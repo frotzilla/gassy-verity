@@ -23,7 +23,6 @@ No build step: open `index.html` in a browser.
 - `js/puffs.js` - canvas gas particles (fixed pool, capped, lingers to fill the screen, blast shockwave)
 - `js/face.js` - expressions: blush, bulging eyes, watering eyes, relief
 - `js/skins.js` - skins: the body is an image from assets/, the animated face is drawn over it
-- `js/poop.js` - Cat Boy's weak stomach
 - `js/clips.js` - plays random clips from `clips/`
 - `js/achievements.js` - achievements (+1% gas each) and their list in the stats panel
 - `js/weather.js` - optional real weather: clouds, fog, rain, snow, storms
@@ -67,13 +66,14 @@ browser blocks it and the button says so.
 
 ## Skins and clips
 
-Skins are bought once and switched any time: Verity, Mint, Cat Boy (regular Verity with cat ears and a tail), Clawd,
-Pumpkin, Ghost, and the Verity variants Lovity (pink), Falsity (blue), Cruelty (red) and a fan-drawn Monster Verity.
-The variants come from the Verity fandom; this is an unofficial fan project. Cat Boy has a weak stomach: fart about 14 times in
-6 seconds and he poops. Click the poop to clean it up for a little gas.
+Skins are bought once and switched any time. They are the Verity variants from the
+[Veritypedia](https://verityminecraft.fandom.com/) (Falsity, Lovity, Curiosity, Larpity, Mandity, Cruelty,
+Manipulity, Narity, Moggity, Freakity, Obesity, Eclipsity, Monster Verity and Lord Verity) plus Clawd, a little
+orange guy with claws. The art is my own drawings based on the wiki's descriptions; the wiki's text is
+CC-BY-SA. This is an unofficial fan project.
 
 Voice clips: put audio files in the `clips/` folder and push. They play at random on some farts,
-more often on blasts, big combos and poops. The page reads `clips/manifest.js`, which is generated:
+more often on blasts and big combos. The page reads `clips/manifest.js`, which is generated:
 a GitHub Action rebuilds it whenever you push files to `clips/`, or run
 `node tools/clips-manifest.js` locally. Chance and volume are in `js/config.js`. Only add clips you
 have the right to use, since the repo is public.
@@ -92,7 +92,7 @@ To test other times, places or weather, use the admin panel.
 
 Add `?admin` to the URL (or use "Open admin" in the About dialog) and enter the password:
 `ughImSoBigAndFatAndGassyAndGay`. It can set the time (or run it fast), the weather,
-the location, give gas and crystals, unlock everything, spawn golden clouds and poop, and more.
+the location, give gas and crystals, unlock everything, spawn golden clouds, and more.
 The password is checked against a salted hash in the source. It is public on purpose: this is a cheat-menu
 gate, not real security: the game runs entirely in your browser, so anyone with the dev tools
 open can edit their own game state anyway. There is nothing server-side to protect.

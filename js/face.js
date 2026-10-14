@@ -1,7 +1,7 @@
-// Verity's face: expression reacts to how inflated it is, how gassy the room is, and relief.
+// Verity's face: expression reacts to how inflated it is, and to relief after a fart.
 GV.face = (() => {
   const img = document.getElementById("skinImg");
-  let eyes, happy, tears, mouth, eyeY = 44;
+  let eyes, happy, mouth, eyeY = 44;
   let mouthPath = p => `M${33 + p * 3} ${62 + p * 4} Q50 ${78 - p * 14} ${67 - p * 3} ${62 + p * 4}`;
   let reliefTimer = 0, lastP = 0;
 
@@ -9,7 +9,7 @@ GV.face = (() => {
   function rebind(mouthFn, y = 44) {
     eyeY = y;
     eyes = document.getElementById("eyes");
-    happy = document.getElementById("eyesHappy"); tears = document.getElementById("tears");
+    happy = document.getElementById("eyesHappy");
     mouth = document.getElementById("mouth");
     if (mouthFn) mouthPath = mouthFn;
     update(lastP);
@@ -26,12 +26,6 @@ GV.face = (() => {
     eyes.setAttribute("transform", `translate(50 ${eyeY}) scale(${(1 + p * 0.35).toFixed(3)}) translate(-50 -${eyeY})`);
     mouth.setAttribute("d", mouthPath(p));
   }
-
-  // Eyes water as the room fills with gas.
-  function updateTears() {
-    if (tears) tears.setAttribute("opacity", clamp((GV.puffs.level() - 0.3) / 0.5, 0, 1).toFixed(2));
-  }
-  setInterval(updateTears, 250);
 
   // Happy closed eyes for a moment after letting it out.
   function relief(ms = 900) {

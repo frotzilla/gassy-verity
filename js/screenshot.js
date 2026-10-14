@@ -40,8 +40,8 @@ GV.shot = (() => {
     }
     g.restore();
 
-    // Clouds, poops
-    for (const im of document.querySelectorAll("#clouds img, .poop img")) { if (!im.complete) continue; const r = rectOf(im); g.globalAlpha = +getComputedStyle(im).opacity || 1; g.drawImage(im, r.x, r.y, r.w, r.h); g.globalAlpha = 1; }
+    // Clouds
+    for (const im of document.querySelectorAll("#clouds img")) { if (!im.complete) continue; const r = rectOf(im); g.globalAlpha = +getComputedStyle(im).opacity || 1; g.drawImage(im, r.x, r.y, r.w, r.h); g.globalAlpha = 1; }
 
     // Verity: body image (with its current red tint) and the face SVG
     const body = q("skinImg"), br = rectOf(body);

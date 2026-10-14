@@ -5,7 +5,7 @@ GV.clips = (() => {
   const files = GV.clipFiles || [];
   let lastPlay = 0;
 
-  // kind: "fart" (normal chance) or "big" (blast, finale, poop).
+  // kind: "fart" (normal chance) or "big" (blast, big combo).
   function maybe(kind = "fart") {
     if (!files.length || GV.audio.muted) return;
     const now = performance.now();

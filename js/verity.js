@@ -53,7 +53,6 @@ GV.verity = (() => {
     }
     GV.combo.show(blast);
     GV.motion.pop(boosted);
-    GV.poop.note();
     GV.clips.maybe(blast || c.count >= cfg.audioFinaleCombo ? "big" : "fart");
     GV.face.relief();
     GV.haptics.release(boosted, blast);

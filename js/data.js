@@ -74,8 +74,6 @@ GV.data = (() => {
     ["allTypes", "Full House",       "Own every kind of auto-farter.", c => c.types >= generators.length],
     ["skin1",    "New Look",         "Buy a skin.",                    c => Object.keys(c.S.skins).length >= 2],
     ["skinAll",  "Wardrobe",         "Own every skin.",                c => Object.keys(c.S.skins).length >= skins.length],
-    ["poop1",    "Oops",             "Clean up your first poop.",      c => c.st.poops >= 1],
-    ["poop10",   "Janitor",          "Clean up 10 poops.",             c => c.st.poops >= 10],
     ["gold1",    "Shiny",            "Click a golden cloud.",          c => c.st.goldens >= 1],
     ["gold25",   "Prospector",       "Click 25 golden clouds.",        c => c.st.goldens >= 25],
     ["ascend1",  "Rebirth",          "Ascend for the first time.",     c => (c.S.ascensions || 0) >= 1]
