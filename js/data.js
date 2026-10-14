@@ -47,5 +47,22 @@ GV.data = (() => {
   }
   upgrades.sort((a, b) => a.cost - b.cost);
 
-  return { generators, upgrades };
+  // Pets: one each, permanent bonuses. fx values are fractions (0.1 = +10%), golden is a factor.
+  const pets = [
+    { id: "fly",    name: "Stink Fly",   cost: 1500,    desc: "Buzzes around Verity. +10% gas per second.",    fx: { gps: 0.1 } },
+    { id: "frog",   name: "Bog Frog",    cost: 2e4,     desc: "Hops through the gas. +15% gas per fart.",     fx: { tap: 0.15 } },
+    { id: "snail",  name: "Slow Snail",  cost: 2.5e5,   desc: "Takes its time. Gas blasts pay +50%.",         fx: { blast: 0.5 } },
+    { id: "beetle", name: "Dung Beetle", cost: 3e6,     desc: "Rolls a little ball. +20% gas per second.",    fx: { gps: 0.2 } },
+    { id: "pug",    name: "Gas Mask Pug", cost: 5e7,    desc: "Unbothered. Golden clouds show up 25% more often.", fx: { golden: 0.8 } }
+  ];
+
+  // Skins: art lives in skins.js. Owning one is permanent; you can switch any time.
+  const skins = [
+    { id: "verity",  name: "Verity",      cost: 0,      desc: "The original." },
+    { id: "mint",    name: "Mint Verity", cost: 3000,   desc: "A cool green coat." },
+    { id: "catboy",  name: "Cat Boy",     cost: 20000,  desc: "Ears, whiskers, and a weak stomach. Fart too much and he poops." },
+    { id: "robot",   name: "Robo Verity", cost: 300000, desc: "Beep. Boop. Pffft." }
+  ];
+
+  return { generators, upgrades, pets, skins };
 })();

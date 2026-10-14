@@ -33,9 +33,7 @@ GV.stats = (() => {
 
   function blast() { data.blasts++; save(); render(); }
 
-  btn.addEventListener("click", () => { panel.hidden = !panel.hidden; });
-  btn.addEventListener("pointerdown", e => e.stopPropagation());
-  panel.addEventListener("pointerdown", e => e.stopPropagation());
+  GV.ui.bindPanel(btn, panel, "left");
   render();
 
   return { record, blast, get: () => data };

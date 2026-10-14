@@ -23,35 +23,12 @@
 
   <div id="stage">
     <div id="body">
-      <svg id="verity" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="g" cx="35%" cy="30%" r="75%">
-            <stop offset="0" stop-color="#fff59a"/>
-            <stop offset="0.55" stop-color="#ffd92e"/>
-            <stop offset="1" stop-color="#d9a900"/>
-          </radialGradient>
-        </defs>
-        <circle cx="50" cy="50" r="46" fill="url(#g)"/>
-        <circle id="blush" cx="50" cy="50" r="46" fill="#ff4b3a" opacity="0"/>
-        <g id="eyes">
-          <ellipse cx="36" cy="44" rx="5" ry="7" fill="#222"/>
-          <ellipse cx="64" cy="44" rx="5" ry="7" fill="#222"/>
-          <circle cx="34.5" cy="41" r="1.8" fill="#fff"/>
-          <circle cx="62.5" cy="41" r="1.8" fill="#fff"/>
-        </g>
-        <g id="eyesHappy" style="display:none" fill="none" stroke="#222" stroke-width="3.5" stroke-linecap="round">
-          <path d="M30 46 Q36 39 42 46"/>
-          <path d="M58 46 Q64 39 70 46"/>
-        </g>
-        <g id="tears" opacity="0">
-          <path class="tear" d="M33 52 q-3 6 0 8 q3 -2 0 -8z" fill="#7cc4ff"/>
-          <path class="tear t2" d="M67 52 q-3 6 0 8 q3 -2 0 -8z" fill="#7cc4ff"/>
-        </g>
-        <path id="mouth" d="M33 62 Q50 78 67 62" fill="none" stroke="#222" stroke-width="4" stroke-linecap="round"/>
-      </svg>
+      <svg id="verity" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
   </div>
 
+  <div id="pets"></div>
+  <div id="poops"></div>
   <canvas id="gasCanvas"></canvas>
 </div>
 
@@ -62,8 +39,12 @@
 <div id="meter"><div id="fill"></div></div>
 <div id="count">Toots: 0</div>
 <div id="hint"></div>
-<div id="topBtns"><button id="shopBtn" type="button">shop</button><button id="statsBtn" type="button">stats</button></div>
+<div id="topBtns"><button id="shopBtn" type="button">shop</button><button id="clipsBtn" type="button">clips</button><button id="statsBtn" type="button">stats</button><button id="aboutBtn" type="button">about</button></div>
 <div id="statsPanel" hidden></div>
+<div id="clipsPanel" class="leftPanel" hidden></div>
+<div id="aboutPanel" class="leftPanel" hidden></div>
+<div id="notice" hidden></div>
+<div id="dropHint" hidden>Drop audio clips to add them</div>
 <div id="shopPanel"></div>
 
 <!-- Classic scripts (no build step, works from file://). Order matters. -->
@@ -77,13 +58,18 @@
 <script src="js/audio.js"></script>
 <script src="js/puffs.js"></script>
 <script src="js/face.js"></script>
+<script src="js/skins.js"></script>
 <script src="js/combo.js"></script>
 <script src="js/sky.js"></script>
 <script src="js/motion.js"></script>
 <script src="js/blast.js"></script>
+<script src="js/poop.js"></script>
+<script src="js/pets.js"></script>
+<script src="js/clips.js"></script>
 <script src="js/verity.js"></script>
 <script src="js/shop.js"></script>
 <script src="js/golden.js"></script>
+<script src="js/about.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

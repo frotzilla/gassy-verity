@@ -8,9 +8,9 @@ GV.game = (() => {
   const upById = Object.fromEntries(D.upgrades.map(u => [u.id, u]));
   const listeners = [];
 
-  const blank = () => ({ gas: 0, total: 0, gens: {}, ups: {}, frenzyUntil: 0, saved: Date.now() });
+  const blank = () => ({ gas: 0, total: 0, gens: {}, ups: {}, pets: {}, skins: { verity: 1 }, skin: "verity", frenzyUntil: 0, saved: Date.now() });
   let S = blank();
-  let d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1 };  // derived from upgrades
+  let d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1, gps: 1 };  // derived from upgrades and pets
 
   const onChange = fn => listeners.push(fn);
   let queued = false;
@@ -22,7 +22,15 @@ GV.game = (() => {
 
   // ---- derived values ----
   function recalc() {
-    d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1 };
+    d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1, gps: 1 };
+    let petTap = 0, petBlast = 0, petGps = 0;
+    for (const pt of D.pets) {
+      if (!S.pets[pt.id]) continue;
+      const f = pt.fx;
+      petGps += f.gps || 0; petTap += f.tap || 0; petBlast += f.blast || 0;
+      if (f.golden) d.golden *= f.golden;
+    }
+    d.gps = 1 + petGps; d.tap *= 1 + petTap; d.blast *= 1 + petBlast;
     for (const u of D.upgrades) {
       if (!S.ups[u.id]) continue;
       const f = u.fx;
@@ -41,7 +49,7 @@ GV.game = (() => {
   const frenzyMult = () => frenzyOn() ? gc.frenzyMult : 1;
 
   function gpsOf(id) { return (S.gens[id] || 0) * genById[id].gps * (d.gen[id] || 1); }
-  function baseGps() { let t = 0; for (const g of D.generators) t += gpsOf(g.id); return t; }
+  function baseGps() { let t = 0; for (const g of D.generators) t += gpsOf(g.id); return t * d.gps; }
   const gps = () => baseGps() * frenzyMult();
 
   // Gas for one fart. p = how long it was held (0..1). A tap is ~1, a full hold is ~12.
@@ -93,6 +101,28 @@ GV.game = (() => {
     return true;
   }
 
+  function buyPet(id) {
+    const pt = D.pets.find(x => x.id === id);
+    if (!pt || S.pets[id] || pt.cost > S.gas) return false;
+    S.gas -= pt.cost; S.pets[id] = 1;
+    recalc(); changed(); save();
+    return true;
+  }
+
+  function buySkin(id) {
+    const sk = D.skins.find(x => x.id === id);
+    if (!sk || S.skins[id] || sk.cost > S.gas) return false;
+    S.gas -= sk.cost; S.skins[id] = 1; S.skin = id;
+    changed(); save();
+    return true;
+  }
+
+  function setSkin(id) {
+    if (!S.skins[id]) return false;
+    S.skin = id; changed(); save();
+    return true;
+  }
+
   function startFrenzy() { S.frenzyUntil = Date.now() + gc.frenzySec * 1000; changed(); }
 
   // ---- save / load ----
@@ -109,6 +139,9 @@ GV.game = (() => {
     n.frenzyUntil = num(raw.frenzyUntil); n.saved = num(raw.saved) || Date.now();
     for (const g of D.generators) if (raw.gens) n.gens[g.id] = Math.floor(num(raw.gens[g.id]));
     for (const u of D.upgrades) if (raw.ups && raw.ups[u.id]) n.ups[u.id] = 1;
+    for (const pt of D.pets) if (raw.pets && raw.pets[pt.id]) n.pets[pt.id] = 1;
+    for (const sk of D.skins) if (raw.skins && raw.skins[sk.id]) n.skins[sk.id] = 1;
+    if (typeof raw.skin === "string" && n.skins[raw.skin]) n.skin = raw.skin;
     return n;
   }
 
@@ -162,7 +195,7 @@ GV.game = (() => {
     get state() { return S; },
     get goldenFactor() { return d.golden; },
     onChange, fart, gps, baseGps, gpsOf, tapValue, owned, genCost, maxAffordable,
-    buyGen, buyUpgrade, startFrenzy, frenzyOn, earn,
+    buyGen, buyUpgrade, buyPet, buySkin, setSkin, startFrenzy, frenzyOn, earn,
     save, exportCode, importCode, reset
   };
 })();

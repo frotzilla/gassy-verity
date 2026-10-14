@@ -42,10 +42,20 @@ GV.sky = (() => {
     return null;
   }
 
+  // The IP lookup can be switched off from the About panel.
+  const GEO_KEY = "gassyVerity.noGeo";
+  function geoOff() { try { return localStorage.getItem(GEO_KEY) === "1"; } catch (e) { return false; } }
+  function setGeo(on) {
+    try { localStorage.setItem(GEO_KEY, on ? "0" : "1"); } catch (e) {}
+    loc = fallbackLoc();
+    locate().then(found => { if (found) loc = found; update(); });
+    update();
+  }
+
   async function locate() {
     const lat = parseFloat(q.get("lat")), lon = parseFloat(q.get("lon"));
     if (isFinite(lat) && isFinite(lon)) return { lat, lon, city: q.get("city") || "" };
-    if (q.get("loc") === "off") return null;
+    if (q.get("loc") === "off" || geoOff()) return null;
     try {
       const c = JSON.parse(localStorage.getItem(KEY) || "null");
       if (c && Date.now() - c.t < cfg.cacheHours * 3600e3) return c;
@@ -77,7 +87,7 @@ GV.sky = (() => {
   // [sun altitude in degrees, sky top, sky horizon]
   const SKY = [
     [-18, "#070b1f", "#0e1736"], [-10, "#10173a", "#2a2552"], [-4, "#2b2d63", "#c4576b"],
-    [2, "#4a74c9", "#ff9a5c"], [10, "#6aaef0", "#ffd3a1"], [25, "#7dbdf8", "#cdeaff"], [50, "#8ecbff", "#dff3ff"]
+    [2, "#4a74c9", "#ff9a5c"], [10, "#5f9be0", "#ffc27d"], [25, "#7dbdf8", "#cdeaff"], [50, "#8ecbff", "#dff3ff"]
   ];
   const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
   const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
@@ -95,9 +105,11 @@ GV.sky = (() => {
     return [r * light * 0.9, g * light * 0.95, b * light + (1 - light) * 45];
   }
 
+  // Morning and evening are the stretches around sunrise and sunset; "day" is the middle.
   function phaseName(alt, ha) {
-    if (alt >= 10) return "day";
-    if (alt >= 0) return ha < 0 ? "sunrise" : "sunset";
+    if (alt >= 25) return "day";
+    if (alt >= 6) return ha < 0 ? "morning" : "evening";
+    if (alt >= -4) return ha < 0 ? "sunrise" : "sunset";
     if (alt >= -12) return ha < 0 ? "dawn" : "dusk";
     return "night";
   }
@@ -148,5 +160,5 @@ GV.sky = (() => {
   locate().then(found => { if (found) { loc = found; } update(); });
   setInterval(update, speed ? 100 : cfg.refreshSec * 1000);
 
-  return { update, apply, position, get loc() { return loc; } };
+  return { update, apply, position, setGeo, geoOn: () => !geoOff(), get loc() { return loc; } };
 })();

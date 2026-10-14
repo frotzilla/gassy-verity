@@ -19,6 +19,11 @@ No build step: open `index.html` in a browser.
 - `js/audio.js` - squeak, fart variants (squeak, classic, rumble, finale) and the blast boom
 - `js/puffs.js` - canvas gas particles (fixed pool, capped, lingers to fill the screen, blast shockwave)
 - `js/face.js` - expressions: blush, bulging eyes, watering eyes, relief
+- `js/skins.js` - skins (SVG art per skin; prices and text are in data.js)
+- `js/poop.js` - Cat Boy's weak stomach
+- `js/pets.js` - pets that wander the ground or hover near Verity
+- `js/clips.js` - random voice clips (drag and drop, stored in IndexedDB)
+- `js/about.js` - credits, privacy blurb, and the first-visit location notice
 - `js/combo.js` - combo counter
 - `js/sky.js` - day/night cycle from the real time and IP location
 - `js/motion.js` - squash spring and screen shake (one loop, continuous state)
@@ -39,11 +44,23 @@ seconds of production. Golden clouds show up now and then: click one for a lump 
 7x frenzy for 30 seconds. Progress saves to localStorage every 15 s, and while you are away it
 earns half production for up to 8 hours. The shop has save export and import, and reset.
 
+## Pets, skins and clips
+
+Pets (Stink Fly, Bog Frog, Slow Snail, Dung Beetle, Gas Mask Pug) each give a permanent bonus.
+Skins are bought once and switched any time. Cat Boy has a weak stomach: fart about 14 times in
+6 seconds and he poops. Click the poop to clean it up for a little gas.
+
+Voice clips: drag audio files onto the page (or use the clips button). They are stored in your
+browser only and play at random on farts, more often on blasts, finales and poops. You can also
+ship clips with the page via `clips/manifest.json` (see `clips/README.txt`). Only add clips you
+have the right to use if you publish them.
+
 ## Sky
 
 The sky follows the sun at your location. Location comes from an IP lookup (ipwho.is, then
 ipapi.co as a fallback), cached in localStorage for 24 hours. **That request shows your IP to
-those services.** If it fails the sky uses the device clock and a longitude guessed from the
+those services.** You can turn the lookup off from the About panel, and there is a notice the
+first time you visit. If it fails the sky uses the device clock and a longitude guessed from the
 time zone, and the label says "(approx)". The sun and moon positions are computed locally.
 
 URL overrides for testing: `?time=21:30`, `?lat=59.9&lon=10.7&city=Oslo`, `?loc=off`

@@ -163,5 +163,18 @@ GV.audio = (() => {
   }
   function boom() { try { boomAt(context(), context().currentTime, 1); } catch (e) {} }
 
-  return { startSqueak, setSqueak, stopSqueak, fart, boom };
+  // Short wet "plop" for the poop.
+  function plop() {
+    try {
+      const c = context(), t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+      o.type = "sine"; o.frequency.setValueAtTime(320, t);
+      o.frequency.exponentialRampToValueAtTime(70, t + 0.16);
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.35, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+      o.connect(g); g.connect(c.destination); g.connect(reverb(c));
+      o.start(t); o.stop(t + 0.25);
+    } catch (e) {}
+  }
+
+  return { startSqueak, setSqueak, stopSqueak, fart, boom, plop };
 })();

@@ -30,5 +30,18 @@ GV.ui = (() => {
                { duration: 900, easing: "ease-out" }).onfinish = () => el.remove();
   }
 
-  return { toast, flash, floatText };
+  // Toggle button/panel pairs. Panels in the same group close each other.
+  const groups = {};
+  function bindPanel(btn, panel, group, onOpen) {
+    (groups[group] = groups[group] || []).push(panel);
+    btn.addEventListener("click", () => {
+      const open = panel.hidden;
+      for (const p of groups[group]) p.hidden = true;
+      panel.hidden = !open;
+      if (open && onOpen) onOpen();
+    });
+    for (const el of [btn, panel]) el.addEventListener("pointerdown", e => e.stopPropagation());
+  }
+
+  return { toast, flash, floatText, bindPanel };
 })();
