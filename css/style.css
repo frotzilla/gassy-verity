@@ -12,10 +12,8 @@ body {
 /* The whole scene lives in #world so the screen shake moves it as one piece. It is
    oversized by 40px on every side so shake and rotation never reveal an edge. The HUD
    sits outside it and stays still. Nothing in it is position:fixed. */
-#world { position:fixed; inset:-40px; padding:40px 40px 0; background:var(--sky, #8ecbff); }
-#world::before, #world::after { content:""; position:absolute; left:0; right:0; z-index:0; }
-#world::before { top:62%; height:4%; background:var(--grass); }
-#world::after { top:66%; bottom:0; background:var(--dirt); }
+#world { position:fixed; inset:-40px; padding:40px 40px 0;
+         background:linear-gradient(var(--sky-top,#8ecbff), var(--sky-bot,#cfeeff) 62%, var(--grass) 62% 66%, var(--dirt) 66%); }
 h1, .sub { position:relative; z-index:1; }
 h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006; font-size:clamp(1.6rem,5vw,2.8rem); }
 .sub { text-align:center; color:#fff; text-shadow:2px 2px 0 #0006; margin:6px 0; }
@@ -69,7 +67,7 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 
 /* Toast, flash */
 #flash { position:fixed; inset:0; z-index:6; pointer-events:none; opacity:0;
-         background:#e4ff8a; }
+         background:radial-gradient(circle at 50% 70%, #fff, #e4ff8a 45%, #7dae1c); }
 #toast { position:fixed; left:50%; top:38%; z-index:6; pointer-events:none; opacity:0; width:max-content; max-width:92vw; text-align:center;
          transform:translate(-50%,-50%); font-weight:700; font-size:clamp(1.3rem,6vw,3rem); color:#fff;
          text-shadow:3px 3px 0 #0008; }
@@ -154,7 +152,7 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 .cloud { position:absolute; left:-30%; filter:brightness(var(--cloud-b,1)); animation:cloudDrift linear infinite; user-select:none; -webkit-user-drag:none; }
 @keyframes cloudDrift { from { transform:translateX(0); } to { transform:translateX(160vw); } }
 #fog { position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0; transition:opacity 4s;
-       background:rgba(220,228,236,.45); }
+       background:linear-gradient(rgba(220,228,236,.65), rgba(220,228,236,.25)); }
 #weatherCanvas { position:absolute; inset:0; z-index:1; pointer-events:none; }
 
 /* Achievements and ascension */
