@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b1230">
 <title>Gassy Verity</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,43 +12,70 @@
 </head>
 <body>
 <div id="world">
-<h1>Gassy Verity</h1>
-<p class="sub">Hold Verity (or space) to inflate. Let go.</p>
-
-<canvas id="gasCanvas"></canvas>
-
-<div id="stage">
-  <div id="body">
-    <svg id="verity" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="g" cx="35%" cy="30%" r="75%">
-          <stop offset="0" stop-color="#fff59a"/>
-          <stop offset="0.55" stop-color="#ffd92e"/>
-          <stop offset="1" stop-color="#d9a900"/>
-        </radialGradient>
-      </defs>
-      <circle cx="50" cy="50" r="46" fill="url(#g)"/>
-      <ellipse cx="36" cy="44" rx="5" ry="7" fill="#222"/>
-      <ellipse cx="64" cy="44" rx="5" ry="7" fill="#222"/>
-      <circle cx="34.5" cy="41" r="1.8" fill="#fff"/>
-      <circle cx="62.5" cy="41" r="1.8" fill="#fff"/>
-      <path id="mouth" d="M33 62 Q50 78 67 62" fill="none" stroke="#222" stroke-width="4" stroke-linecap="round"/>
-    </svg>
+  <div id="sky">
+    <div id="stars"></div>
+    <div id="sun"></div>
+    <div id="moon"><div id="moonShade"></div></div>
   </div>
-</div>
+
+  <h1>Gassy Verity</h1>
+  <p class="sub">Hold Verity (or space) to inflate. Let go.</p>
+
+  <div id="stage">
+    <div id="body">
+      <svg id="verity" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g" cx="35%" cy="30%" r="75%">
+            <stop offset="0" stop-color="#fff59a"/>
+            <stop offset="0.55" stop-color="#ffd92e"/>
+            <stop offset="1" stop-color="#d9a900"/>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="50" r="46" fill="url(#g)"/>
+        <circle id="blush" cx="50" cy="50" r="46" fill="#ff4b3a" opacity="0"/>
+        <g id="eyes">
+          <ellipse cx="36" cy="44" rx="5" ry="7" fill="#222"/>
+          <ellipse cx="64" cy="44" rx="5" ry="7" fill="#222"/>
+          <circle cx="34.5" cy="41" r="1.8" fill="#fff"/>
+          <circle cx="62.5" cy="41" r="1.8" fill="#fff"/>
+        </g>
+        <g id="eyesHappy" style="display:none" fill="none" stroke="#222" stroke-width="3.5" stroke-linecap="round">
+          <path d="M30 46 Q36 39 42 46"/>
+          <path d="M58 46 Q64 39 70 46"/>
+        </g>
+        <g id="tears" opacity="0">
+          <path class="tear" d="M33 52 q-3 6 0 8 q3 -2 0 -8z" fill="#7cc4ff"/>
+          <path class="tear t2" d="M67 52 q-3 6 0 8 q3 -2 0 -8z" fill="#7cc4ff"/>
+        </g>
+        <path id="mouth" d="M33 62 Q50 78 67 62" fill="none" stroke="#222" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <canvas id="gasCanvas"></canvas>
 </div>
 
+<div id="flash"></div>
+<div id="toast"></div>
 <div id="combo"><div id="comboText"></div><div id="comboBar"><div id="comboFill"></div></div></div>
 <div id="meter"><div id="fill"></div></div>
 <div id="count">Toots: 0</div>
-<div id="hint">sound on</div>
+<div id="hint"></div>
+<button id="statsBtn" type="button">stats</button>
+<div id="statsPanel" hidden></div>
 
 <!-- Classic scripts (no build step, works from file://). Order matters. -->
 <script src="js/config.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/haptics.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/puffs.js"></script>
+<script src="js/face.js"></script>
 <script src="js/combo.js"></script>
+<script src="js/sky.js"></script>
 <script src="js/motion.js"></script>
+<script src="js/blast.js"></script>
 <script src="js/verity.js"></script>
 <script src="js/main.js"></script>
 </body>

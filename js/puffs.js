@@ -11,6 +11,7 @@ GV.puffs = (() => {
   const vx = new Float32Array(N), vy = new Float32Array(N);
   const size = new Float32Array(N), age = new Float32Array(N), life = new Float32Array(N);
   const tint = new Uint8Array(N), wob = new Float32Array(N);
+  const fadeLeft = new Float32Array(N), fadeTotal = new Float32Array(N); // blast: seconds until gone
   let alive = 0, running = false, prev = 0;
 
   // Pre-rendered soft blobs, one per tint. drawImage of these is cheap.
@@ -63,7 +64,7 @@ GV.puffs = (() => {
       x[i] = ox; y[i] = oy + (Math.random() - 0.5) * 30;
       vx[i] = Math.cos(ang) * sp; vy[i] = Math.sin(ang) * sp - 60;
       size[i] = (60 + Math.random() * (60 + power * 90)) * Math.min(1.6, Math.min(innerWidth, innerHeight) / 700);
-      age[i] = 0;
+      age[i] = 0; fadeTotal[i] = 0;
       life[i] = cfg.lifeMin + Math.random() * cfg.lifeExtra + Math.min(combo, cfg.comboCap) * cfg.lifePerCombo;
       tint[i] = Math.random() * sprites.length | 0;
       wob[i] = Math.random() * 6.28;
@@ -95,7 +96,13 @@ GV.puffs = (() => {
       else if (y[i] > H) { y[i] = H; vy[i] = -Math.abs(vy[i]); }
       // Grow, quick fade in, long fade out.
       const s = size[i] * (1 + t * 0.8);
-      g.globalAlpha = Math.min(t * 12, 1) * (1 - t * t) * cfg.alpha;
+      let a = Math.min(t * 12, 1) * (1 - t * t) * cfg.alpha;
+      if (fadeTotal[i] > 0) {                       // being cleared by a blast
+        fadeLeft[i] -= dt;
+        if (fadeLeft[i] <= 0) { life[i] = 0; alive--; continue; }
+        a *= fadeLeft[i] / fadeTotal[i];
+      }
+      g.globalAlpha = a;
       g.drawImage(sprites[tint[i]], x[i] - s / 2, y[i] - s / 2, s, s);
     }
     g.globalAlpha = 1;
@@ -103,8 +110,23 @@ GV.puffs = (() => {
     else running = false;
   }
 
+  // Gas blast: shove every puff away from Verity and fade them all out over clearSec.
+  function shock(stage, strength, clearSec) {
+    const r = stage.getBoundingClientRect();
+    const ox = r.left + M + r.width / 2, oy = r.top + M + r.height / 2;
+    for (let i = 0; i < N; i++) {
+      if (life[i] <= 0) continue;
+      let dx = x[i] - ox, dy = y[i] - oy;
+      const d = Math.hypot(dx, dy) || 1;
+      const k = strength * innerWidth * (0.6 + 0.8 * Math.exp(-d / (innerWidth * 0.5)));
+      vx[i] += dx / d * k; vy[i] += dy / d * k;
+      fadeTotal[i] = fadeLeft[i] = clearSec * (0.55 + Math.random() * 0.45);
+    }
+    if (!running) { running = true; prev = performance.now(); requestAnimationFrame(frame); }
+  }
+
   // 0..1, how packed the screen is. Used for the "GAS MAXED" label.
   function level() { return alive / N; }
 
-  return { emit, level };
+  return { emit, shock, level };
 })();

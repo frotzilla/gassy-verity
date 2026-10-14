@@ -5,7 +5,6 @@ GV.motion = (() => {
   const cfg = GV.config.motion, maxScale = GV.config.maxScale;
   const bodyEl = document.getElementById("body");
   const world = document.getElementById("world");
-  const mouth = document.getElementById("mouth");
 
   let s = 1, v = 0, target = 1, jit = 0, trauma = 0;
   let time = 0, prev = 0, running = false;
@@ -42,9 +41,8 @@ GV.motion = (() => {
     const jx = wave(61, 0) * jit * cfg.jitterPx, jy = wave(83, 1.3) * jit * cfg.jitterPx;
     bodyEl.style.transform = `translate(${jx}px,${jy}px) scale(${s * (1 - stretch)},${s * (1 + stretch)})`;
 
-    // Mouth follows how inflated Verity currently is, so it eases back to the smile.
-    const p = clamp((s - 1) / (maxScale - 1), 0, 1);
-    mouth.setAttribute("d", `M${33 + p * 3} ${62 + p * 4} Q50 ${78 - p * 14} ${67 - p * 3} ${62 + p * 4}`);
+    // The face follows how inflated Verity currently is, so it eases back to the smile.
+    GV.face.update(clamp((s - 1) / (maxScale - 1), 0, 1));
 
     // Screen shake: trauma decays smoothly; shake strength is trauma squared.
     trauma = Math.max(0, trauma - cfg.traumaDecay * dt);

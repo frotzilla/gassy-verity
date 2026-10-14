@@ -9,7 +9,19 @@ window.GV = { config: {
             jelly: 0.025, jitterPx: 3,    // stretch along motion, strain shiver
             traumaPerPower: 0.55, traumaDecay: 1.3, shakePx: 18, shakeDeg: 0.8 },
   squeak: { baseHz: 180, riseHz: 700, gain: 0.04 },
-  fart:   { minSec: 0.3, extraSec: 1.6, baseHz: 70, jitterHz: 40, reverbSec: 1.6, reverbMix: 0.5 },
+  fart:   { minSec: 0.3, extraSec: 1.6, baseHz: 70, jitterHz: 40, reverbSec: 1.6, reverbMix: 0.5,
+            squeakBelow: 0.22,   // powers under this make squeaky toots
+            rumbleAbove: 0.7,    // powers over this make long low rumbles
+            finaleCombo: 12 },   // combo at which big farts become a 3-part finale
+  blast:  { minLevel: 0.85,      // cloud fullness needed ...
+            minPower: 0.75,      // ... plus a fart this strong sets off a gas blast
+            clearSec: 2.2,       // how long the old gas takes to fade out after the blast
+            push: 1.3,           // shockwave strength, in screen widths per second
+            flashMs: 700 },
+  haptics: true,                 // phone vibration (Android browsers; iOS ignores it)
+  sky:    { refreshSec: 20,      // how often the sky is recomputed
+            ipTimeoutMs: 4000,   // give up on the IP lookup after this long
+            cacheHours: 24 },    // reuse the looked-up location for this long
   combo:  { windowMs: 2500,       // time to land the next fart and keep the combo
             powerPerCombo: 0.12,  // extra fart power per combo step
             puffsPerCombo: 0.2 }, // extra puffs per combo step (fraction)

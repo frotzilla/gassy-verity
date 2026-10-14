@@ -16,9 +16,9 @@ GV.combo = (() => {
   }
 
   // Label is refreshed after the burst is emitted so the cloud level is current.
-  function show() {
-    const maxed = GV.puffs.level() > 0.9;
-    textEl.textContent = maxed ? "GAS MAXED x" + count : count > 1 ? "x" + count + " COMBO" : "";
+  function show(blast = false) {
+    const maxed = !blast && GV.puffs.level() > 0.9;
+    textEl.textContent = maxed ? "GAS MAXED! BIG FART = BLAST" : count > 1 ? "x" + count + " COMBO" : "";
     comboEl.classList.toggle("on", maxed || count > 1);
     textEl.classList.remove("pop"); void textEl.offsetWidth; textEl.classList.add("pop");
   }
