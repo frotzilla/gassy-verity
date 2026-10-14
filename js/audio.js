@@ -163,6 +163,20 @@ GV.audio = (() => {
   }
   function boom() { try { boomAt(context(), context().currentTime, 1); } catch (e) {} }
 
+  // Short wet "plop" for the poop.
+  function plop() {
+    try {
+      const c = context(), t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+      o.type = "sine"; o.frequency.setValueAtTime(320, t);
+      o.frequency.exponentialRampToValueAtTime(70, t + 0.16);
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.35, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+      o.connect(g); g.connect(c.destination); g.connect(reverb(c));
+      o.start(t); o.stop(t + 0.25);
+    } catch (e) {}
+  }
+
+
   // Small UI sounds: a rising blip for buying, a two-note chime for achievements, a whoosh for ascending.
   function tone(freqs, step, dur, gain, type = "triangle") {
     try {
@@ -196,7 +210,7 @@ GV.audio = (() => {
 
   return {
     startSqueak: gate(startSqueak), setSqueak, stopSqueak,
-    fart: gate(fart), boom: gate(boom),
+    fart: gate(fart), boom: gate(boom), plop: gate(plop),
     buy: gate(buy), chime: gate(chime), whoosh: gate(whoosh),
     setMuted, get muted() { return muted; }
   };

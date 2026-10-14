@@ -31,6 +31,7 @@ No build step: open `index.html` in a browser.
 - `js/combo.js` - combo counter
 - `js/sky.js` - day/night cycle from the real time and IP location
 - `js/motion.js` - squash spring and screen shake (one loop, continuous state)
+- `js/poop.js` - fart too much, too fast, and Verity poops (any skin)
 - `js/blast.js` - gas blast: packed cloud + a big hold clears the screen
 - `js/verity.js` - charge and release behavior
 - `js/main.js` - input wiring
@@ -65,8 +66,10 @@ browser blocks it and the button says so.
 
 Skins are bought once and switched any time. They are the Verity variants from the
 [Veritypedia](https://verityminecraft.fandom.com/) (Falsity, Lovity, Curiosity, Larpity, Mandity, Cruelty,
-Manipulity, Narity, Moggity, Freakity, Obesity, Eclipsity, Monster Verity and Lord Verity) plus Clawd, a little
-orange guy with claws. The art is my own drawings based on the wiki's descriptions; the wiki's text is
+Manipulity, Narity, Moggity, Freakity, Obesity, Eclipsity, Monster Verity and Lord Verity), Chellsity (hot pink
+`>_<`, from the author's GitHub avatar) and Clawd, a little
+orange guy with claws. Fart about 14 times in 6 seconds, on any skin, and Verity poops; click the poop
+to clean it up for a little gas. The art is my own drawings based on the wiki's descriptions; the wiki's text is
 CC-BY-SA. This is an unofficial fan project.
 
 Voice clips: put audio files in the `clips/` folder and push. They play at random on some farts,

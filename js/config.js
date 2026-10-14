@@ -22,9 +22,10 @@ window.GV = { config: {
             offlineEff: 0.5,     // fraction of normal production earned while away
             saveSec: 15 },
   clips:  { chance: 0.15,        // chance a normal fart plays a random clip
-            bigChance: 0.8,      // chance for blasts and big combos
+            bigChance: 0.8,      // chance for blasts, big combos and poops
             volume: 0.8, minGapMs: 2500 },
   audioFinaleCombo: 12,          // combo at which clips use the "big" chance
+  poop:   { count: 14, windowSec: 6, limit: 6 },   // this many farts in this many seconds makes a poop; most on screen
   haptics: true,                 // phone vibration (Android browsers; iOS ignores it)
   sky:    { refreshSec: 20,      // how often the sky is recomputed
             ipTimeoutMs: 4000,   // give up on the IP lookup after this long

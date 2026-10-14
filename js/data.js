@@ -62,6 +62,8 @@ GV.data = (() => {
     ["blast1",   "Kaboom",           "Set off a gas blast.",           c => c.st.blasts >= 1],
     ["blast10",  "Demolition",       "10 gas blasts.",                 c => c.st.blasts >= 10],
     ["blast50",  "Controlled Burn",  "50 gas blasts.",                 c => c.st.blasts >= 50],
+    ["poop1",    "Oops",             "Clean up your first poop.",      c => c.st.poops >= 1],
+    ["poop10",   "Janitor",          "Clean up 10 poops.",             c => c.st.poops >= 10],
     ["gas1k",    "Pocket Change",    "Earn 1,000 gas.",                c => c.S.lifetime >= 1e3],
     ["gas1m",    "Millionaire",      "Earn 1 million gas.",            c => c.S.lifetime >= 1e6],
     ["gas1b",    "Billionaire",      "Earn 1 billion gas.",            c => c.S.lifetime >= 1e9],

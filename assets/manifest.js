@@ -8,17 +8,21 @@ GV.assets = {
   sun: "assets/sky/sun.svg",
   moon: "assets/sky/moon.svg",
   cloud: "assets/weather/cloud.svg",
+  poop: "assets/poop.svg",
 
   // face: how the animated eyes and mouth are drawn on top of the image (coordinates are on a
   //       100x100 grid over the image). Use  face: false  if your image already has a face.
   //   eyeColor, eyeY, eyeDX (distance from center), eyeRx, eyeRy, mouth, mouthColor, mouthWidth
   //   eyeShape: "ellipse" (default) or "rect"; mouthDy shifts the mouth up/down on the grid
+  //   emoticon: ">_<" draws a text face in JetBrains Mono instead (emoticonHappy for after a fart, emoticonSize, eyeColor)
   //   eyesClosed: true draws closed eyes. mouth is one of: "smile" "frown" "w" "line" "zigzag" "o" "none"
   skins: [
     { id: "verity", name: "Verity", cost: 0, desc: "The original: a lemon-yellow ball with a black smile.",
       file: "assets/skins/verity.svg", face: {} },
     { id: "falsity", name: "Falsity", cost: 5000, desc: "The blue variant. Always wrong.",
       file: "assets/skins/falsity.svg", face: {} },
+    { id: "chellsity", name: "Chellsity", cost: 10000, desc: "Chellsea's own variant: hot pink, with a >_< in JetBrains Mono.",
+      file: "assets/skins/chellsity.svg", face: { emoticon: ">_<", emoticonHappy: "^_^", eyeColor: "#ffffff", eyeY: 52, emoticonSize: 34 } },
     { id: "lovity", name: "Lovity", cost: 15000, desc: "The pink variant, eyes closed, completely benevolent.",
       file: "assets/skins/lovity.svg", face: { eyesClosed: true } },
     { id: "curiosity", name: "Curiosity", cost: 40000, desc: "The green variant. Wants to know everything.",

@@ -6,7 +6,7 @@ GV.skins = (() => {
   const faceSvg = document.getElementById("face");
   const list = GV.data.skins;
 
-  const DEFAULT_FACE = { eyeColor: "#222", eyeShape: "ellipse", eyesClosed: false, eyeY: 44, eyeDX: 14, eyeRx: 5, eyeRy: 7, mouth: "smile", mouthColor: "#222", mouthWidth: 4, mouthDy: 0 };
+  const DEFAULT_FACE = { eyeColor: "#222", eyeShape: "ellipse", eyesClosed: false, emoticon: "", emoticonHappy: "", emoticonSize: 30, eyeY: 44, eyeDX: 14, eyeRx: 5, eyeRy: 7, mouth: "smile", mouthColor: "#222", mouthWidth: 4, mouthDy: 0 };
 
   // Mouth shapes: p is inflation 0..1, so the mouth gets more worried as Verity swells.
   const MOUTHS = {
@@ -19,7 +19,20 @@ GV.skins = (() => {
     o:      p => { const r = 6 + p * 3; return `M${50 - r} 66 a${r} ${r * 1.2} 0 1 0 ${2 * r} 0 a${r} ${r * 1.2} 0 1 0 ${-2 * r} 0`; }
   };
 
+  const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  // A face made of text, e.g. ">_<" (like the GitHub avatar): the text is the "eyes", so it swells
+  // with Verity and swaps for emoticonHappy after a fart. There is no separate mouth.
+  function emoticonMarkup(f) {
+    const text = t => `<text x="50" y="${f.eyeY + f.emoticonSize * 0.3}" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, monospace" ` +
+                      `font-weight="700" font-size="${f.emoticonSize}" fill="${f.eyeColor}">${esc(t)}</text>`;
+    return `<g id="eyes">${text(f.emoticon)}</g>
+      <g id="eyesHappy" style="display:none">${text(f.emoticonHappy || f.emoticon)}</g>
+      <path id="mouth" d="" fill="none"/>`;
+  }
+
   function faceMarkup(f) {
+    if (f.emoticon) return emoticonMarkup(f);
     const cx1 = 50 - f.eyeDX, cx2 = 50 + f.eyeDX, y = f.eyeY;
     const eye = cx => f.eyeShape === "rect"
       ? `<rect x="${cx - f.eyeRx}" y="${y - f.eyeRy}" width="${f.eyeRx * 2}" height="${f.eyeRy * 2}" rx="1" fill="${f.eyeColor}"/>`
@@ -47,6 +60,7 @@ GV.skins = (() => {
       if (GV.face) GV.face.rebind(null);
     } else {
       const f = { ...DEFAULT_FACE, ...(sk.face || {}) };
+      if (f.emoticon) f.mouth = "none";
       faceSvg.innerHTML = faceMarkup(f);
       if (GV.face) GV.face.rebind(MOUTHS[f.mouth] || MOUTHS.smile, f.eyeY);
     }
