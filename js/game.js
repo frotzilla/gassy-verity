@@ -150,7 +150,8 @@ GV.game = (() => {
     for (const a of D.achievements) if (raw.ach && raw.ach[a.id]) n.ach[a.id] = 1;
     for (const u of D.upgrades) if (raw.ups && raw.ups[u.id]) n.ups[u.id] = 1;
     for (const sk of D.skins) if (raw.skins && raw.skins[sk.id]) n.skins[sk.id] = 1;
-    if (typeof raw.skin === "string" && n.skins[raw.skin]) n.skin = raw.skin;
+    if (raw.skins && raw.skins.robot) n.skins.clawd = 1;                 // Robo Verity became Clawd
+    if (typeof raw.skin === "string") { const id = raw.skin === "robot" ? "clawd" : raw.skin; if (n.skins[id]) n.skin = id; }
     return n;
   }
 

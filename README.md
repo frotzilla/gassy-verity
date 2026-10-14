@@ -67,7 +67,9 @@ browser blocks it and the button says so.
 
 ## Skins and clips
 
-Skins (Verity, Mint, Cat Boy, Pumpkin, Robo, Ghost) are bought once and switched any time. Cat Boy has a weak stomach: fart about 14 times in
+Skins are bought once and switched any time: Verity, Mint, Cat Boy (regular Verity with cat ears and a tail), Clawd,
+Pumpkin, Ghost, and the Verity variants Lovity (pink), Falsity (blue), Cruelty (red) and a fan-drawn Monster Verity.
+The variants come from the Verity fandom; this is an unofficial fan project. Cat Boy has a weak stomach: fart about 14 times in
 6 seconds and he poops. Click the poop to clean it up for a little gas.
 
 Voice clips: put audio files in the `clips/` folder and push. They play at random on some farts,
