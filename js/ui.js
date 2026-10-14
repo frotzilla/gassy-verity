@@ -46,7 +46,13 @@ GV.ui = (() => {
   // Centered dialogs with a shared backdrop. Esc, the backdrop and any .close button dismiss.
   const modals = [];
   let backdrop = null;
-  function closeModals() { for (const m of modals) m.hidden = true; if (backdrop) backdrop.hidden = true; }
+  let opener = null;
+  function closeModals() {
+    const wasOpen = modals.some(m => !m.hidden);
+    for (const m of modals) m.hidden = true;
+    if (backdrop) backdrop.hidden = true;
+    if (wasOpen && opener && document.contains(opener)) { opener.focus(); opener = null; }
+  }
   function modal(btn, panel, onOpen) {
     if (!backdrop) {
       backdrop = document.createElement("div"); backdrop.id = "modalBackdrop"; backdrop.hidden = true;
@@ -56,7 +62,14 @@ GV.ui = (() => {
       addEventListener("keydown", e => { if (e.key === "Escape") closeModals(); });
     }
     modals.push(panel);
-    const open = () => { closeModals(); panel.hidden = false; backdrop.hidden = false; if (onOpen) onOpen(); };
+    // Dialog semantics for screen readers, and focus moves in on open and back out on close.
+    panel.setAttribute("role", "dialog"); panel.setAttribute("aria-modal", "true");
+    panel.setAttribute("aria-label", panel.dataset.label || panel.id.replace("Panel", ""));
+    const open = () => {
+      opener = document.activeElement;
+      closeModals(); panel.hidden = false; backdrop.hidden = false; if (onOpen) onOpen();
+      setTimeout(() => { const f = panel.querySelector("input, select, button:not(.close), a[href], .close"); if (f) f.focus(); }, 30);
+    };
     if (btn) { btn.addEventListener("click", open); btn.addEventListener("pointerdown", e => e.stopPropagation()); }
     panel.addEventListener("pointerdown", e => e.stopPropagation());
     panel.addEventListener("click", e => { if (e.target.closest(".close")) closeModals(); });

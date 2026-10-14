@@ -14,14 +14,13 @@ GV.puffs = (() => {
   const fadeLeft = new Float32Array(N), fadeTotal = new Float32Array(N); // blast: seconds until gone
   let alive = 0, running = false, prev = 0;
 
-  // Pre-rendered soft blobs, one per tint. drawImage of these is cheap.
+  // Pre-rendered flat discs, one per tint. drawImage of these is cheap; the look comes from
+  // alpha and overlap.
   const sprites = cfg.colors.map(([r, gr, b]) => {
     const s = document.createElement("canvas"); s.width = s.height = 64;
-    const c = s.getContext("2d"), grad = c.createRadialGradient(32, 32, 0, 32, 32, 32);
-    grad.addColorStop(0, `rgba(${r},${gr},${b},.9)`);
-    grad.addColorStop(0.5, `rgba(${r},${gr},${b},.45)`);
-    grad.addColorStop(1, `rgba(${r},${gr},${b},0)`);
-    c.fillStyle = grad; c.fillRect(0, 0, 64, 64);
+    const c = s.getContext("2d");
+    c.fillStyle = `rgb(${r},${gr},${b})`;
+    c.beginPath(); c.arc(32, 32, 31, 0, 6.2832); c.fill();
     return s;
   });
 

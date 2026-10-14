@@ -125,8 +125,7 @@ GV.sky = (() => {
     const p = position(date, loc.lat, loc.lon), alt = p.alt;
     const [top, bot] = skyColors(alt);
     const light = 0.28 + 0.72 * smooth(-8, 6, alt);
-    world.style.setProperty("--sky-top", css(top));
-    world.style.setProperty("--sky-bot", css(bot));
+    world.style.setProperty("--sky", css(mix(top, bot, 0.5)));      // one flat color
     world.style.setProperty("--grass", css(ground("#5d9b3a", light)));
     world.style.setProperty("--dirt", css(ground("#8a5a35", light)));
     starsEl.style.opacity = smooth(-4, -14, alt).toFixed(3);

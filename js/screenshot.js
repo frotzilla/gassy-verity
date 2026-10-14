@@ -18,9 +18,7 @@ GV.shot = (() => {
     const hRatio = (H + 2 * M) * 0.62 - M;          // horizon in viewport coordinates
 
     // Sky, ground
-    const sky = g.createLinearGradient(0, 0, 0, hRatio);
-    sky.addColorStop(0, col("--sky-top") || "#8ecbff"); sky.addColorStop(1, col("--sky-bot") || "#cfeeff");
-    g.fillStyle = sky; g.fillRect(0, 0, W, hRatio);
+    g.fillStyle = col("--sky") || "#8ecbff"; g.fillRect(0, 0, W, hRatio);
     g.fillStyle = col("--grass") || "#5d9b3a"; g.fillRect(0, hRatio, W, (H + 2 * M) * 0.04);
     g.fillStyle = col("--dirt") || "#8a5a35"; g.fillRect(0, hRatio + (H + 2 * M) * 0.04, W, H);
 
@@ -40,8 +38,8 @@ GV.shot = (() => {
     }
     g.restore();
 
-    // Clouds, pets, poops
-    for (const im of document.querySelectorAll("#clouds img, .pet img, .poop img")) { if (!im.complete) continue; const r = rectOf(im); g.globalAlpha = +getComputedStyle(im).opacity || 1; g.drawImage(im, r.x, r.y, r.w, r.h); g.globalAlpha = 1; }
+    // Clouds, poops
+    for (const im of document.querySelectorAll("#clouds img, .poop img")) { if (!im.complete) continue; const r = rectOf(im); g.globalAlpha = +getComputedStyle(im).opacity || 1; g.drawImage(im, r.x, r.y, r.w, r.h); g.globalAlpha = 1; }
 
     // Verity: body image (with its current red tint) and the face SVG
     const body = q("skinImg"), br = rectOf(body);

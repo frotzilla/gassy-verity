@@ -17,12 +17,16 @@ GV.about = (() => {
     `<a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GPL-3.0</a>.</p>` +
     `<p>Verity is a character from ThatMob's videos. This is an unofficial fan project, not affiliated with or endorsed by ThatMob or PnTMC.</p>` +
     `<p>Font: JetBrains Mono (SIL Open Font License). Sun position: low-precision NOAA solar formulas. ` +
-    `The art is in the assets folder; the sounds are generated in your browser. Weather data: open-meteo.com.</p>`;
+    `The art is in the assets folder; the sounds are generated in your browser. Weather data: open-meteo.com.</p>` +
+    `<div class="shopSec">For tinkerers</div>` +
+    `<p>There is an admin panel for setting the time, weather and location, giving gas, and spawning things. It needs a password. ` +
+    `<button type="button" id="openAdmin" class="linkBtn">Open admin</button></p>`;
 
   const geo = panel.querySelector("#geoToggle"), wx = panel.querySelector("#wxToggle");
   geo.addEventListener("change", () => GV.sky.setGeo(geo.checked));
   wx.addEventListener("change", () => GV.weather.setEnabled(wx.checked));
 
+  panel.querySelector("#openAdmin").addEventListener("click", () => GV.admin.open());
   GV.ui.modal(btn, panel, () => { geo.checked = GV.sky.geoOn(); wx.checked = GV.weather.enabled(); });
   return {};
 })();

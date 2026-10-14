@@ -2,7 +2,7 @@
 // files exist and what they do. To add your own, drop the image in the right folder and add
 // one entry below. See assets/README.md.
 //
-// Skins and pets cost gas in the shop (cost) and show up there automatically.
+// Skins cost gas in the shop (cost) and show up there automatically.
 window.GV = window.GV || {};
 GV.assets = {
   sun: "assets/sky/sun.svg",
@@ -24,16 +24,5 @@ GV.assets = {
     { id: "pumpkin", name: "Pumpkin Verity", cost: 150000, desc: "Spooky season, all year.",       file: "assets/skins/pumpkin.svg", face: { eyeColor: "#2a1300", eyeY: 50, eyeRx: 6, eyeRy: 7, mouth: "zigzag", mouthColor: "#2a1300" } },
     { id: "robot",  name: "Robo Verity", cost: 300000, desc: "Beep. Boop. Pffft.",                  file: "assets/skins/robot.svg",   face: { eyeColor: "#6df0ff", mouth: "line", mouthColor: "#6df0ff" } },
     { id: "ghost",  name: "Ghost Verity", cost: 1.5e6, desc: "Boo. Also, ew.",                      file: "assets/skins/ghost.svg",   face: { eyeY: 50, eyeRx: 5, eyeRy: 8, mouth: "o", mouthWidth: 3 } }
-  ],
-
-  // move: "hover" (flies around Verity) | "hop" | "crawl" | "walk" | "sit" (beside Verity)
-  // fx: { gps: 0.1 } +10% gas/second | { tap: 0.15 } +15% per fart | { blast: 0.5 } +50% blast
-  //     { golden: 0.8 } golden clouds 25% more often
-  pets: [
-    { id: "fly",    name: "Stink Fly",    cost: 1500,  desc: "Buzzes around Verity. +10% gas per second.",        fx: { gps: 0.1 },    file: "assets/pets/fly.svg",    move: "hover" },
-    { id: "frog",   name: "Bog Frog",     cost: 2e4,   desc: "Hops through the gas. +15% gas per fart.",         fx: { tap: 0.15 },   file: "assets/pets/frog.svg",   move: "hop" },
-    { id: "snail",  name: "Slow Snail",   cost: 2.5e5, desc: "Takes its time. Gas blasts pay +50%.",             fx: { blast: 0.5 },  file: "assets/pets/snail.svg",  move: "crawl" },
-    { id: "beetle", name: "Dung Beetle",  cost: 3e6,   desc: "Rolls a little ball. +20% gas per second.",        fx: { gps: 0.2 },    file: "assets/pets/beetle.svg", move: "walk" },
-    { id: "pug",    name: "Gas Mask Pug", cost: 5e7,   desc: "Unbothered. Golden clouds show up 25% more often.", fx: { golden: 0.8 }, file: "assets/pets/pug.svg",    move: "sit" }
   ]
 };

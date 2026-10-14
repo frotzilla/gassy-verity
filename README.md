@@ -24,7 +24,6 @@ No build step: open `index.html` in a browser.
 - `js/face.js` - expressions: blush, bulging eyes, watering eyes, relief
 - `js/skins.js` - skins: the body is an image from assets/, the animated face is drawn over it
 - `js/poop.js` - Cat Boy's weak stomach
-- `js/pets.js` - pets that wander the ground or hover near Verity
 - `js/clips.js` - plays random clips from `clips/`
 - `js/achievements.js` - achievements (+1% gas each) and their list in the stats panel
 - `js/weather.js` - optional real weather: clouds, fog, rain, snow, storms
@@ -54,8 +53,8 @@ earns half production for up to 8 hours. The shop has save export and import, an
 ## Ascension, achievements, weather, screenshots
 
 Once you have earned about 100 million gas, Ascend (in the shop) to trade your run for methane
-crystals: each is a permanent +1% gas. It resets gas, auto-farters and upgrades, and keeps pets,
-skins, achievements and crystals. Each of the 28 achievements is also +1% gas. Buying, achievements
+crystals: each is a permanent +1% gas. It resets gas, auto-farters and upgrades, and keeps
+skins, achievements and crystals. Each of the 26 achievements is also +1% gas. Buying, achievements
 and ascending have little sounds, and the sound button mutes everything.
 
 Weather is opt-in (About panel): it asks open-meteo.com for the current conditions at your
@@ -66,9 +65,8 @@ The snap button saves a PNG of the scene (or opens the share sheet on a phone). 
 page's own images back, so it needs the page served over http(s); opened from a file:// URL the
 browser blocks it and the button says so.
 
-## Pets, skins and clips
+## Skins and clips
 
-Pets (Stink Fly, Bog Frog, Slow Snail, Dung Beetle, Gas Mask Pug) each give a permanent bonus.
 Skins (Verity, Mint, Cat Boy, Pumpkin, Robo, Ghost) are bought once and switched any time. Cat Boy has a weak stomach: fart about 14 times in
 6 seconds and he poops. Click the poop to clean it up for a little gas.
 

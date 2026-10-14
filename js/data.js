@@ -47,8 +47,8 @@ GV.data = (() => {
   }
   upgrades.sort((a, b) => a.cost - b.cost);
 
-  // Pets and skins are art, so they live in assets/manifest.js.
-  const { pets, skins } = GV.assets;
+  // Skins are art, so they live in assets/manifest.js.
+  const { skins } = GV.assets;
 
   // Achievements: each unlocked one adds +1% to all gas. test(c) gets c.S (game state),
   // c.st (lifetime stats), c.buildings (total owned) and c.types (kinds of building owned).
@@ -72,8 +72,6 @@ GV.data = (() => {
     ["build50",  "Small Business",   "Own 50 auto-farters.",           c => c.buildings >= 50],
     ["build200", "Industry",         "Own 200 auto-farters.",          c => c.buildings >= 200],
     ["allTypes", "Full House",       "Own every kind of auto-farter.", c => c.types >= generators.length],
-    ["pet1",     "Best Friend",      "Get a pet.",                     c => Object.keys(c.S.pets).length >= 1],
-    ["petAll",   "Zoo Keeper",       "Get every pet.",                 c => Object.keys(c.S.pets).length >= pets.length],
     ["skin1",    "New Look",         "Buy a skin.",                    c => Object.keys(c.S.skins).length >= 2],
     ["skinAll",  "Wardrobe",         "Own every skin.",                c => Object.keys(c.S.skins).length >= skins.length],
     ["poop1",    "Oops",             "Clean up your first poop.",      c => c.st.poops >= 1],
@@ -83,5 +81,5 @@ GV.data = (() => {
     ["ascend1",  "Rebirth",          "Ascend for the first time.",     c => (c.S.ascensions || 0) >= 1]
   ].map(([id, name, desc, test]) => ({ id, name, desc, test }));
 
-  return { generators, upgrades, pets, skins, achievements };
+  return { generators, upgrades, skins, achievements };
 })();

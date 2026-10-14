@@ -8,9 +8,9 @@ GV.game = (() => {
   const upById = Object.fromEntries(D.upgrades.map(u => [u.id, u]));
   const listeners = [];
 
-  const blank = () => ({ gas: 0, total: 0, gens: {}, ups: {}, pets: {}, skins: { verity: 1 }, skin: "verity", ach: {}, lifetime: 0, crystals: 0, ascensions: 0, frenzyUntil: 0, saved: Date.now() });
+  const blank = () => ({ gas: 0, total: 0, gens: {}, ups: {}, skins: { verity: 1 }, skin: "verity", ach: {}, lifetime: 0, crystals: 0, ascensions: 0, frenzyUntil: 0, saved: Date.now() });
   let S = blank();
-  let d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1, gps: 1 };  // derived from upgrades and pets
+  let d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1, gps: 1 };  // derived from upgrades
 
   const onChange = fn => listeners.push(fn);
   const sfx = name => { if (GV.audio && GV.audio[name]) GV.audio[name](); };
@@ -24,14 +24,6 @@ GV.game = (() => {
   // ---- derived values ----
   function recalc() {
     d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1, gps: 1 };
-    let petTap = 0, petBlast = 0, petGps = 0;
-    for (const pt of D.pets) {
-      if (!S.pets[pt.id]) continue;
-      const f = pt.fx;
-      petGps += f.gps || 0; petTap += f.tap || 0; petBlast += f.blast || 0;
-      if (f.golden) d.golden *= f.golden;
-    }
-    d.gps = 1 + petGps; d.tap *= 1 + petTap; d.blast *= 1 + petBlast;
     for (const u of D.upgrades) {
       if (!S.ups[u.id]) continue;
       const f = u.fx;
@@ -104,14 +96,6 @@ GV.game = (() => {
     return true;
   }
 
-  function buyPet(id) {
-    const pt = D.pets.find(x => x.id === id);
-    if (!pt || S.pets[id] || pt.cost > S.gas) return false;
-    S.gas -= pt.cost; S.pets[id] = 1;
-    recalc(); changed(); save(); sfx("buy");
-    return true;
-  }
-
   function buySkin(id) {
     const sk = D.skins.find(x => x.id === id);
     if (!sk || S.skins[id] || sk.cost > S.gas) return false;
@@ -137,7 +121,7 @@ GV.game = (() => {
   const crystalsEverEarned = () => Math.floor(Math.sqrt(S.lifetime / 1e8));
   const crystalGain = () => Math.max(0, crystalsEverEarned() - S.crystals);
 
-  // Resets the run (gas, auto-farters, upgrades). Keeps pets, skins, achievements, crystals.
+  // Resets the run (gas, auto-farters, upgrades). Keeps skins, achievements, crystals.
   function ascend() {
     const gain = crystalGain();
     if (gain < 1) return 0;
@@ -165,7 +149,6 @@ GV.game = (() => {
     n.lifetime = Math.max(num(raw.lifetime), n.total); n.crystals = Math.floor(num(raw.crystals)); n.ascensions = Math.floor(num(raw.ascensions));
     for (const a of D.achievements) if (raw.ach && raw.ach[a.id]) n.ach[a.id] = 1;
     for (const u of D.upgrades) if (raw.ups && raw.ups[u.id]) n.ups[u.id] = 1;
-    for (const pt of D.pets) if (raw.pets && raw.pets[pt.id]) n.pets[pt.id] = 1;
     for (const sk of D.skins) if (raw.skins && raw.skins[sk.id]) n.skins[sk.id] = 1;
     if (typeof raw.skin === "string" && n.skins[raw.skin]) n.skin = raw.skin;
     return n;
@@ -223,7 +206,6 @@ GV.game = (() => {
     giveCrystals(n) { S.crystals += Math.max(0, Math.floor(n)); changed(); save(); },
     unlockAll() {
       for (const s of D.skins) S.skins[s.id] = 1;
-      for (const p of D.pets) S.pets[p.id] = 1;
       for (const a of D.achievements) S.ach[a.id] = 1;
       recalc(); changed(); save();
     }
@@ -234,7 +216,7 @@ GV.game = (() => {
     get state() { return S; },
     get goldenFactor() { return d.golden; },
     onChange, fart, gps, baseGps, gpsOf, tapValue, owned, genCost, maxAffordable,
-    buyGen, buyUpgrade, buyPet, buySkin, setSkin, startFrenzy, mult, unlock, crystalGain, ascend, frenzyOn, earn,
+    buyGen, buyUpgrade, buySkin, setSkin, startFrenzy, mult, unlock, crystalGain, ascend, frenzyOn, earn,
     save, exportCode, importCode, reset
   };
 })();

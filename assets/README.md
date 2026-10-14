@@ -7,7 +7,6 @@ Every image in the game is a file in this folder. `manifest.js` lists them.
       favicon.svg        browser tab icon (linked from index.html)
       poop.svg  golden.svg
       skins/             Verity's bodies (100x100 grid)
-      pets/              pets (34x24 grid, facing right)
       sky/               sun.svg, moon.svg
       weather/           cloud.svg
 
@@ -28,11 +27,6 @@ up with where your art has a face. If your image already has a face, use `face: 
 inflates, shakes and squashes, but the eyes and mouth will not animate).
 
 Add `poop: { count: 14, windowSec: 6 }` to make that skin poop when you fart too much.
-
-## Add a pet
-
-Drop a 34x24 image in `assets/pets/` (facing right) and add to `pets`. `move` picks how it
-behaves and `fx` picks its bonus; see the comments in `manifest.js`.
 
 ## Replace anything else
 

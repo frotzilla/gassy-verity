@@ -35,8 +35,8 @@ GV.admin = (() => {
     panel.innerHTML =
       `<div class="shopHead"><b>Admin</b><button type="button" class="close">close</button></div>` +
       `<p class="small">Enter the password.</p>` +
-      `<form id="adForm"><input type="password" id="adPw" autocomplete="off" autofocus> <button type="submit">unlock</button></form>` +
-      `<p class="small" id="adMsg">${msg}</p>`;
+      `<form id="adForm"><label for="adPw" class="small">Password</label> <input type="password" id="adPw" autocomplete="off"> <button type="submit">unlock</button></form>` +
+      `<p class="small" id="adMsg" role="status" aria-live="polite">${msg}</p>`;
     panel.querySelector("#adForm").addEventListener("submit", async e => {
       e.preventDefault();
       const msgEl = panel.querySelector("#adMsg");
@@ -55,22 +55,22 @@ GV.admin = (() => {
       `<div class="shopHead"><b>Admin</b><button type="button" class="close">close</button></div>` +
 
       `<div class="shopSec">Time</div>` +
-      `<div class="row"><input type="datetime-local" id="adTime"><button type="button" data-a="setTime">set</button></div>` +
-      `<div class="row"><span>speed (sky min per sec)</span><input type="number" id="adSpeed" value="0" min="0" step="1"><button type="button" data-a="setSpeed">go</button></div>` +
+      `<div class="row"><input type="datetime-local" id="adTime" aria-label="date and time"><button type="button" data-a="setTime">set</button></div>` +
+      `<div class="row"><label for="adSpeed">speed (sky min per sec)</label><input type="number" id="adSpeed" value="0" min="0" step="1"><button type="button" data-a="setSpeed">go</button></div>` +
       `<div class="row"><button type="button" data-a="realTime">use real time</button></div>` +
 
       `<div class="shopSec">Weather</div>` +
-      `<div class="row"><select id="adWx">${wk.map(k => `<option>${k}</option>`).join("")}</select><button type="button" data-a="setWx">apply</button></div>` +
+      `<div class="row"><select id="adWx" aria-label="weather">${wk.map(k => `<option>${k}</option>`).join("")}</select><button type="button" data-a="setWx">apply</button></div>` +
 
       `<div class="shopSec">Location</div>` +
-      `<div class="row"><select id="adPreset"><option value="">preset...</option>${Object.keys(PRESETS).map(k => `<option>${k}</option>`).join("")}</select></div>` +
-      `<div class="row"><input id="adLat" placeholder="lat" size="6"><input id="adLon" placeholder="lon" size="6"><input id="adCity" placeholder="name" size="8"><button type="button" data-a="setLoc">set</button></div>` +
+      `<div class="row"><select id="adPreset" aria-label="location preset"><option value="">preset...</option>${Object.keys(PRESETS).map(k => `<option>${k}</option>`).join("")}</select></div>` +
+      `<div class="row"><input id="adLat" placeholder="lat" aria-label="latitude" size="6"><input id="adLon" placeholder="lon" aria-label="longitude" size="6"><input id="adCity" placeholder="name" aria-label="place name" size="8"><button type="button" data-a="setLoc">set</button></div>` +
       `<div class="row"><button type="button" data-a="realLoc">use real location</button></div>` +
 
       `<div class="shopSec">Gas and progress</div>` +
-      `<div class="row"><input id="adAmt" placeholder="amount, e.g. 5M or 1e9" size="16"><button type="button" data-a="give">give</button><button type="button" data-a="setGas">set</button></div>` +
-      `<div class="row"><input id="adCr" placeholder="crystals" size="8"><button type="button" data-a="crystals">give crystals</button></div>` +
-      `<div class="row"><button type="button" data-a="unlockAll">unlock all skins, pets, achievements</button></div>` +
+      `<div class="row"><input id="adAmt" placeholder="amount, e.g. 5M or 1e9" aria-label="gas amount" size="16"><button type="button" data-a="give">give</button><button type="button" data-a="setGas">set</button></div>` +
+      `<div class="row"><input id="adCr" placeholder="crystals" aria-label="crystals" size="8"><button type="button" data-a="crystals">give crystals</button></div>` +
+      `<div class="row"><button type="button" data-a="unlockAll">unlock all skins and achievements</button></div>` +
 
       `<div class="shopSec">Spawn</div>` +
       `<div class="row wrap"><button type="button" data-a="golden">golden cloud</button><button type="button" data-a="frenzy">frenzy</button>` +
