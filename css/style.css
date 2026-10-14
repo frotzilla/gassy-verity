@@ -17,10 +17,6 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 #verity.strain { animation:strain .08s linear infinite; }
 @keyframes strain { 0%{transform:translate(-2px,1px)} 50%{transform:translate(2px,-1px)} 100%{transform:translate(-2px,1px)} }
 
-/* Gas */
-.puff { position:absolute; width:var(--s); height:var(--s); border-radius:20%;
-        animation:drift var(--d) ease-out forwards; pointer-events:none; }
-@keyframes drift { to { transform:translate(var(--x),var(--y)) scale(var(--k)); opacity:0; } }
 
 /* HUD */
 #meter { position:fixed; left:50%; bottom:56px; transform:translateX(-50%); width:min(70vw,320px); height:16px;
@@ -35,15 +31,10 @@ body.shake { animation:quake .6s; }
 @keyframes quake { 10%{transform:translate(-14px,6px)} 30%{transform:translate(12px,-6px)} 50%{transform:translate(-9px,4px)}
   70%{transform:translate(6px,-2px)} 90%{transform:translate(-3px,1px)} }
 
-/* Gas that fills the screen as the combo builds */
-#gas { position:fixed; left:0; right:0; bottom:0; height:0; z-index:1; pointer-events:none;
-       background:linear-gradient(rgba(140,190,40,.55), rgba(90,140,20,.8)); }
-#gas::before { content:""; position:absolute; left:0; right:0; top:-28px; height:30px;
-               background:radial-gradient(circle at 20px 30px, rgba(140,190,40,.55) 22px, transparent 23px) 0 0 / 40px 30px repeat-x;
-               animation:wave 4s linear infinite; }
-@keyframes wave { to { background-position-x:40px; } }
+/* Gas particles are drawn on one canvas (js/puffs.js), above Verity, below the HUD */
+#gasCanvas { position:fixed; inset:0; z-index:3; pointer-events:none; }
 #stage { z-index:2; }
-#meter, #count, #hint, #combo { z-index:3; }
+#meter, #count, #hint, #combo { z-index:4; }
 
 /* Combo readout */
 #combo { position:fixed; top:110px; left:50%; transform:translateX(-50%); text-align:center; color:#fff;

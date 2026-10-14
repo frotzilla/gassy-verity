@@ -46,10 +46,14 @@ GV.audio = (() => {
     return bus;
   }
 
+  let voices = 0; // live fart sounds; spamming past the cap skips the sound, not the visuals
+
   function fart(power) {
     try {
+      if (voices >= cfg.maxFarts) return;
       const c = context(), t = c.currentTime, f = cfg.fart;
       const dur = f.minSec + power * f.extraSec;
+      voices++; setTimeout(() => voices--, (dur + 0.1) * 1000);
       const o = c.createOscillator(), o2 = c.createOscillator();
       const flutter = c.createGain(), env = c.createGain();
       o.type = "sawtooth"; o2.type = "square";

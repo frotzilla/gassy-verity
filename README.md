@@ -9,8 +9,8 @@ No build step: open `index.html` in a browser.
 - `css/style.css` - all styling
 - `js/config.js` - tweakable numbers (size, timings, sound, gas)
 - `js/audio.js` - squeak and fart sounds
-- `js/puffs.js` - gas cloud particles
-- `js/combo.js` - combo counter and screen-filling gas
+- `js/puffs.js` - canvas gas particles (fixed pool, capped, lingers to fill the screen)
+- `js/combo.js` - combo counter
 - `js/verity.js` - charge and release behavior
 - `js/main.js` - input wiring
 

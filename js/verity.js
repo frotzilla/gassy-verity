@@ -54,6 +54,7 @@ GV.verity = (() => {
     const boosted = Math.min(1, p + cfg.combo.powerPerCombo * (c.count - 1));
     GV.audio.fart(boosted);
     GV.puffs.emit(stage, boosted, c.count);
+    GV.combo.show();
     if (boosted > cfg.shakeThreshold) {
       document.body.classList.remove("shake"); void document.body.offsetWidth;
       document.body.classList.add("shake");
