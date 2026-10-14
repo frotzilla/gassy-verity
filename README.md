@@ -72,7 +72,7 @@ Skins are bought once and switched any time. They are the Verity variants from t
 Manipulity, Narity, Moggity, Freakity, Obesity, Eclipsity, Monster Verity and Lord Verity, plus fan-blog variants:
 Timeity, Gypsy Verity, Acclivity, Vapority, Smallity, Calamity, Powerity, Upside-down Verity and Variety), Chellsity (hot pink
 `>_<`, from the author's GitHub avatar) and Clawd, a little
-orange guy with claws. Fart about 14 times in 6 seconds, on any skin, and Verity poops; click the poop
+orange guy with claws (an unofficial fan tribute to Anthropic's Claude Code mascot; see `NOTICE.md`). Fart about 14 times in 6 seconds, on any skin, and Verity poops; click the poop
 to clean it up for a little gas. The art is my own drawings based on the wiki's descriptions; the wiki's text is
 CC-BY-SA. This is an unofficial fan project.
 
@@ -121,3 +121,7 @@ several oscillators feeding a shared reverb. Kept as-is for fun. Check it out wi
 ## License
 
 GPL-3.0. See `LICENSE`. Copyright (C) 2026 Redwan Hossain.
+
+The GPL covers this project's code and original drawings only. The characters it depicts (the Verity
+series, and Clawd, the Claude Code mascot owned by Anthropic) belong to their owners and are used here as
+unofficial, non-commercial fan tributes. See `NOTICE.md` for details and how to ask for something to be removed.

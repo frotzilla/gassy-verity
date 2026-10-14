@@ -33,3 +33,6 @@ Overwrite `poop.svg`, `sky/sun.svg`, `sky/moon.svg`, `weather/cloud.svg` or
 `favicon.svg` with your own. Keep the same file names (or change the path in `manifest.js`).
 
 Only use images you have the right to use if you publish the repo.
+
+See `../NOTICE.md` for which assets depict third-party characters (Verity, and Clawd, the Claude Code mascot owned by
+Anthropic) and how they are used.

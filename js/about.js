@@ -17,7 +17,10 @@ GV.about = (() => {
     `<a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GPL-3.0</a>.</p>` +
     `<p>Verity is a character from ThatMob's videos. This is an unofficial fan project, not affiliated with or endorsed by ThatMob or PnTMC.</p>` +
     `<p>The variant skins are my own drawings based on descriptions from the <a href="https://verityminecraft.fandom.com/" target="_blank" rel="noopener">Veritypedia</a> ` +
-    `(text CC-BY-SA). Clawd is a fan-drawn nod to the Claude Code mascot.</p>` +
+    `(text CC-BY-SA). No wiki text or images are copied.</p>` +
+    `<p><b>Clawd</b> is the mascot of Claude Code, a product of Anthropic. This skin is an unofficial fan tribute I drew myself. ` +
+    `It was not made, endorsed or licensed by Anthropic, and it is not covered by this project's license. All characters and trademarks belong to their owners. ` +
+    `See <a href="https://github.com/frotzilla/gassy-verity/blob/main/NOTICE.md" target="_blank" rel="noopener">NOTICE</a>.</p>` +
     `<p>Font: JetBrains Mono (SIL Open Font License). Sun position: low-precision NOAA solar formulas. ` +
     `The art is in the assets folder; the sounds are generated in your browser. Weather data: open-meteo.com.</p>` +
     `<div class="shopSec">For tinkerers</div>` +

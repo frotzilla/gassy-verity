@@ -34,7 +34,8 @@ GV.assets = {
       file: "assets/skins/larpity.svg", face: {} },
     { id: "timeity", name: "Timeity", cost: 100000, desc: "The dark green orb that can reach all of space and time.",
       file: "assets/skins/timeity.svg", face: {} },
-    { id: "clawd", name: "Clawd", cost: 150000, desc: "A little orange guy with claws.",
+    // Clawd is Anthropic's Claude Code mascot; this is an unofficial fan drawing. See NOTICE.md.
+    { id: "clawd", name: "Clawd", cost: 150000, desc: "Unofficial fan tribute to the Claude Code mascot (Anthropic's character).",
       file: "assets/skins/clawd.svg", face: { eyeColor: "#1a1a1a", eyeShape: "rect", eyeY: 44, eyeDX: 18, eyeRx: 4, eyeRy: 6, mouth: "none" } },
     { id: "gypsy", name: "Gypsy Verity", cost: 200000, desc: "Yellow ball in a hat with a hoop earring.",
       file: "assets/skins/gypsy.svg", face: {} },
