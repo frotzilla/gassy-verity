@@ -16,6 +16,7 @@ No build step: open `index.html` in a browser.
 - `js/data.js` - the content: auto-farters, upgrades and achievements (add new ones here)
 - `js/game.js` - economy: gas, buying, offline earnings, save/load
 - `js/shop.js` - bank readout and the shop panel
+- `js/skinspanel.js` - the skins tab (a grid of every skin)
 - `js/stats.js` - lifetime stats in localStorage and the stats panel
 - `js/haptics.js` - phone vibration
 - `js/audio.js` - squeak, fart variants (squeak, classic, rumble, finale) and the blast boom
@@ -67,10 +68,12 @@ browser blocks it and the button says so.
 Chellsity's face is a text emoticon in JetBrains Mono (the other skins keep dot eyes). It changes with mood: a random idle face
 every few seconds (mostly `>_<`, with `:3`, `UwU` and `^w^`), `:o`, `O_O`, `@_@` as it swells, and `^_^` after a fart.
 
+Skins live in their own tab (the "skins" button): a grid of every skin with its picture; click one to buy or equip it.
 Skins are bought once and switched any time. They are the Verity variants from the
 [Veritypedia](https://verityminecraft.fandom.com/) (Falsity, Lovity, Curiosity, Larpity, Mandity, Cruelty,
 Manipulity, Narity, Moggity, Freakity, Obesity, Eclipsity, Monster Verity and Lord Verity, plus fan-blog variants:
-Timeity, Gypsy Verity, Acclivity, Vapority, Smallity, Calamity, Powerity, Upside-down Verity and Variety), Chellsity (hot pink
+Timeity, Gypsy Verity, Acclivity, Vapority, Smallity, Calamity, Powerity, Upside-down Verity, Variety, Blarity,
+Chillity, Nothinity, Stupidity, Purity, Homosexuality, and two I drew from the name alone, Angelity and Auraity), Chellsity (hot pink
 `>_<`, from the author's GitHub avatar) and Clawd, a little
 orange guy with claws (an unofficial fan tribute to Anthropic's Claude Code mascot; see `NOTICE.md`). Fart about 14 times in 6 seconds, on any skin, and Verity poops; click the poop
 to clean it up for a little gas. The art is my own drawings based on the wiki's descriptions; the wiki's text is

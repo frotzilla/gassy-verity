@@ -15,21 +15,10 @@ GV.shop = (() => {
     `</span></div>` +
     `<div class="shopSec">Upgrades</div><div id="shopUps"></div>` +
     `<div class="shopSec">Auto-farters</div><div id="shopGens"></div>` +
-    `<div class="shopSec">Skins</div><div id="shopSkins"></div>` +
     `<div class="shopSec">Ascension</div><div class="ascend" id="shopAscend"><div id="ascInfo"></div><button type="button" data-act="ascend">Ascend</button></div>` +
     `<div class="shopFoot"><button type="button" data-act="export">export</button>` +
     `<button type="button" data-act="import">import</button><button type="button" data-act="reset">reset</button></div>`;
   const upsEl = panel.querySelector("#shopUps"), gensEl = panel.querySelector("#shopGens");
-
-  // Skins: one-time buys, rows built once.
-  const skinsEl = panel.querySelector("#shopSkins");
-  const skinRows = {};
-  for (const sk of D.skins) {
-    const b = document.createElement("button");
-    b.type = "button"; b.className = "up skin-row"; b.dataset.skin = sk.id; b.title = sk.desc;
-    b.innerHTML = `<span>${sk.name}</span><span class="ucost"></span><span class="udesc">${sk.desc}</span>`;
-    skinsEl.appendChild(b); skinRows[sk.id] = { b, cost: b.children[1] };
-  }
 
   const rows = {};
   for (const g of D.generators) {
@@ -86,12 +75,6 @@ GV.shop = (() => {
       `Methane crystals: <b>${S.crystals}</b> (+${S.crystals}% gas)<br>Total multiplier: <b>x${G.mult().toFixed(2)}</b> (crystals and achievements)<br>` +
       `Ascending now gives <b>${gain}</b> more. Resets gas, auto-farters and upgrades; keeps skins, achievements and crystals.`;
     panel.querySelector('[data-act="ascend"]').disabled = gain < 1;
-    for (const sk of D.skins) {
-      const r = skinRows[sk.id], has = !!S.skins[sk.id];
-      r.cost.textContent = S.skin === sk.id ? "equipped" : has ? "equip" : fmt(sk.cost);
-      r.b.classList.toggle("off", !has && sk.cost > S.gas);
-      r.b.classList.toggle("own", has);
-    }
     for (const b of panel.querySelectorAll(".buyN button")) b.classList.toggle("on", String(buyN) === b.dataset.n);
   }
 
@@ -99,7 +82,6 @@ GV.shop = (() => {
     const t = e.target.closest("button"); if (!t) return;
     if (t.dataset.gen) G.buyGen(t.dataset.gen, buyN);
     else if (t.dataset.up) G.buyUpgrade(t.dataset.up);
-    else if (t.dataset.skin) { if (!G.setSkin(t.dataset.skin)) G.buySkin(t.dataset.skin); }
     else if (t.dataset.n) buyN = t.dataset.n === "max" ? "max" : +t.dataset.n;
     else if (t.dataset.act === "export") prompt("Copy this save code:", G.exportCode());
     else if (t.dataset.act === "import") {
