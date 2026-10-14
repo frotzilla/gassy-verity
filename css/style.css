@@ -34,3 +34,23 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 body.shake { animation:quake .6s; }
 @keyframes quake { 10%{transform:translate(-14px,6px)} 30%{transform:translate(12px,-6px)} 50%{transform:translate(-9px,4px)}
   70%{transform:translate(6px,-2px)} 90%{transform:translate(-3px,1px)} }
+
+/* Gas that fills the screen as the combo builds */
+#gas { position:fixed; left:0; right:0; bottom:0; height:0; z-index:1; pointer-events:none;
+       background:linear-gradient(rgba(140,190,40,.55), rgba(90,140,20,.8)); }
+#gas::before { content:""; position:absolute; left:0; right:0; top:-28px; height:30px;
+               background:radial-gradient(circle at 20px 30px, rgba(140,190,40,.55) 22px, transparent 23px) 0 0 / 40px 30px repeat-x;
+               animation:wave 4s linear infinite; }
+@keyframes wave { to { background-position-x:40px; } }
+#stage { z-index:2; }
+#meter, #count, #hint, #combo { z-index:3; }
+
+/* Combo readout */
+#combo { position:fixed; top:110px; left:50%; transform:translateX(-50%); text-align:center; color:#fff;
+         text-shadow:3px 3px 0 #0007; opacity:0; transition:opacity .2s; pointer-events:none; }
+#combo.on { opacity:1; }
+#comboText { font-weight:700; font-size:clamp(1.4rem,5vw,2.4rem); }
+#comboText.pop { animation:pop .25s; }
+@keyframes pop { 50% { transform:scale(1.35); } }
+#comboBar { width:160px; height:8px; margin:6px auto 0; background:#0007; }
+#comboFill { height:100%; width:100%; background:#ffd92e; }

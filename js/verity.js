@@ -49,9 +49,12 @@ GV.verity = (() => {
                     { transform: "scale(1)" }], { duration: 400 + p * 700, easing: "ease-out" });
     bodyEl.style.transform = "scale(1)";
 
-    GV.audio.fart(p);
-    GV.puffs.emit(stage, p);
-    if (p > cfg.shakeThreshold) {
+    // Chained farts hit harder.
+    const c = GV.combo.hit(p);
+    const boosted = Math.min(1, p + cfg.combo.powerPerCombo * (c.count - 1));
+    GV.audio.fart(boosted);
+    GV.puffs.emit(stage, boosted, c.count);
+    if (boosted > cfg.shakeThreshold) {
       document.body.classList.remove("shake"); void document.body.offsetWidth;
       document.body.classList.add("shake");
     }

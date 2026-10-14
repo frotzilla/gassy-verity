@@ -2,9 +2,9 @@
 GV.puffs = (() => {
   const cfg = GV.config.puffs;
 
-  function emit(stage, power) {
+  function emit(stage, power, combo = 1) {
     const w = stage.offsetWidth, h = stage.offsetHeight;
-    const n = Math.round(cfg.base + power * cfg.extra);
+    const n = Math.round((cfg.base + power * cfg.extra) * (1 + GV.config.combo.puffsPerCombo * (combo - 1)));
     for (let i = 0; i < n; i++) {
       const el = document.createElement("div"), s = 14 + Math.random() * (24 + power * 40);
       const [lo, hi] = cfg.colors;
