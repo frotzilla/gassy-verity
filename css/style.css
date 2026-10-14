@@ -4,9 +4,14 @@
 body {
   margin:0; min-height:100vh; overflow:hidden;
   font-family:"JetBrains Mono", ui-monospace, monospace;
-  background:linear-gradient(var(--sky) 0 62%, var(--grass) 62% 66%, var(--dirt) 66%);
+  background:var(--sky);
   user-select:none; -webkit-user-select:none; touch-action:none;
 }
+/* The whole scene lives in #world so the screen shake moves it as one piece. It is
+   oversized by 40px on every side so shake and rotation never reveal an edge. The HUD
+   sits outside it and stays still. Nothing in it is position:fixed. */
+#world { position:fixed; inset:-40px; padding:40px 40px 0;
+         background:linear-gradient(var(--sky) 0 62%, var(--grass) 62% 66%, var(--dirt) 66%); }
 h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006; font-size:clamp(1.6rem,5vw,2.8rem); }
 .sub { text-align:center; color:#fff; text-shadow:2px 2px 0 #0006; margin:6px 0; }
 
@@ -26,7 +31,7 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 
 
 /* Gas particles are drawn on one canvas (js/puffs.js), above Verity, below the HUD */
-#gasCanvas { position:fixed; inset:0; z-index:3; pointer-events:none; }
+#gasCanvas { position:absolute; left:40px; top:40px; z-index:3; pointer-events:none; }
 #stage { z-index:2; }
 #meter, #count, #hint, #combo { z-index:4; }
 

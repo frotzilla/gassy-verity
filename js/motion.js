@@ -4,6 +4,7 @@
 GV.motion = (() => {
   const cfg = GV.config.motion, maxScale = GV.config.maxScale;
   const bodyEl = document.getElementById("body");
+  const world = document.getElementById("world");
   const mouth = document.getElementById("mouth");
 
   let s = 1, v = 0, target = 1, jit = 0, trauma = 0;
@@ -48,7 +49,7 @@ GV.motion = (() => {
     // Screen shake: trauma decays smoothly; shake strength is trauma squared.
     trauma = Math.max(0, trauma - cfg.traumaDecay * dt);
     const sh = trauma * trauma;
-    document.body.style.transform = sh > 0.0004
+    world.style.transform = sh > 0.0004
       ? `translate(${wave(31, 2) * sh * cfg.shakePx}px,${wave(37, 4) * sh * cfg.shakePx}px) rotate(${wave(23, 6) * sh * cfg.shakeDeg}deg)`
       : "";
 
