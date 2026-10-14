@@ -17,6 +17,9 @@ window.GV = { config: {
             perBurst: 110,       // cap on particles from a single fart
             spreadBase: 2.6, spreadPower: 3.4,            // fan angle (radians), grows with power
             speedMin: 0.25, speedRand: 0.5, speedPower: 0.9,  // launch speed, in screen widths per second
+            comboCap: 8,         // combo steps past this add no extra puffs or lifetime
+            crowdDamp: 0.85,     // how much a packed screen cuts new puffs (0 = none)
+            probes: 8,           // recycling picks the most-faded of this many random puffs
             drag: 0.9,           // lower = gas travels farther
             base: 8, extra: 40,
             lifeMin: 4, lifeExtra: 5, lifePerCombo: 1.2,  // seconds a puff lingers

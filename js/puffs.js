@@ -11,7 +11,7 @@ GV.puffs = (() => {
   const vx = new Float32Array(N), vy = new Float32Array(N);
   const size = new Float32Array(N), age = new Float32Array(N), life = new Float32Array(N);
   const tint = new Uint8Array(N), wob = new Float32Array(N);
-  let next = 0, alive = 0, running = false, prev = 0;
+  let alive = 0, running = false, prev = 0;
 
   // Pre-rendered soft blobs, one per tint. drawImage of these is cheap.
   const sprites = cfg.colors.map(([r, gr, b]) => {
@@ -30,12 +30,31 @@ GV.puffs = (() => {
   function resize() { canvas.width = innerWidth + 2 * M; canvas.height = innerHeight + 2 * M; }
   addEventListener("resize", resize); resize();
 
+  // Pick a slot for a new puff: a dead one if the probes find it, else the most-faded of a few
+  // random probes. Recycling by insertion order would eat young, still-visible gas and thin
+  // the cloud out when you tap fast; this only takes gas that is already mostly gone.
+  function slot() {
+    let best = -1, bestAge = -1;
+    for (let k = 0; k < cfg.probes; k++) {
+      const i = Math.random() * N | 0;
+      const a = life[i] <= 0 ? 2 : age[i] / life[i];
+      if (a > bestAge) { bestAge = a; best = i; }
+    }
+    return best;
+  }
+
   function emit(stage, power, combo = 1) {
     const r = stage.getBoundingClientRect();
     const ox = r.left + M + r.width * 0.1, oy = r.top + M + r.height * 0.7;
-    const n = Math.min(cfg.perBurst, Math.round((cfg.base + power * cfg.extra) * (1 + GV.config.combo.puffsPerCombo * (combo - 1))));
+    // Combo bonuses stop growing after comboCap, and a crowded screen gets fewer new puffs.
+    // Otherwise fast spam floods the pool with fresh gas around Verity, which evicts the old
+    // gas that had already spread across the screen and makes the cloud look like it clears.
+    const bonus = Math.min(combo, cfg.comboCap) - 1;
+    const crowd = alive / N;
+    const n = Math.max(1, Math.min(cfg.perBurst,
+      Math.round((cfg.base + power * cfg.extra) * (1 + GV.config.combo.puffsPerCombo * bonus) * (1 - crowd * cfg.crowdDamp))));
     for (let k = 0; k < n; k++) {
-      const i = next; next = (next + 1) % N;       // ring buffer: oldest particle gets recycled
+      const i = slot();
       if (life[i] <= 0) alive++;
       // Starts leftwards; harder farts fan out toward a full circle. Speed scales with the
       // screen so a big one can reach the far side.
@@ -45,7 +64,7 @@ GV.puffs = (() => {
       vx[i] = Math.cos(ang) * sp; vy[i] = Math.sin(ang) * sp - 60;
       size[i] = (60 + Math.random() * (60 + power * 90)) * Math.min(1.6, Math.min(innerWidth, innerHeight) / 700);
       age[i] = 0;
-      life[i] = cfg.lifeMin + Math.random() * cfg.lifeExtra + combo * cfg.lifePerCombo;
+      life[i] = cfg.lifeMin + Math.random() * cfg.lifeExtra + Math.min(combo, cfg.comboCap) * cfg.lifePerCombo;
       tint[i] = Math.random() * sprites.length | 0;
       wob[i] = Math.random() * 6.28;
     }
