@@ -31,7 +31,7 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 
 
 /* Gas particles are drawn on one canvas (js/puffs.js), above Verity, below the HUD */
-#gasCanvas { position:absolute; left:40px; top:40px; z-index:3; pointer-events:none; }
+#gasCanvas { position:absolute; left:0; top:0; z-index:3; pointer-events:none; }
 #stage { z-index:2; }
 #meter, #count, #hint, #combo { z-index:4; }
 

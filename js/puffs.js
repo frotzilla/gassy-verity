@@ -24,12 +24,15 @@ GV.puffs = (() => {
     return s;
   });
 
-  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  // The canvas covers the whole oversized #world (viewport + margin on each side), so the
+  // gas never ends at a visible edge when the world shakes. Canvas coords = viewport + M.
+  const M = GV.config.worldMargin;
+  function resize() { canvas.width = innerWidth + 2 * M; canvas.height = innerHeight + 2 * M; }
   addEventListener("resize", resize); resize();
 
   function emit(stage, power, combo = 1) {
     const r = stage.getBoundingClientRect();
-    const ox = r.left + r.width * 0.1, oy = r.top + r.height * 0.7;
+    const ox = r.left + M + r.width * 0.1, oy = r.top + M + r.height * 0.7;
     const n = Math.min(cfg.perBurst, Math.round((cfg.base + power * cfg.extra) * (1 + GV.config.combo.puffsPerCombo * (combo - 1))));
     for (let k = 0; k < n; k++) {
       const i = next; next = (next + 1) % N;       // ring buffer: oldest particle gets recycled

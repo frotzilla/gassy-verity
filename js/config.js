@@ -1,5 +1,6 @@
 // Tweakable numbers live here. Everything else reads from GV.config.
 window.GV = { config: {
+  worldMargin: 40,      // px the scene is oversized by (keep in sync with #world in style.css)
   maxScale: 2.4,        // how big Verity gets at full charge
   fullChargeMs: 3000,   // hold time to reach full charge
   minPower: 0.08,       // power of a quick tap
