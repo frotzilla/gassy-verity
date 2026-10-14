@@ -6,7 +6,6 @@ GV.shop = (() => {
   const panel = document.getElementById("shopPanel");
   const bankNum = document.getElementById("bankNum");
   const bankRate = document.getElementById("bankRate");
-  const frenzyEl = document.getElementById("frenzy");
   let buyN = 1;                            // 1, 10 or "max"
   let upKey = "";
 
@@ -68,9 +67,6 @@ GV.shop = (() => {
     const S = G.state, gps = G.gps();
     bankNum.textContent = fmt(S.gas) + " gas";
     bankRate.textContent = "per second: " + fmt(gps);
-    const left = (S.frenzyUntil - Date.now()) / 1000;
-    frenzyEl.hidden = !(left > 0);
-    if (left > 0) frenzyEl.textContent = "FRENZY x" + GV.config.game.frenzyMult + "  " + Math.ceil(left) + "s";
 
     const maxOwned = D.generators.reduce((m, g, i) => G.owned(g.id) > 0 ? i : m, -1);
     D.generators.forEach((g, i) => {
@@ -124,7 +120,7 @@ GV.shop = (() => {
   panel.hidden = innerWidth < 900;          // open by default only on wide screens
 
   G.onChange(update);
-  setInterval(update, 250);                 // also catches frenzy ending and price changes
+  setInterval(update, 250);                 // also catches price changes
   update();
 
   return { update };

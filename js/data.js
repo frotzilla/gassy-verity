@@ -16,7 +16,7 @@ GV.data = (() => {
 
   // fx: { tap: x } farts earn x more | { gen, mult } that building makes x more
   //     { charge: x } charge time times x | { window: ms } longer combo window
-  //     { blast: x } bigger blast bonus | { golden: x } golden clouds come x times as often (<1)
+  //     { blast: x } bigger blast bonus
   const upgrades = [];
   const earlyShow = cost => s => s.total >= cost / 2;
   const add = (id, name, desc, cost, fx, show = earlyShow(cost)) => upgrades.push({ id, name, desc, cost, fx, show });
@@ -34,8 +34,6 @@ GV.data = (() => {
   [["Bigger Boom I", 2.5e4, 2], ["Bigger Boom II", 2e6, 3]]
     .forEach(([n, c, m], i) => add("blast" + i, n, "Gas blasts pay " + m + "x.", c, { blast: m }));
 
-  [["Lucky Gas I", 1e4, 0.7], ["Lucky Gas II", 5e5, 0.6]]
-    .forEach(([n, c, f], i) => add("golden" + i, n, "Golden clouds show up more often.", c, { golden: f }));
 
   // Four 2x tiers per building, unlocked by owning 1, 10, 25 and 50 of it.
   const tiers = [[1, 10, "I"], [10, 50, "II"], [25, 500, "III"], [50, 5000, "IV"]];
@@ -74,8 +72,6 @@ GV.data = (() => {
     ["allTypes", "Full House",       "Own every kind of auto-farter.", c => c.types >= generators.length],
     ["skin1",    "New Look",         "Buy a skin.",                    c => Object.keys(c.S.skins).length >= 2],
     ["skinAll",  "Wardrobe",         "Own every skin.",                c => Object.keys(c.S.skins).length >= skins.length],
-    ["gold1",    "Shiny",            "Click a golden cloud.",          c => c.st.goldens >= 1],
-    ["gold25",   "Prospector",       "Click 25 golden clouds.",        c => c.st.goldens >= 25],
     ["ascend1",  "Rebirth",          "Ascend for the first time.",     c => (c.S.ascensions || 0) >= 1]
   ].map(([id, name, desc, test]) => ({ id, name, desc, test }));
 

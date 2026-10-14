@@ -20,9 +20,7 @@ window.GV = { config: {
   game:   { growth: 1.15,        // each owned building raises its price by this factor
             offlineCapHours: 8,  // away time that still earns gas
             offlineEff: 0.5,     // fraction of normal production earned while away
-            saveSec: 15,
-            goldenMinSec: 60, goldenMaxSec: 180, goldenLifeSec: 13,
-            frenzyMult: 7, frenzySec: 30 },
+            saveSec: 15 },
   clips:  { chance: 0.15,        // chance a normal fart plays a random clip
             bigChance: 0.8,      // chance for blasts and big combos
             volume: 0.8, minGapMs: 2500 },

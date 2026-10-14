@@ -5,7 +5,6 @@ Every image in the game is a file in this folder. `manifest.js` lists them.
     assets/
       manifest.js        the list (edit this to add things)
       favicon.svg        browser tab icon (linked from index.html)
-      golden.svg
       skins/             Verity's bodies (100x100 grid)
       sky/               sun.svg, moon.svg
       weather/           cloud.svg
@@ -28,7 +27,7 @@ inflates, shakes and squashes, but the eyes and mouth will not animate).
 
 ## Replace anything else
 
-Overwrite `golden.svg`, `sky/sun.svg`, `sky/moon.svg`, `weather/cloud.svg` or
+Overwrite `sky/sun.svg`, `sky/moon.svg`, `weather/cloud.svg` or
 `favicon.svg` with your own. Keep the same file names (or change the path in `manifest.js`).
 
 Only use images you have the right to use if you publish the repo.

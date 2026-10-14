@@ -8,7 +8,6 @@ GV.assets = {
   sun: "assets/sky/sun.svg",
   moon: "assets/sky/moon.svg",
   cloud: "assets/weather/cloud.svg",
-  golden: "assets/golden.svg",
 
   // face: how the animated eyes and mouth are drawn on top of the image (coordinates are on a
   //       100x100 grid over the image). Use  face: false  if your image already has a face.

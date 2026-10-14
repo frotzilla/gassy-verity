@@ -87,7 +87,6 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
         text-shadow:2px 2px 0 #0008; pointer-events:none; white-space:nowrap; }
 #bankNum { font-weight:700; font-size:clamp(1.3rem,5vw,2rem); }
 #bankRate { font-size:.8rem; opacity:.9; }
-#frenzy { margin-top:2px; font-weight:700; color:#ffe27a; }
 
 /* Shop */
 #shopPanel { position:fixed; right:0; top:calc(max(12px, env(safe-area-inset-top)) + 36px); bottom:max(48px, env(safe-area-inset-bottom));
@@ -113,12 +112,8 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 .shopFoot { margin-top:12px; display:flex; gap:6px; }
 .shopFoot button { font:inherit; font-size:.75rem; background:#fff2; color:#fff; border:0; padding:4px 10px; cursor:pointer; }
 
-/* Floating gain text, golden cloud */
+/* Floating gain text */
 .float { position:fixed; z-index:4; pointer-events:none; color:#fff; font-weight:700; text-shadow:2px 2px 0 #0008; }
-.golden { position:fixed; z-index:5; width:clamp(56px,11vmin,84px); aspect-ratio:1; border:0; border-radius:50%;
-          background:center/contain no-repeat; cursor:pointer;
-          transform:translate(-50%,-50%); animation:goldenLife 13s linear forwards; }
-@keyframes goldenLife { 0% { opacity:0; } 4% { opacity:1; } 85% { opacity:1; } 100% { opacity:0; } }
 
 
 /* Left panels: clips, about */

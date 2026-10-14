@@ -14,9 +14,8 @@ No build step: open `index.html` in a browser.
 - `js/format.js` - number formatting (1.23K, 5.10B)
 - `js/ui.js` - toast, screen flash, floating gain text
 - `js/data.js` - the content: auto-farters, upgrades and achievements (add new ones here)
-- `js/game.js` - economy: gas, buying, frenzy, offline earnings, save/load
+- `js/game.js` - economy: gas, buying, offline earnings, save/load
 - `js/shop.js` - bank readout and the shop panel
-- `js/golden.js` - golden clouds
 - `js/stats.js` - lifetime stats in localStorage and the stats panel
 - `js/haptics.js` - phone vibration
 - `js/audio.js` - squeak, fart variants (squeak, classic, rumble, finale) and the blast boom
@@ -43,17 +42,15 @@ Scripts are plain (non-module) files sharing a `GV` namespace, so the page works
 
 Every fart earns gas: a tap is worth about 1, a full hold about 12, and chained farts add up to
 +100%. Spend gas in the shop on auto-farters (they produce gas per second and leak puffs onto
-the screen) and on upgrades (2x farts, faster charge, longer combo window, bigger blasts,
-more golden clouds, and four 2x tiers per auto-farter). A gas blast pays out about 45
-seconds of production. Golden clouds show up now and then: click one for a lump sum or a
-7x frenzy for 30 seconds. Progress saves to localStorage every 15 s, and while you are away it
+the screen) and on upgrades (2x farts, faster charge, longer combo window, bigger blasts, and four 2x tiers per auto-farter). A gas blast pays out about 45
+seconds of production. Progress saves to localStorage every 15 s, and while you are away it
 earns half production for up to 8 hours. The shop has save export and import, and reset.
 
 ## Ascension, achievements, weather, screenshots
 
 Once you have earned about 100 million gas, Ascend (in the shop) to trade your run for methane
 crystals: each is a permanent +1% gas. It resets gas, auto-farters and upgrades, and keeps
-skins, achievements and crystals. Each of the 26 achievements is also +1% gas. Buying, achievements
+skins, achievements and crystals. Each of the 22 achievements is also +1% gas. Buying, achievements
 and ascending have little sounds, and the sound button mutes everything.
 
 Weather is opt-in (About panel): it asks open-meteo.com for the current conditions at your
@@ -92,7 +89,7 @@ To test other times, places or weather, use the admin panel.
 
 Add `?admin` to the URL (or use "Open admin" in the About dialog) and enter the password:
 `ughImSoBigAndFatAndGassyAndGay`. It can set the time (or run it fast), the weather,
-the location, give gas and crystals, unlock everything, spawn golden clouds, and more.
+the location, give gas and crystals, unlock everything, and more.
 The password is checked against a salted hash in the source. It is public on purpose: this is a cheat-menu
 gate, not real security: the game runs entirely in your browser, so anyone with the dev tools
 open can edit their own game state anyway. There is nothing server-side to protect.

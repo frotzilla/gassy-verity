@@ -73,7 +73,7 @@ GV.admin = (() => {
       `<div class="row"><button type="button" data-a="unlockAll">unlock all skins and achievements</button></div>` +
 
       `<div class="shopSec">Spawn</div>` +
-      `<div class="row wrap"><button type="button" data-a="golden">golden cloud</button><button type="button" data-a="frenzy">frenzy</button>` +
+      `<div class="row wrap">` +
       `<button type="button" data-a="fill">fill with gas</button><button type="button" data-a="clear">clear gas</button></div>` +
 
       `<div class="shopSec">Danger</div>` +
@@ -97,8 +97,6 @@ GV.admin = (() => {
       case "setGas": { const n = parseNum(val("adAmt")); if (n >= 0) { G.admin.setGas(n); say("Gas set"); } break; }
       case "crystals": { const n = parseNum(val("adCr")); if (n > 0) { G.admin.giveCrystals(n); say("+" + n + " crystals"); } break; }
       case "unlockAll": G.admin.unlockAll(); say("Unlocked"); break;
-      case "golden": GV.golden.show(); break;
-      case "frenzy": G.startFrenzy(); break;
       case "fill": for (let i = 0; i < 12; i++) GV.puffs.emit(GV.verity.stage, 1, 8); break;
       case "clear": GV.puffs.shock(GV.verity.stage, GV.config.blast.push, GV.config.blast.clearSec); break;
       case "reset": if (confirm("Delete all progress?")) { G.reset(); say("Reset"); } break;

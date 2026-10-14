@@ -1,4 +1,4 @@
-// The economy: gas balance, buildings, upgrades, frenzy, offline earnings and saving.
+// The economy: gas balance, buildings, upgrades, offline earnings and saving.
 // UI lives in shop.js; content (prices, names) lives in data.js.
 GV.game = (() => {
   const cfg = GV.config, gc = cfg.game, D = GV.data;
@@ -8,9 +8,9 @@ GV.game = (() => {
   const upById = Object.fromEntries(D.upgrades.map(u => [u.id, u]));
   const listeners = [];
 
-  const blank = () => ({ gas: 0, total: 0, gens: {}, ups: {}, skins: { verity: 1 }, skin: "verity", ach: {}, lifetime: 0, crystals: 0, ascensions: 0, frenzyUntil: 0, saved: Date.now() });
+  const blank = () => ({ gas: 0, total: 0, gens: {}, ups: {}, skins: { verity: 1 }, skin: "verity", ach: {}, lifetime: 0, crystals: 0, ascensions: 0, saved: Date.now() });
   let S = blank();
-  let d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1, gps: 1 };  // derived from upgrades
+  let d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, gps: 1 };  // derived from upgrades
 
   const onChange = fn => listeners.push(fn);
   const sfx = name => { if (GV.audio && GV.audio[name]) GV.audio[name](); };
@@ -23,7 +23,7 @@ GV.game = (() => {
 
   // ---- derived values ----
   function recalc() {
-    d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1, gps: 1 };
+    d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, gps: 1 };
     for (const u of D.upgrades) {
       if (!S.ups[u.id]) continue;
       const f = u.fx;
@@ -32,24 +32,20 @@ GV.game = (() => {
       if (f.charge) d.charge *= f.charge;
       if (f.window) d.window += f.window;
       if (f.blast) d.blast *= f.blast;
-      if (f.golden) d.golden *= f.golden;
     }
     cfg.fullChargeMs = Math.max(1000, baseCharge * d.charge);
     cfg.combo.windowMs = baseWindow + d.window;
   }
 
-  const frenzyOn = () => Date.now() < S.frenzyUntil;
-  const frenzyMult = () => frenzyOn() ? gc.frenzyMult : 1;
-
   function gpsOf(id) { return (S.gens[id] || 0) * genById[id].gps * (d.gen[id] || 1); }
   function baseGps() { let t = 0; for (const g of D.generators) t += gpsOf(g.id); return t * d.gps; }
   // Permanent bonuses: +1% per ascension crystal, +1% per achievement.
   const mult = () => (1 + 0.01 * S.crystals) * (1 + 0.01 * Object.keys(S.ach).length);
-  const gps = () => baseGps() * mult() * frenzyMult();
+  const gps = () => baseGps() * mult();
 
   // Gas for one fart. p = how long it was held (0..1). A tap is ~1, a full hold is ~12.
   function tapValue(p, combo) {
-    return d.tap * mult() * (1 + 11 * Math.pow(p, 1.5)) * (1 + 0.05 * Math.min(combo - 1, 20)) * frenzyMult();
+    return d.tap * mult() * (1 + 11 * Math.pow(p, 1.5)) * (1 + 0.05 * Math.min(combo - 1, 20));
   }
 
   // ---- earning ----
@@ -126,12 +122,10 @@ GV.game = (() => {
     const gain = crystalGain();
     if (gain < 1) return 0;
     S.crystals += gain; S.ascensions = (S.ascensions || 0) + 1;
-    S.gas = 0; S.total = 0; S.gens = {}; S.ups = {}; S.frenzyUntil = 0;
+    S.gas = 0; S.total = 0; S.gens = {}; S.ups = {};
     recalc(); changed(); save(); sfx("whoosh");
     return gain;
   }
-
-  function startFrenzy() { S.frenzyUntil = Date.now() + gc.frenzySec * 1000; changed(); }
 
   // ---- save / load ----
   function save() {
@@ -144,7 +138,7 @@ GV.game = (() => {
     if (!raw || typeof raw !== "object") return n;
     const num = x => (typeof x === "number" && isFinite(x) && x >= 0 ? x : 0);
     n.gas = num(raw.gas); n.total = Math.max(num(raw.total), n.gas);
-    n.frenzyUntil = num(raw.frenzyUntil); n.saved = num(raw.saved) || Date.now();
+    n.saved = num(raw.saved) || Date.now();
     for (const g of D.generators) if (raw.gens) n.gens[g.id] = Math.floor(num(raw.gens[g.id]));
     n.lifetime = Math.max(num(raw.lifetime), n.total); n.crystals = Math.floor(num(raw.crystals)); n.ascensions = Math.floor(num(raw.ascensions));
     for (const a of D.achievements) if (raw.ach && raw.ach[a.id]) n.ach[a.id] = 1;
@@ -215,9 +209,8 @@ GV.game = (() => {
   return {
     admin,
     get state() { return S; },
-    get goldenFactor() { return d.golden; },
     onChange, fart, gps, baseGps, gpsOf, tapValue, owned, genCost, maxAffordable,
-    buyGen, buyUpgrade, buySkin, setSkin, startFrenzy, mult, unlock, crystalGain, ascend, frenzyOn, earn,
+    buyGen, buyUpgrade, buySkin, setSkin, mult, unlock, crystalGain, ascend, earn,
     save, exportCode, importCode, reset
   };
 })();
