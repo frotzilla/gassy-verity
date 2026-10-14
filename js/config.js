@@ -21,7 +21,7 @@ window.GV = { config: {
   sky:    { refreshSec: 20,      // how often the sky is recomputed
             ipTimeoutMs: 4000,   // give up on the IP lookup after this long
             cacheHours: 24 },    // reuse the looked-up location for this long
-  combo:  { windowMs: 2500,       // time to land the next fart and keep the combo
+  combo:  { windowMs: 1500,       // time to land the next fart and keep the combo
             powerPerCombo: 0.12,  // extra fart power per combo step
             puffsPerCombo: 0.2 }, // extra puffs per combo step (fraction)
   puffs:  { max: 700,            // hard cap on live particles (the lag guard)
