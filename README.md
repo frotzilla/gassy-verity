@@ -88,9 +88,10 @@ To test other times, places or weather, use the admin panel.
 
 ## Admin panel
 
-Add `?admin` to the URL and enter the password. It can set the time (or run it fast), the weather,
+Add `?admin` to the URL (or use "Open admin" in the About dialog) and enter the password:
+`ughImSoBigAndFatAndGassyAndGay`. It can set the time (or run it fast), the weather,
 the location, give gas and crystals, unlock everything, spawn golden clouds and poop, and more.
-The password is checked against a salted hash, so it is not in the source. This is a cheat-menu
+The password is checked against a salted hash in the source. It is public on purpose: this is a cheat-menu
 gate, not real security: the game runs entirely in your browser, so anyone with the dev tools
 open can edit their own game state anyway. There is nothing server-side to protect.
 
