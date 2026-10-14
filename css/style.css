@@ -165,3 +165,20 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 .ascend b { color:#d9c8ff; }
 .ascend button { margin-top:6px; width:100%; font:inherit; font-size:.8rem; background:#6a4fd0; color:#fff; border:0; padding:6px; cursor:pointer; }
 .ascend button:disabled { opacity:.4; cursor:default; }
+
+/* About corner button, dialogs (about, admin) */
+.cornerBtn { position:fixed; top:max(12px, env(safe-area-inset-top)); left:12px; z-index:5; background:#0006; color:#fff; border:0;
+             padding:6px 12px; font:inherit; font-size:.8rem; cursor:pointer; opacity:.8; }
+#modalBackdrop { position:fixed; inset:0; z-index:8; background:#0008; }
+.modal { position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:9; width:min(92vw,520px); max-height:84vh; overflow-y:auto;
+         background:#0b0f1ae6; color:#fff; padding:12px 16px; font-size:.8rem; line-height:1.45; }
+.modal p { margin:6px 0; }
+.modal a { color:#c9f27a; }
+.modal .small { opacity:.7; }
+.modal .shopHead button, .modal .row button, .modal form button { font:inherit; font-size:.75rem; background:#fff2; color:#fff; border:0; padding:4px 10px; cursor:pointer; }
+.modal .row { display:flex; align-items:center; gap:6px; padding:3px 0; }
+.modal .row.wrap { flex-wrap:wrap; }
+.modal .row span { flex:1; }
+.modal input, .modal select { font:inherit; font-size:.8rem; background:#fff1; color:#fff; border:1px solid #fff3; padding:4px 6px; min-width:0; }
+.modal select option { color:#000; }
+.modal .check { display:flex; gap:8px; align-items:center; margin:6px 0; }

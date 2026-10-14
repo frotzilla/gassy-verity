@@ -25,7 +25,7 @@ window.GV = { config: {
             frenzyMult: 7, frenzySec: 30 },
   clips:  { chance: 0.15,        // chance a normal fart plays a random clip
             bigChance: 0.8,      // chance for blasts, finales and poop
-            volume: 0.8, minGapMs: 2500, maxCount: 30, maxBytes: 4e6 },
+            volume: 0.8, minGapMs: 2500 },
   audioFinaleCombo: 12,          // combo at which clips use the "big" chance
   poopLimit: 6,                  // most poops allowed on screen at once
   haptics: true,                 // phone vibration (Android browsers; iOS ignores it)

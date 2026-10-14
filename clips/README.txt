@@ -1,8 +1,10 @@
-Optional: ship voice clips with the page.
+Voice clips. Drop audio files (mp3, wav, ogg, m4a, aac, flac, webm) in this folder and push.
+The game plays a random one now and then (on some farts, and more often on blasts, big combos
+and poops).
 
-1. Put audio files (mp3, wav, ogg, m4a) in this folder.
-2. List their file names in manifest.json, for example:  ["meow.mp3", "oh-no.wav"]
-3. Serve the folder over http (fetch does not work from file://).
+The page cannot list a folder by itself, so it reads clips/manifest.js. That file is generated:
+  - on GitHub, a workflow regenerates it whenever you push files to clips/
+  - locally, run:  node tools/clips-manifest.js
 
-You can also just drag audio files onto the page; those are stored in your browser only.
-Only add clips you have the right to use if you publish this repo.
+Chance and volume are in js/config.js (the "clips" block). Only add clips you have the right to
+use, since this repo is public.

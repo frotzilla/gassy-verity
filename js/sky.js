@@ -18,7 +18,6 @@ GV.sky = (() => {
   // Sun and moon are image files (assets/sky/); the moon's phase shade is drawn over its image.
   sunEl.insertAdjacentHTML("afterbegin", `<img src="${GV.assets.sun}" alt="" draggable="false">`);
   moonEl.insertAdjacentHTML("afterbegin", `<img src="${GV.assets.moon}" alt="" draggable="false">`);
-  const q = new URLSearchParams(location.search);
   const rad = Math.PI / 180;
   const KEY = "gassyVerity.loc.v1";
 
@@ -27,8 +26,8 @@ GV.sky = (() => {
   const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 
   // ---- location ----
-  const speed = parseFloat(q.get("speed")) || 0;
   let loc = fallbackLoc();
+  let ovLoc = null;                       // admin override: a fixed location, never saved
 
   function fallbackLoc() {
     // Longitude from the time zone (15 degrees per hour); latitude is a mid-latitude guess.
@@ -50,15 +49,12 @@ GV.sky = (() => {
   function geoOff() { try { return localStorage.getItem(GEO_KEY) === "1"; } catch (e) { return false; } }
   function setGeo(on) {
     try { localStorage.setItem(GEO_KEY, on ? "0" : "1"); } catch (e) {}
-    loc = fallbackLoc();
-    locate().then(found => { if (found) loc = found; update(); });
+    if (!ovLoc) { loc = fallbackLoc(); locate().then(found => { if (found && !ovLoc) loc = found; update(); }); }
     update();
   }
 
   async function locate() {
-    const lat = parseFloat(q.get("lat")), lon = parseFloat(q.get("lon"));
-    if (isFinite(lat) && isFinite(lon)) return { lat, lon, city: q.get("city") || "" };
-    if (q.get("loc") === "off" || geoOff()) return null;
+    if (geoOff()) return null;
     try {
       const c = JSON.parse(localStorage.getItem(KEY) || "null");
       if (c && Date.now() - c.t < cfg.cacheHours * 3600e3) return c;
@@ -152,18 +148,40 @@ GV.sky = (() => {
   }
 
   // ---- clock ----
-  const t0 = Date.now();
+  // Normally the real time. The admin panel can pin the time, or run it faster (speed = sky
+  // minutes per real second). These overrides are never saved.
+  let ovTime = null, speed = 0, ovStart = Date.now(), timer = 0;
   function now() {
-    const m = /^(\d{1,2}):(\d{2})$/.exec(q.get("time") || "");
-    const d = new Date(speed ? t0 + (Date.now() - t0) * speed * 60 : Date.now());
-    if (m) { d.setHours(+m[1], +m[2], 0, 0); }
-    return d;
+    if (ovTime == null && !speed) return new Date();
+    const base = ovTime != null ? ovTime : ovStart;
+    return new Date(base + (Date.now() - ovStart) * speed * 60);
   }
   function update() { return apply(now()); }
 
-  update();
-  locate().then(found => { if (found) { loc = found; } update(); if (GV.weather) GV.weather.refresh(true); });
-  setInterval(update, speed ? 100 : cfg.refreshSec * 1000);
+  function restartTimer() {
+    clearInterval(timer);
+    timer = setInterval(update, speed ? 100 : cfg.refreshSec * 1000);
+  }
 
-  return { update, apply, position, setGeo, geoOn: () => !geoOff(), get loc() { return loc; } };
+  // date: a Date to pin to (or null for the real clock), spd: sky minutes per second (0 = still).
+  function setTime(date, spd = 0) {
+    ovTime = date ? date.getTime() : null;
+    speed = spd > 0 ? spd : 0;
+    ovStart = Date.now();
+    restartTimer(); update();
+  }
+
+  // l: { lat, lon, city } to pin a location, or null to go back to the real lookup.
+  function setLocation(l) {
+    ovLoc = l ? { lat: +l.lat, lon: +l.lon, city: l.city || "" } : null;
+    if (ovLoc) loc = ovLoc;
+    else { loc = fallbackLoc(); locate().then(found => { if (found && !ovLoc) loc = found; update(); if (GV.weather) GV.weather.refresh(true); }); }
+    update(); if (GV.weather) GV.weather.refresh(true);
+  }
+
+  update();
+  locate().then(found => { if (found && !ovLoc) { loc = found; } update(); if (GV.weather) GV.weather.refresh(true); });
+  restartTimer();
+
+  return { update, apply, position, setGeo, setTime, setLocation, geoOn: () => !geoOff(), get loc() { return loc; }, get now() { return now(); } };
 })();

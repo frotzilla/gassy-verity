@@ -217,7 +217,20 @@ GV.game = (() => {
   addEventListener("beforeunload", save);
   document.addEventListener("visibilitychange", () => { if (document.hidden) save(); });
 
+  // Used by the admin panel (js/admin.js).
+  const admin = {
+    setGas(x) { S.gas = Math.max(0, x); changed(); save(); },
+    giveCrystals(n) { S.crystals += Math.max(0, Math.floor(n)); changed(); save(); },
+    unlockAll() {
+      for (const s of D.skins) S.skins[s.id] = 1;
+      for (const p of D.pets) S.pets[p.id] = 1;
+      for (const a of D.achievements) S.ach[a.id] = 1;
+      recalc(); changed(); save();
+    }
+  };
+
   return {
+    admin,
     get state() { return S; },
     get goldenFactor() { return d.golden; },
     onChange, fart, gps, baseGps, gpsOf, tapValue, owned, genCost, maxAffordable,

@@ -1,17 +1,15 @@
-// About panel (credits and privacy) plus a one-time notice about the IP location lookup.
+// About (credits and privacy), in its own corner button and dialog, separate from the game UI.
 GV.about = (() => {
   const btn = document.getElementById("aboutBtn");
   const panel = document.getElementById("aboutPanel");
-  const notice = document.getElementById("notice");
-  const SEEN = "gassyVerity.noticeSeen";
 
   panel.innerHTML =
-    `<div class="shopHead"><b>About</b></div>` +
+    `<div class="shopHead"><b>About</b><button type="button" class="close">close</button></div>` +
     `<div class="shopSec">Privacy</div>` +
     `<p>To match the sky to your real sunrise and sunset, this page looks up your approximate location from your IP address ` +
     `using <b>ipwho.is</b> (or <b>ipapi.co</b> if that fails). Those services see your IP, which is shared with every site you visit anyway, ` +
     `but they are a third party. The result is cached in your browser for a day. Nothing else leaves your device: ` +
-    `your game save, stats and any voice clips stay in this browser and are never uploaded.</p>` +
+    `your game save and stats stay in this browser and are never uploaded.</p>` +
     `<label class="check"><input type="checkbox" id="geoToggle"> Use my IP location for the sky</label>` +
     `<label class="check"><input type="checkbox" id="wxToggle"> Show my real weather (sends your location, rounded to about 10 km, to open-meteo.com; off by default)</label>` +
     `<div class="shopSec">Credits</div>` +
@@ -21,29 +19,10 @@ GV.about = (() => {
     `<p>Font: JetBrains Mono (SIL Open Font License). Sun position: low-precision NOAA solar formulas. ` +
     `The art is in the assets folder; the sounds are generated in your browser. Weather data: open-meteo.com.</p>`;
 
-  const toggle = panel.querySelector("#geoToggle");
-  toggle.checked = GV.sky.geoOn();
-  toggle.addEventListener("change", () => { GV.sky.setGeo(toggle.checked); });
-  const wx = panel.querySelector("#wxToggle");
-  wx.checked = GV.weather.enabled();
+  const geo = panel.querySelector("#geoToggle"), wx = panel.querySelector("#wxToggle");
+  geo.addEventListener("change", () => GV.sky.setGeo(geo.checked));
   wx.addEventListener("change", () => GV.weather.setEnabled(wx.checked));
 
-  GV.ui.bindPanel(btn, panel, "left", () => { toggle.checked = GV.sky.geoOn(); });
-
-  // First visit: a short heads-up with a way out, instead of burying it in the panel.
-  function seen() { try { return localStorage.getItem(SEEN) === "1"; } catch (e) { return true; } }
-  function dismiss() { notice.hidden = true; try { localStorage.setItem(SEEN, "1"); } catch (e) {} }
-  if (!seen() && GV.sky.geoOn()) {
-    notice.innerHTML = `<span>The sky uses your IP location (looked up via ipwho.is). </span>` +
-      `<button type="button" data-a="ok">ok</button><button type="button" data-a="off">turn off</button>`;
-    notice.hidden = false;
-    notice.addEventListener("pointerdown", e => e.stopPropagation());
-    notice.addEventListener("click", e => {
-      const a = e.target.dataset && e.target.dataset.a;
-      if (a === "off") GV.sky.setGeo(false);
-      if (a) dismiss();
-    });
-  }
-
+  GV.ui.modal(btn, panel, () => { geo.checked = GV.sky.geoOn(); wx.checked = GV.weather.enabled(); });
   return {};
 })();

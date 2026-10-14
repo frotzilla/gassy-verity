@@ -7,7 +7,8 @@ No build step: open `index.html` in a browser.
 
 - `index.html` - page markup
 - `assets/` - all the art (SVG/PNG), listed in `assets/manifest.js`; see `assets/README.md` to add your own
-- `clips/` - optional shipped voice clips (see `clips/README.txt`)
+- `clips/` - voice clips: drop audio files here (see `clips/README.txt`)
+- `tools/clips-manifest.js` - regenerates `clips/manifest.js` (a GitHub Action also does it on push)
 - `css/style.css` - all styling
 - `js/config.js` - tweakable numbers (size, timings, sound, gas, blast, sky)
 - `js/format.js` - number formatting (1.23K, 5.10B)
@@ -24,11 +25,12 @@ No build step: open `index.html` in a browser.
 - `js/skins.js` - skins: the body is an image from assets/, the animated face is drawn over it
 - `js/poop.js` - Cat Boy's weak stomach
 - `js/pets.js` - pets that wander the ground or hover near Verity
-- `js/clips.js` - random voice clips (drag and drop, stored in IndexedDB)
+- `js/clips.js` - plays random clips from `clips/`
 - `js/achievements.js` - achievements (+1% gas each) and their list in the stats panel
 - `js/weather.js` - optional real weather: clouds, fog, rain, snow, storms
 - `js/screenshot.js` - the snap button (saves a PNG of the scene)
-- `js/about.js` - credits, privacy blurb, and the first-visit location notice
+- `js/about.js` - credits and privacy, in its own dialog
+- `js/admin.js` - password-gated admin panel (time, weather, location, gas)
 - `js/combo.js` - combo counter
 - `js/sky.js` - day/night cycle from the real time and IP location
 - `js/motion.js` - squash spring and screen shake (one loop, continuous state)
@@ -58,7 +60,7 @@ and ascending have little sounds, and the sound button mutes everything.
 
 Weather is opt-in (About panel): it asks open-meteo.com for the current conditions at your
 approximate location, with the coordinates rounded to about 10 km, and shows clouds, fog, rain,
-snow or storms. For testing use `?weather=rain` (also `storm`, `snow`, `fog`, `cloudy`, `overcast`).
+snow or storms.
 
 The snap button saves a PNG of the scene (or opens the share sheet on a phone). It reads the
 page's own images back, so it needs the page served over http(s); opened from a file:// URL the
@@ -70,10 +72,11 @@ Pets (Stink Fly, Bog Frog, Slow Snail, Dung Beetle, Gas Mask Pug) each give a pe
 Skins (Verity, Mint, Cat Boy, Pumpkin, Robo, Ghost) are bought once and switched any time. Cat Boy has a weak stomach: fart about 14 times in
 6 seconds and he poops. Click the poop to clean it up for a little gas.
 
-Voice clips: drag audio files onto the page (or use the clips button). They are stored in your
-browser only and play at random on farts, more often on blasts, finales and poops. You can also
-ship clips with the page via `clips/manifest.json` (see `clips/README.txt`). Only add clips you
-have the right to use if you publish them.
+Voice clips: put audio files in the `clips/` folder and push. They play at random on some farts,
+more often on blasts, big combos and poops. The page reads `clips/manifest.js`, which is generated:
+a GitHub Action rebuilds it whenever you push files to `clips/`, or run
+`node tools/clips-manifest.js` locally. Chance and volume are in `js/config.js`. Only add clips you
+have the right to use, since the repo is public.
 
 ## Sky
 
@@ -83,8 +86,15 @@ those services.** You can turn the lookup off from the About panel, and there is
 first time you visit. If it fails the sky uses the device clock and a longitude guessed from the
 time zone, and the label says "(approx)". The sun and moon positions are computed locally.
 
-URL overrides for testing: `?time=21:30`, `?lat=59.9&lon=10.7&city=Oslo`, `?loc=off`
-(skip the lookup), `?speed=30` (sky minutes per real second, a time-lapse).
+To test other times, places or weather, use the admin panel.
+
+## Admin panel
+
+Add `?admin` to the URL and enter the password. It can set the time (or run it fast), the weather,
+the location, give gas and crystals, unlock everything, spawn golden clouds and poop, and more.
+The password is checked against a salted hash, so it is not in the source. This is a cheat-menu
+gate, not real security: the game runs entirely in your browser, so anyone with the dev tools
+open can edit their own game state anyway. There is nothing server-side to protect.
 
 ## Controls
 

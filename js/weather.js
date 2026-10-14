@@ -1,6 +1,6 @@
 // Weather over the scene: clouds, fog, rain, snow, storms. Opt-in: with the About toggle on, it
 // asks open-meteo.com for the current weather at your approximate location (coordinates rounded
-// to about 10 km). ?weather=rain|storm|snow|fog|cloudy|overcast|clear forces one for testing.
+// to about 10 km). The admin panel can force any kind of weather.
 GV.weather = (() => {
   const world = document.getElementById("world");
   const canvas = document.getElementById("weatherCanvas");
@@ -8,7 +8,6 @@ GV.weather = (() => {
   const cloudBox = document.getElementById("clouds");
   const dimEl = document.getElementById("dim");
   const fogEl = document.getElementById("fog");
-  const q = new URLSearchParams(location.search);
   const KEY = "gassyVerity.weather";
 
   // What each kind of weather looks like.
@@ -22,7 +21,7 @@ GV.weather = (() => {
     snow:     { clouds: 8, dim: 0.2,  fog: 0.15, rain: 0,   snow: 110 }
   };
 
-  let kind = "clear", on = false, lastFetch = 0, drops = [], flakes = [], raf = 0, lightning = 0, nextBolt = 0;
+  let kind = "clear", forced = null, on = false, lastFetch = 0, drops = [], flakes = [], raf = 0, lightning = 0, nextBolt = 0;
 
   // WMO weather code -> one of the looks above.
   function fromCode(c, cloud) {
@@ -39,12 +38,11 @@ GV.weather = (() => {
   function setEnabled(v) {
     try { localStorage.setItem(KEY, v ? "1" : "0"); } catch (e) {}
     on = v; lastFetch = 0;
-    if (!v && !q.get("weather")) apply("clear"); else refresh();
+    if (!v && !forced) apply("clear"); else refresh();
   }
 
   async function refresh(force) {
-    const forced = q.get("weather");
-    if (forced) return apply(LOOKS[forced] ? forced : "clear");
+    if (forced) return apply(forced);
     if (!enabled()) return;
     const loc = GV.sky.loc;
     if (!loc || loc.approx) return;                    // only with a real looked-up location
@@ -103,9 +101,15 @@ GV.weather = (() => {
     raf = (drops.length || flakes.length) ? requestAnimationFrame(frame) : 0;
   }
 
+  // Admin: pin a kind of weather (any key of LOOKS), or null to go back to real/off.
+  function force(k) {
+    forced = k && LOOKS[k] ? k : null;
+    if (forced) apply(forced); else if (enabled()) refresh(true); else apply("clear");
+  }
+
   on = enabled();
-  if (q.get("weather") || on) setTimeout(() => refresh(true), 1200);
+  if (on) setTimeout(() => refresh(true), 1200);
   setInterval(() => refresh(), 5 * 60e3);
 
-  return { setEnabled, enabled, refresh, get name() { return kind === "clear" ? "" : kind; }, get kind() { return kind; } };
+  return { setEnabled, enabled, refresh, force, kinds: Object.keys(LOOKS), get name() { return kind === "clear" ? "" : kind; }, get kind() { return kind; } };
 })();

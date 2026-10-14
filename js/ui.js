@@ -43,5 +43,25 @@ GV.ui = (() => {
     for (const el of [btn, panel]) el.addEventListener("pointerdown", e => e.stopPropagation());
   }
 
-  return { toast, flash, floatText, bindPanel };
+  // Centered dialogs with a shared backdrop. Esc, the backdrop and any .close button dismiss.
+  const modals = [];
+  let backdrop = null;
+  function closeModals() { for (const m of modals) m.hidden = true; if (backdrop) backdrop.hidden = true; }
+  function modal(btn, panel, onOpen) {
+    if (!backdrop) {
+      backdrop = document.createElement("div"); backdrop.id = "modalBackdrop"; backdrop.hidden = true;
+      backdrop.addEventListener("pointerdown", e => e.stopPropagation());
+      backdrop.addEventListener("click", closeModals);
+      document.body.appendChild(backdrop);
+      addEventListener("keydown", e => { if (e.key === "Escape") closeModals(); });
+    }
+    modals.push(panel);
+    const open = () => { closeModals(); panel.hidden = false; backdrop.hidden = false; if (onOpen) onOpen(); };
+    if (btn) { btn.addEventListener("click", open); btn.addEventListener("pointerdown", e => e.stopPropagation()); }
+    panel.addEventListener("pointerdown", e => e.stopPropagation());
+    panel.addEventListener("click", e => { if (e.target.closest(".close")) closeModals(); });
+    return { open, close: closeModals };
+  }
+
+  return { toast, flash, floatText, bindPanel, modal };
 })();
