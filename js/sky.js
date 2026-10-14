@@ -103,10 +103,10 @@ GV.sky = (() => {
   }
 
   // Stars are made once; the layer just fades in and out.
-  for (let i = 0; i < 90; i++) {
-    const s = document.createElement("i"), sz = 1 + Math.random() * 1.8;
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement("i");
     s.className = "star";
-    s.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 92}%;width:${sz}px;height:${sz}px;animation-delay:${(Math.random() * 4).toFixed(2)}s`;
+    s.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 92}%`;
     starsEl.appendChild(s);
   }
 

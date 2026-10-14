@@ -50,3 +50,7 @@ spawns up to ~100 DOM puffs scaled up to 4x, they pile up, and each fart also st
 several oscillators feeding a shared reverb. Kept as-is for fun. Check it out with:
 
     git checkout v1-laggy-combo
+
+## License
+
+GPL-3.0. See `LICENSE`. Copyright (C) 2026 Redwan Hossain.

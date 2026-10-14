@@ -8,9 +8,10 @@ GV.verity = (() => {
   let holdStart = 0, raf = 0, power = 0, toots = 0;
 
   function tick() {
+    if (!holdStart) return;          // released: stop even if a frame was already queued
     const now = performance.now();
     power = Math.min((now - holdStart) / cfg.fullChargeMs, 1);
-    GV.motion.set(1 + (cfg.maxScale - 1) * power, power);
+    GV.motion.set(1 + (cfg.maxScale - 1) * power);
     fill.style.width = power * 100 + "%";
     GV.audio.setSqueak(power);
     GV.haptics.charge(power, now);
@@ -36,7 +37,7 @@ GV.verity = (() => {
     GV.haptics.cancel();
     toots++; countEl.textContent = "Toots: " + toots;
     fill.style.width = "0";
-    GV.motion.set(1, 0);
+    GV.motion.set(1);
 
     // Chained farts hit harder.
     const c = GV.combo.hit(p);

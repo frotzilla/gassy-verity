@@ -52,30 +52,22 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 /* Sky: sun, moon and stars ride behind Verity, clipped at the horizon (62% of the scene) */
 #sky { position:absolute; left:0; right:0; top:0; height:62%; overflow:hidden; pointer-events:none; z-index:0; }
 #stars { position:absolute; inset:0; opacity:0; transition:opacity 3s; }
-.star { position:absolute; border-radius:50%; background:#fff; animation:twinkle 3.5s ease-in-out infinite; }
-@keyframes twinkle { 50% { opacity:.25; } }
+.star { position:absolute; width:2px; height:2px; background:#fff; }
 #sun, #moon { position:absolute; border-radius:50%; transform:translate(-50%,-50%); }
-#sun { width:clamp(50px,12vmin,90px); aspect-ratio:1;
-       background:radial-gradient(circle, #fffbe0 0 35%, #ffe27a 55%, rgba(255,200,80,0) 72%); }
-#moon { width:clamp(36px,8vmin,64px); aspect-ratio:1; background:#eef2ff; overflow:hidden;
-        box-shadow:0 0 22px #cfd8ff88; }
-#moonShade { position:absolute; inset:0; border-radius:50%; background:rgba(12,16,44,.93); }
+#sun { width:clamp(44px,10vmin,76px); aspect-ratio:1; background:#ffe27a; }
+#moon { width:clamp(34px,7vmin,56px); aspect-ratio:1; background:#e8ecf5; overflow:hidden; }
+#moonShade { position:absolute; inset:0; border-radius:50%; background:#0e1736; }
 
 /* Eyes water as the room fills with gas */
-.tear { animation:tear 1.5s ease-in infinite; }
-.tear.t2 { animation-delay:.6s; }
-@keyframes tear { 0% { transform:translateY(0); opacity:1; } 100% { transform:translateY(12px); opacity:0; } }
 
 /* Toast, flash */
 #flash { position:fixed; inset:0; z-index:6; pointer-events:none; opacity:0;
          background:radial-gradient(circle at 50% 70%, #fff, #e4ff8a 45%, #7dae1c); }
 #toast { position:fixed; left:50%; top:38%; z-index:6; pointer-events:none; opacity:0; white-space:nowrap;
          transform:translate(-50%,-50%); font-weight:700; font-size:clamp(1.6rem,8vw,4rem); color:#fff;
-         text-shadow:4px 4px 0 #0008; }
-#toast.show { animation:toast 1.6s ease-out forwards; }
-@keyframes toast { 0% { opacity:0; transform:translate(-50%,-50%) scale(.6); }
-  14% { opacity:1; transform:translate(-50%,-50%) scale(1.18); } 24% { transform:translate(-50%,-50%) scale(1); }
-  80% { opacity:1; } 100% { opacity:0; transform:translate(-50%,-50%) scale(1.05); } }
+         text-shadow:3px 3px 0 #0008; }
+#toast.show { animation:toast 1.4s ease-out forwards; }
+@keyframes toast { 0% { opacity:0; } 12% { opacity:1; } 80% { opacity:1; } 100% { opacity:0; } }
 
 /* Stats */
 #statsBtn { position:fixed; top:max(12px, env(safe-area-inset-top)); right:12px; background:#0008; color:#fff; border:0;
