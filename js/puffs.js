@@ -34,11 +34,13 @@ GV.puffs = (() => {
     for (let k = 0; k < n; k++) {
       const i = next; next = (next + 1) % N;       // ring buffer: oldest particle gets recycled
       if (life[i] <= 0) alive++;
-      const ang = Math.PI + (Math.random() - 0.5) * 2.2;   // mostly leftwards, wide spread
-      const sp = (120 + Math.random() * (260 + power * 520));
+      // Starts leftwards; harder farts fan out toward a full circle. Speed scales with the
+      // screen so a big one can reach the far side.
+      const ang = Math.PI + (Math.random() - 0.5) * (cfg.spreadBase + power * cfg.spreadPower);
+      const sp = innerWidth * (cfg.speedMin + Math.random() * cfg.speedRand + power * cfg.speedPower);
       x[i] = ox; y[i] = oy + (Math.random() - 0.5) * 30;
       vx[i] = Math.cos(ang) * sp; vy[i] = Math.sin(ang) * sp - 60;
-      size[i] = 40 + Math.random() * (50 + power * 50);
+      size[i] = (60 + Math.random() * (60 + power * 90)) * Math.min(1.6, Math.min(innerWidth, innerHeight) / 700);
       age[i] = 0;
       life[i] = cfg.lifeMin + Math.random() * cfg.lifeExtra + combo * cfg.lifePerCombo;
       tint[i] = Math.random() * sprites.length | 0;
@@ -49,7 +51,7 @@ GV.puffs = (() => {
 
   function frame(now) {
     const dt = Math.min((now - prev) / 1000, 0.05); prev = now;
-    const W = canvas.width, H = canvas.height, drag = Math.exp(-1.6 * dt);
+    const W = canvas.width, H = canvas.height, drag = Math.exp(-cfg.drag * dt);
     g.clearRect(0, 0, W, H);
     alive = 0;
     for (let i = 0; i < N; i++) {
@@ -62,8 +64,8 @@ GV.puffs = (() => {
       // Burst velocity bleeds off, then a lazy drift takes over so the cloud hangs around.
       vx[i] *= drag; vy[i] *= drag;
       wob[i] += dt * 0.8;
-      x[i] += (vx[i] + Math.sin(wob[i]) * 14) * dt;
-      y[i] += (vy[i] - 10 + Math.cos(wob[i] * 0.7) * 10) * dt;
+      x[i] += (vx[i] + Math.sin(wob[i]) * 30) * dt;
+      y[i] += (vy[i] + Math.cos(wob[i] * 0.7) * 24) * dt;
       // Soft walls so the gas piles up on screen instead of leaving it.
       if (x[i] < 0) { x[i] = 0; vx[i] = Math.abs(vx[i]); }
       else if (x[i] > W) { x[i] = W; vx[i] = -Math.abs(vx[i]); }

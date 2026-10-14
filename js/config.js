@@ -12,8 +12,11 @@ window.GV = { config: {
   combo:  { windowMs: 2500,       // time to land the next fart and keep the combo
             powerPerCombo: 0.12,  // extra fart power per combo step
             puffsPerCombo: 0.2 }, // extra puffs per combo step (fraction)
-  puffs:  { max: 600,            // hard cap on live particles (the lag guard)
-            perBurst: 90,        // cap on particles from a single fart
+  puffs:  { max: 700,            // hard cap on live particles (the lag guard)
+            perBurst: 110,       // cap on particles from a single fart
+            spreadBase: 2.6, spreadPower: 3.4,            // fan angle (radians), grows with power
+            speedMin: 0.25, speedRand: 0.5, speedPower: 0.9,  // launch speed, in screen widths per second
+            drag: 0.9,           // lower = gas travels farther
             base: 8, extra: 40,
             lifeMin: 4, lifeExtra: 5, lifePerCombo: 1.2,  // seconds a puff lingers
             alpha: 0.5,
