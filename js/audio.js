@@ -32,20 +32,34 @@ GV.audio = (() => {
     try {
       const c = context(), t = c.currentTime, f = cfg.fart;
       const dur = f.minSec + power * f.extraSec;
-      const o = c.createOscillator(), o2 = c.createOscillator(), g = c.createGain();
+      const o = c.createOscillator(), o2 = c.createOscillator();
+      const flutter = c.createGain(), env = c.createGain();
       o.type = "sawtooth"; o2.type = "square";
       const f0 = f.baseHz + Math.random() * f.jitterHz;
       o.frequency.setValueAtTime(f0, t);
       o2.frequency.setValueAtTime(f0 * 0.5, t);
       for (const x of [o, o2]) x.frequency.exponentialRampToValueAtTime(30, t + dur);
-      // flutter
+
+      // Flutter is applied before the envelope, so it fades out with the sound
+      // instead of leaving an audible buzz that gets cut off.
       const lfo = c.createOscillator(), lg = c.createGain();
-      lfo.frequency.value = 28 + Math.random() * 12; lg.gain.value = 0.2 + power * 0.25;
-      lfo.connect(lg).connect(g.gain);
-      g.gain.setValueAtTime(0.25 + power * 0.35, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
-      o.connect(g); o2.connect(g); g.connect(c.destination);
-      for (const x of [o, o2, lfo]) { x.start(t); x.stop(t + dur); }
+      lfo.frequency.setValueAtTime(34 + Math.random() * 10, t);
+      lfo.frequency.linearRampToValueAtTime(12, t + dur); // flaps slow down as it tapers
+      flutter.gain.value = 0.6;
+      lg.gain.value = 0.4;
+      lfo.connect(lg).connect(flutter.gain);
+
+      // Quick attack, long smooth tail down to true silence.
+      const peak = 0.25 + power * 0.35;
+      env.gain.setValueAtTime(0.0001, t);
+      env.gain.linearRampToValueAtTime(peak, t + 0.02);
+      env.gain.exponentialRampToValueAtTime(peak * 0.5, t + dur * 0.3);
+      env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      env.gain.setValueAtTime(0, t + dur);
+
+      o.connect(flutter); o2.connect(flutter);
+      flutter.connect(env); env.connect(c.destination);
+      for (const x of [o, o2, lfo]) { x.start(t); x.stop(t + dur + 0.05); }
     } catch (e) {}
   }
 
