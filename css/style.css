@@ -212,3 +212,7 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 .skinCard.afford .skinState { color:#ffe27a; }
 .skinCard.on { border-color:var(--pink); }
 .skinCard.on .skinState { color:var(--pink); }
+
+.skinWrap { display:flex; flex-direction:column; }
+.skinWrap .skinCard { flex:1; }
+.wikiLink { text-align:center; font-size:.68rem; color:var(--pink); padding:2px 0; text-decoration:underline; }

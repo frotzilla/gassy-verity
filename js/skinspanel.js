@@ -12,11 +12,20 @@ GV.skinsPanel = (() => {
 
   const cards = {};
   for (const sk of D.skins) {
+    const wrap = document.createElement("div");
+    wrap.className = "skinWrap";
     const b = document.createElement("button");
     b.type = "button"; b.className = "skinCard"; b.dataset.skin = sk.id; b.title = sk.desc;
     b.innerHTML = `<span class="skinPic"><img src="${sk.file}" alt="" draggable="false" loading="lazy"></span>` +
                   `<span class="skinName">${sk.name}</span><span class="skinState"></span>`;
-    grid.appendChild(b);
+    wrap.appendChild(b);
+    if (sk.wiki) {
+      const a = document.createElement("a");
+      a.className = "wikiLink"; a.href = sk.wiki; a.target = "_blank"; a.rel = "noopener"; a.textContent = "wiki";
+      a.setAttribute("aria-label", sk.name + " on the Veritypedia");
+      wrap.appendChild(a);
+    }
+    grid.appendChild(wrap);
     cards[sk.id] = { b, state: b.querySelector(".skinState") };
   }
 
