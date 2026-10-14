@@ -22,8 +22,8 @@ SVG or PNG both work. Keep skins roughly square.
 
 `face: {}` draws the animated eyes and mouth over your image with defaults. Tweak with
 `eyeColor`, `eyeY`, `eyeDX`, `eyeRx`, `eyeRy`, `mouth` ("smile", "frown", "w", "line", "zigzag", "o", "none"),
-`mouthColor`, `mouthWidth`. Emoticon faces (the shop's faces toggle) use `emoIdle`, `emoCharge`, `emoRelief` (lists of ASCII faces like ":3"),
-`emoSize` and `emoY`; `alwaysEmoticon: true` makes a skin use them always. Eyes and mouth are placed on a 100x100 grid over the image, so line them
+`mouthColor`, `mouthWidth`. A skin with `alwaysEmoticon: true` gets a text face (as Chellsity does): `emoIdle`, `emoCharge`, `emoRelief` are lists of ASCII
+faces like ":3", and `emoSize` / `emoY` place the text. Eyes and mouth are placed on a 100x100 grid over the image, so line them
 up with where your art has a face. If your image already has a face, use `face: false` (it still
 inflates, shakes and squashes, but the eyes and mouth will not animate).
 

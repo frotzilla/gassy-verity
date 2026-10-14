@@ -64,10 +64,8 @@ browser blocks it and the button says so.
 
 ## Skins and clips
 
-Faces: every skin can wear a text face in JetBrains Mono instead of dot eyes. Flip the "faces" toggle at the
-bottom of the shop's skins list (classic or `:3`). The emoticon changes with mood: a random idle face every few
-seconds, `:o` then `O_O` then `>_<` as Verity swells, and `^_^` or similar after a fart. Each variant has its own
-idle faces (Cruelty gets `>:(`, Lovity gets `<3`, and so on). Chellsity always wears an emoticon.
+Chellsity's face is a text emoticon in JetBrains Mono (the other skins keep dot eyes). It changes with mood: a random idle face
+every few seconds (mostly `>_<`, with `:3`, `UwU` and `^w^`), `:o`, `O_O`, `@_@` as it swells, and `^_^` after a fart.
 
 Skins are bought once and switched any time. They are the Verity variants from the
 [Veritypedia](https://verityminecraft.fandom.com/) (Falsity, Lovity, Curiosity, Larpity, Mandity, Cruelty,

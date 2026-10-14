@@ -16,7 +16,6 @@ GV.shop = (() => {
     `<div class="shopSec">Upgrades</div><div id="shopUps"></div>` +
     `<div class="shopSec">Auto-farters</div><div id="shopGens"></div>` +
     `<div class="shopSec">Skins</div><div id="shopSkins"></div>` +
-    `<div class="row faceStyle" id="faceStyle">Faces <span class="buyN"><button type="button" data-face="classic">classic</button><button type="button" data-face="emoticon">:3</button></span></div>` +
     `<div class="shopSec">Ascension</div><div class="ascend" id="shopAscend"><div id="ascInfo"></div><button type="button" data-act="ascend">Ascend</button></div>` +
     `<div class="shopFoot"><button type="button" data-act="export">export</button>` +
     `<button type="button" data-act="import">import</button><button type="button" data-act="reset">reset</button></div>`;
@@ -93,8 +92,7 @@ GV.shop = (() => {
       r.b.classList.toggle("off", !has && sk.cost > S.gas);
       r.b.classList.toggle("own", has);
     }
-    for (const b of panel.querySelectorAll(".buyN button[data-n]")) b.classList.toggle("on", String(buyN) === b.dataset.n);
-    for (const b of panel.querySelectorAll(".buyN button[data-face]")) b.classList.toggle("on", GV.skins.faceStyle === b.dataset.face);
+    for (const b of panel.querySelectorAll(".buyN button")) b.classList.toggle("on", String(buyN) === b.dataset.n);
   }
 
   panel.addEventListener("click", e => {
@@ -102,7 +100,6 @@ GV.shop = (() => {
     if (t.dataset.gen) G.buyGen(t.dataset.gen, buyN);
     else if (t.dataset.up) G.buyUpgrade(t.dataset.up);
     else if (t.dataset.skin) { if (!G.setSkin(t.dataset.skin)) G.buySkin(t.dataset.skin); }
-    else if (t.dataset.face) GV.skins.setFaceStyle(t.dataset.face);
     else if (t.dataset.n) buyN = t.dataset.n === "max" ? "max" : +t.dataset.n;
     else if (t.dataset.act === "export") prompt("Copy this save code:", G.exportCode());
     else if (t.dataset.act === "import") {

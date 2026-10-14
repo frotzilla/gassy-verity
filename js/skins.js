@@ -1,7 +1,7 @@
 // Skins: the body is an image file (assets/skins/, listed in assets/manifest.js). The animated
-// face is drawn on top as a small SVG, tuned per skin by its `face` settings, in one of two
-// styles: classic (dot eyes and a mouth) or emoticon (a text face like :3 in JetBrains Mono that
-// changes with mood). A skin with face:false is just the image.
+// face is drawn on top as a small SVG, tuned per skin by its `face` settings: classic (dot eyes
+// and a mouth) or, for skins with alwaysEmoticon (Chellsity), a text face like :3 in JetBrains Mono
+// that changes with mood. A skin with face:false is just the image.
 GV.skins = (() => {
   const img = document.getElementById("skinImg");
   const faceSvg = document.getElementById("face");
@@ -29,10 +29,6 @@ GV.skins = (() => {
     charge: [":o", "O_O", ">_<"],
     relief: ["^_^", "-w-", "UwU", "=D", ":3"]
   };
-
-  const STYLE_KEY = "gassyVerity.faceStyle";
-  let style = "classic";
-  try { style = localStorage.getItem(STYLE_KEY) === "emoticon" ? "emoticon" : "classic"; } catch (e) {}
 
   // The text is the "eyes" group, so it swells with Verity. There is no separate mouth.
   function emoticonMarkup(f) {
@@ -72,7 +68,7 @@ GV.skins = (() => {
       if (GV.face) GV.face.rebind(null);
     } else {
       const f = { ...DEFAULT_FACE, ...(sk.face || {}) };
-      const emo = f.alwaysEmoticon || style === "emoticon";
+      const emo = !!f.alwaysEmoticon;
       faceSvg.innerHTML = faceMarkup(f, emo);
       if (GV.face) {
         const sets = emo ? { idle: f.emoIdle || DEFAULT_EMO.idle, charge: f.emoCharge || DEFAULT_EMO.charge, relief: f.emoRelief || DEFAULT_EMO.relief } : null;
@@ -84,11 +80,5 @@ GV.skins = (() => {
   set(GV.game.state.skin);
   GV.game.onChange(() => { if (GV.game.state.skin !== current) set(GV.game.state.skin); });
 
-  function setFaceStyle(st) {
-    style = st === "emoticon" ? "emoticon" : "classic";
-    try { localStorage.setItem(STYLE_KEY, style); } catch (e) {}
-    set(current);
-  }
-
-  return { set, setFaceStyle, get faceStyle() { return style; }, get current() { return current; } };
+  return { set, get current() { return current; } };
 })();
