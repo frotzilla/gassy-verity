@@ -17,6 +17,12 @@ window.GV = { config: {
             clearSec: 2.2,       // how long the old gas takes to fade out after the blast
             push: 1.3,           // shockwave strength, in screen widths per second
             flashMs: 700 },
+  game:   { growth: 1.15,        // each owned building raises its price by this factor
+            offlineCapHours: 8,  // away time that still earns gas
+            offlineEff: 0.5,     // fraction of normal production earned while away
+            saveSec: 15,
+            goldenMinSec: 60, goldenMaxSec: 180, goldenLifeSec: 13,
+            frenzyMult: 7, frenzySec: 30 },
   haptics: true,                 // phone vibration (Android browsers; iOS ignores it)
   sky:    { refreshSec: 20,      // how often the sky is recomputed
             ipTimeoutMs: 4000,   // give up on the IP lookup after this long

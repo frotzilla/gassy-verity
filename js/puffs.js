@@ -44,7 +44,7 @@ GV.puffs = (() => {
     return best;
   }
 
-  function emit(stage, power, combo = 1) {
+  function emit(stage, power, combo = 1, scale = 1) {
     const r = stage.getBoundingClientRect();
     const ox = r.left + M + r.width * 0.1, oy = r.top + M + r.height * 0.7;
     // Combo bonuses stop growing after comboCap, and a crowded screen gets fewer new puffs.
@@ -53,7 +53,7 @@ GV.puffs = (() => {
     const bonus = Math.min(combo, cfg.comboCap) - 1;
     const crowd = alive / N;
     const n = Math.max(1, Math.min(cfg.perBurst,
-      Math.round((cfg.base + power * cfg.extra) * (1 + GV.config.combo.puffsPerCombo * bonus) * (1 - crowd * cfg.crowdDamp))));
+      Math.round((cfg.base + power * cfg.extra) * (1 + GV.config.combo.puffsPerCombo * bonus) * (1 - crowd * cfg.crowdDamp) * scale)));
     for (let k = 0; k < n; k++) {
       const i = slot();
       if (life[i] <= 0) alive++;

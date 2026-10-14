@@ -57,18 +57,23 @@
 
 <div id="flash"></div>
 <div id="toast"></div>
+<div id="bank"><div id="bankNum">0 gas</div><div id="bankRate"></div><div id="frenzy" hidden></div></div>
 <div id="combo"><div id="comboText"></div><div id="comboBar"><div id="comboFill"></div></div></div>
 <div id="meter"><div id="fill"></div></div>
 <div id="count">Toots: 0</div>
 <div id="hint"></div>
-<button id="statsBtn" type="button">stats</button>
+<div id="topBtns"><button id="shopBtn" type="button">shop</button><button id="statsBtn" type="button">stats</button></div>
 <div id="statsPanel" hidden></div>
+<div id="shopPanel"></div>
 
 <!-- Classic scripts (no build step, works from file://). Order matters. -->
 <script src="js/config.js"></script>
+<script src="js/format.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/stats.js"></script>
 <script src="js/haptics.js"></script>
+<script src="js/data.js"></script>
+<script src="js/game.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/puffs.js"></script>
 <script src="js/face.js"></script>
@@ -77,6 +82,8 @@
 <script src="js/motion.js"></script>
 <script src="js/blast.js"></script>
 <script src="js/verity.js"></script>
+<script src="js/shop.js"></script>
+<script src="js/golden.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

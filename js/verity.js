@@ -43,8 +43,10 @@ GV.verity = (() => {
     const c = GV.combo.hit(p);
     const boosted = Math.min(1, p + cfg.combo.powerPerCombo * (c.count - 1));
     const blast = GV.blast.ready(p); // needs a real hold, not combo-boosted taps
+    const earned = GV.game.fart({ power: p, combo: c.count, blast });
+    GV.ui.floatText("+" + GV.fmt(earned.gain), stage.getBoundingClientRect());
     if (blast) {
-      GV.blast.fire(stage);
+      GV.blast.fire(stage, earned.bonus);
     } else {
       GV.audio.fart(boosted, c.count);
       GV.puffs.emit(stage, boosted, c.count);

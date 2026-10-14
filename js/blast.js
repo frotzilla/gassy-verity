@@ -7,11 +7,11 @@ GV.blast = (() => {
     return GV.puffs.level() >= cfg.minLevel && power >= cfg.minPower;
   }
 
-  function fire(stage) {
+  function fire(stage, bonus = 0) {
     GV.audio.boom();
     GV.puffs.shock(stage, cfg.push, cfg.clearSec);
     GV.ui.flash(cfg.flashMs);
-    GV.ui.toast("GAS BLAST!", 1800);
+    GV.ui.toast("GAS BLAST! +" + GV.fmt(bonus), 1800);
     GV.motion.pop(2);
     GV.stats.blast();
   }

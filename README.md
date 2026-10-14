@@ -8,7 +8,12 @@ No build step: open `index.html` in a browser.
 - `index.html` - page markup and the Verity SVG
 - `css/style.css` - all styling
 - `js/config.js` - tweakable numbers (size, timings, sound, gas, blast, sky)
-- `js/ui.js` - toast and screen flash
+- `js/format.js` - number formatting (1.23K, 5.10B)
+- `js/ui.js` - toast, screen flash, floating gain text
+- `js/data.js` - the content: auto-farters and upgrades (add new ones here)
+- `js/game.js` - economy: gas, buying, frenzy, offline earnings, save/load
+- `js/shop.js` - bank readout and the shop panel
+- `js/golden.js` - golden clouds
 - `js/stats.js` - lifetime stats in localStorage and the stats panel
 - `js/haptics.js` - phone vibration
 - `js/audio.js` - squeak, fart variants (squeak, classic, rumble, finale) and the blast boom
@@ -23,6 +28,16 @@ No build step: open `index.html` in a browser.
 
 Scripts are plain (non-module) files sharing a `GV` namespace, so the page works from
 `file://`. Load order in `index.html` matters.
+
+## Game
+
+Every fart earns gas: a tap is worth about 1, a full hold about 12, and chained farts add up to
++100%. Spend gas in the shop on auto-farters (they produce gas per second and leak puffs onto
+the screen) and on upgrades (2x farts, faster charge, longer combo window, bigger blasts,
+more golden clouds, and four 2x tiers per auto-farter). A gas blast pays out about 45
+seconds of production. Golden clouds show up now and then: click one for a lump sum or a
+7x frenzy for 30 seconds. Progress saves to localStorage every 15 s, and while you are away it
+earns half production for up to 8 hours. The shop has save export and import, and reset.
 
 ## Sky
 
