@@ -45,6 +45,8 @@ GV.shot = (() => {
 
     // Verity: body image (with its current red tint) and the face SVG
     const body = q("skinImg"), br = rectOf(body);
+    const flipped = q("verity").classList.contains("flip");
+    if (flipped) { g.save(); g.translate(br.x + br.w / 2, br.y + br.h / 2); g.rotate(Math.PI); g.translate(-(br.x + br.w / 2), -(br.y + br.h / 2)); }
     g.filter = getComputedStyle(body).filter === "none" ? "none" : getComputedStyle(body).filter;
     g.drawImage(body, br.x, br.y, br.w, br.h); g.filter = "none";
     const face = q("face");
@@ -53,6 +55,7 @@ GV.shot = (() => {
       const fi = await load("data:image/svg+xml;charset=utf-8," + encodeURIComponent(xml));
       const fr = rectOf(face); g.drawImage(fi, fr.x, fr.y, fr.w, fr.h);
     }
+    if (flipped) g.restore();
 
     // Weather, gas
     const wc = q("weatherCanvas"); g.drawImage(wc, -M, -M);

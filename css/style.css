@@ -192,3 +192,5 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
   #combo { top:214px; }
 }
 
+
+#verity.flip { transform:rotate(180deg); }

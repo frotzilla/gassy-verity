@@ -69,7 +69,8 @@ every few seconds (mostly `>_<`, with `:3`, `UwU` and `^w^`), `:o`, `O_O`, `@_@`
 
 Skins are bought once and switched any time. They are the Verity variants from the
 [Veritypedia](https://verityminecraft.fandom.com/) (Falsity, Lovity, Curiosity, Larpity, Mandity, Cruelty,
-Manipulity, Narity, Moggity, Freakity, Obesity, Eclipsity, Monster Verity and Lord Verity), Chellsity (hot pink
+Manipulity, Narity, Moggity, Freakity, Obesity, Eclipsity, Monster Verity and Lord Verity, plus fan-blog variants:
+Timeity, Gypsy Verity, Acclivity, Vapority, Smallity, Calamity, Powerity, Upside-down Verity and Variety), Chellsity (hot pink
 `>_<`, from the author's GitHub avatar) and Clawd, a little
 orange guy with claws. Fart about 14 times in 6 seconds, on any skin, and Verity poops; click the poop
 to clean it up for a little gas. The art is my own drawings based on the wiki's descriptions; the wiki's text is

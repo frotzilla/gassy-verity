@@ -7,7 +7,7 @@ GV.skins = (() => {
   const faceSvg = document.getElementById("face");
   const list = GV.data.skins;
 
-  const DEFAULT_FACE = { eyeColor: "#222", eyeShape: "ellipse", eyesClosed: false, alwaysEmoticon: false, emoY: 0, emoSize: 30, eyeY: 44, eyeDX: 14, eyeRx: 5, eyeRy: 7, mouth: "smile", mouthColor: "#222", mouthWidth: 4, mouthDy: 0 };
+  const DEFAULT_FACE = { eyeColor: "#222", eyeShape: "ellipse", eyesClosed: false, alwaysEmoticon: false, emoY: 0, emoSize: 30, faceScale: 1, faceDy: 0, eyeY: 44, eyeDX: 14, eyeRx: 5, eyeRy: 7, mouth: "smile", mouthColor: "#222", mouthWidth: 4, mouthDy: 0 };
 
   // Mouth shapes: p is inflation 0..1, so the mouth gets more worried as Verity swells.
   const MOUTHS = {
@@ -63,13 +63,17 @@ GV.skins = (() => {
     current = sk.id;
     img.src = sk.file;
     img.alt = sk.name;
+    document.getElementById("verity").classList.toggle("flip", !!sk.flip);   // Upside-down Verity
     if (sk.face === false) {
       faceSvg.innerHTML = "";
       if (GV.face) GV.face.rebind(null);
     } else {
       const f = { ...DEFAULT_FACE, ...(sk.face || {}) };
       const emo = !!f.alwaysEmoticon;
-      faceSvg.innerHTML = faceMarkup(f, emo);
+      const inner = faceMarkup(f, emo);
+      // faceScale / faceDy shrink and shift the whole face for odd shapes (a pyramid, a tiny ball).
+      faceSvg.innerHTML = (f.faceScale !== 1 || f.faceDy)
+        ? `<g transform="translate(0 ${f.faceDy}) translate(50 60) scale(${f.faceScale}) translate(-50 -60)">${inner}</g>` : inner;
       if (GV.face) {
         const sets = emo ? { idle: f.emoIdle || DEFAULT_EMO.idle, charge: f.emoCharge || DEFAULT_EMO.charge, relief: f.emoRelief || DEFAULT_EMO.relief } : null;
         GV.face.rebind(emo ? MOUTHS.none : (MOUTHS[f.mouth] || MOUTHS.smile), emo ? (f.emoY || f.eyeY) : f.eyeY, sets);
