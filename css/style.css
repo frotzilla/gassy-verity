@@ -1,0 +1,36 @@
+:root { --sky:#8ecbff; --grass:#5d9b3a; --dirt:#8a5a35; }
+* { box-sizing:border-box; }
+
+body {
+  margin:0; min-height:100vh; overflow:hidden;
+  font-family:"JetBrains Mono", ui-monospace, monospace;
+  background:linear-gradient(var(--sky) 0 62%, var(--grass) 62% 66%, var(--dirt) 66%);
+  user-select:none; -webkit-user-select:none; touch-action:none;
+}
+h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006; font-size:clamp(1.6rem,5vw,2.8rem); }
+.sub { text-align:center; color:#fff; text-shadow:2px 2px 0 #0006; margin:6px 0; }
+
+/* Character */
+#stage { position:absolute; left:50%; top:62%; transform:translate(-50%,-100%); cursor:pointer; }
+#body { transform-origin:50% 100%; will-change:transform; }
+#verity { width:min(40vw,200px); display:block; }
+#verity.strain { animation:strain .08s linear infinite; }
+@keyframes strain { 0%{transform:translate(-2px,1px)} 50%{transform:translate(2px,-1px)} 100%{transform:translate(-2px,1px)} }
+
+/* Gas */
+.puff { position:absolute; width:var(--s); height:var(--s); border-radius:20%;
+        animation:drift var(--d) ease-out forwards; pointer-events:none; }
+@keyframes drift { to { transform:translate(var(--x),var(--y)) scale(var(--k)); opacity:0; } }
+
+/* HUD */
+#meter { position:fixed; left:50%; bottom:56px; transform:translateX(-50%); width:min(70vw,320px); height:16px;
+         background:#0008; border:2px solid #fff; }
+#fill { height:100%; width:0; background:#9acd32; }
+#count, #hint { position:fixed; bottom:12px; color:#fff; background:#0008; padding:6px 12px; font-size:.85rem; }
+#count { left:12px; }
+#hint { right:12px; }
+
+/* Screen shake on big releases */
+body.shake { animation:quake .6s; }
+@keyframes quake { 10%{transform:translate(-14px,6px)} 30%{transform:translate(12px,-6px)} 50%{transform:translate(-9px,4px)}
+  70%{transform:translate(6px,-2px)} 90%{transform:translate(-3px,1px)} }
