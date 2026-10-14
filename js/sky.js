@@ -15,6 +15,9 @@ GV.sky = (() => {
   const shadeEl = document.getElementById("moonShade");
   const starsEl = document.getElementById("stars");
   const hintEl = document.getElementById("hint");
+  // Sun and moon are image files (assets/sky/); the moon's phase shade is drawn over its image.
+  sunEl.insertAdjacentHTML("afterbegin", `<img src="${GV.assets.sun}" alt="" draggable="false">`);
+  moonEl.insertAdjacentHTML("afterbegin", `<img src="${GV.assets.moon}" alt="" draggable="false">`);
   const q = new URLSearchParams(location.search);
   const rad = Math.PI / 180;
   const KEY = "gassyVerity.loc.v1";
@@ -131,6 +134,7 @@ GV.sky = (() => {
     world.style.setProperty("--grass", css(ground("#5d9b3a", light)));
     world.style.setProperty("--dirt", css(ground("#8a5a35", light)));
     starsEl.style.opacity = smooth(-4, -14, alt).toFixed(3);
+    world.style.setProperty("--cloud-b", light.toFixed(2));
 
     // Sun and moon ride an arc: x from the hour angle, height from altitude. The sky box
     // clips them at the horizon. The moon is (roughly) opposite the sun.
@@ -142,7 +146,8 @@ GV.sky = (() => {
     shadeEl.style.transform = `translateX(${(p.moonAge < 0.5 ? -1 : 1) * u * 100}%)`;
 
     const place = loc.city ? loc.city + " - " : "";
-    hintEl.textContent = place + phaseName(alt, p.ha) + (loc.approx ? " (approx)" : "");
+    const wx = GV.weather && GV.weather.name ? ", " + GV.weather.name : "";
+    hintEl.textContent = place + phaseName(alt, p.ha) + wx + (loc.approx ? " (approx)" : "");
     return p;
   }
 
@@ -157,7 +162,7 @@ GV.sky = (() => {
   function update() { return apply(now()); }
 
   update();
-  locate().then(found => { if (found) { loc = found; } update(); });
+  locate().then(found => { if (found) { loc = found; } update(); if (GV.weather) GV.weather.refresh(true); });
   setInterval(update, speed ? 100 : cfg.refreshSec * 1000);
 
   return { update, apply, position, setGeo, geoOn: () => !geoOff(), get loc() { return loc; } };

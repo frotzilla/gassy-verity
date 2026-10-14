@@ -13,16 +13,20 @@ GV.about = (() => {
     `but they are a third party. The result is cached in your browser for a day. Nothing else leaves your device: ` +
     `your game save, stats and any voice clips stay in this browser and are never uploaded.</p>` +
     `<label class="check"><input type="checkbox" id="geoToggle"> Use my IP location for the sky</label>` +
+    `<label class="check"><input type="checkbox" id="wxToggle"> Show my real weather (sends your location, rounded to about 10 km, to open-meteo.com; off by default)</label>` +
     `<div class="shopSec">Credits</div>` +
     `<p>Made by <a href="https://github.com/frotzilla/gassy-verity" target="_blank" rel="noopener">frotzilla</a>. Free software under the ` +
     `<a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GPL-3.0</a>.</p>` +
     `<p>Verity is a character from ThatMob's videos. This is an unofficial fan project, not affiliated with or endorsed by ThatMob or PnTMC.</p>` +
     `<p>Font: JetBrains Mono (SIL Open Font License). Sun position: low-precision NOAA solar formulas. ` +
-    `Everything else, including the sounds, is generated in your browser.</p>`;
+    `The art is in the assets folder; the sounds are generated in your browser. Weather data: open-meteo.com.</p>`;
 
   const toggle = panel.querySelector("#geoToggle");
   toggle.checked = GV.sky.geoOn();
   toggle.addEventListener("change", () => { GV.sky.setGeo(toggle.checked); });
+  const wx = panel.querySelector("#wxToggle");
+  wx.checked = GV.weather.enabled();
+  wx.addEventListener("change", () => GV.weather.setEnabled(wx.checked));
 
   GV.ui.bindPanel(btn, panel, "left", () => { toggle.checked = GV.sky.geoOn(); });
 

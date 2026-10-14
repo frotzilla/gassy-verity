@@ -15,6 +15,13 @@
   addEventListener("blur", release);
   document.addEventListener("visibilitychange", () => { if (document.hidden) release(); });
 
+  // Sound on/off.
+  const mute = document.getElementById("muteBtn");
+  const paintMute = () => { mute.textContent = GV.audio.muted ? "sound off" : "sound on"; };
+  mute.addEventListener("click", () => { GV.audio.setMuted(!GV.audio.muted); paintMute(); });
+  mute.addEventListener("pointerdown", e => e.stopPropagation());
+  paintMute();
+
   // No long-press menu on phones.
   addEventListener("contextmenu", e => e.preventDefault());
 

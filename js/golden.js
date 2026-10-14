@@ -15,6 +15,7 @@ GV.golden = (() => {
     if (el || document.hidden) return;
     el = document.createElement("button");
     el.type = "button"; el.className = "golden"; el.setAttribute("aria-label", "golden gas cloud");
+    el.style.backgroundImage = `url("${GV.assets.golden}")`;
     el.style.left = rand(10, 80) + "%"; el.style.top = rand(22, 75) + "%";
     el.addEventListener("pointerdown", e => e.stopPropagation());
     el.addEventListener("click", claim);
@@ -26,6 +27,7 @@ GV.golden = (() => {
 
   function claim() {
     remove();
+    GV.stats.bump("goldens");
     if (Math.random() < 0.5) {
       const prize = Math.min(G.state.gas * 0.15, G.baseGps() * 900) + 13;
       G.earn(prize);

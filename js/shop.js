@@ -18,6 +18,7 @@ GV.shop = (() => {
     `<div class="shopSec">Auto-farters</div><div id="shopGens"></div>` +
     `<div class="shopSec">Pets</div><div id="shopPets"></div>` +
     `<div class="shopSec">Skins</div><div id="shopSkins"></div>` +
+    `<div class="shopSec">Ascension</div><div class="ascend" id="shopAscend"><div id="ascInfo"></div><button type="button" data-act="ascend">Ascend</button></div>` +
     `<div class="shopFoot"><button type="button" data-act="export">export</button>` +
     `<button type="button" data-act="import">import</button><button type="button" data-act="reset">reset</button></div>`;
   const upsEl = panel.querySelector("#shopUps"), gensEl = panel.querySelector("#shopGens");
@@ -91,6 +92,11 @@ GV.shop = (() => {
       r.row.classList.toggle("off", G.genCost(g.id, n) > S.gas);
     });
     renderUps();
+    const gain = G.crystalGain();
+    panel.querySelector("#ascInfo").innerHTML =
+      `Methane crystals: <b>${S.crystals}</b> (+${S.crystals}% gas)<br>Total multiplier: <b>x${G.mult().toFixed(2)}</b> (crystals and achievements)<br>` +
+      `Ascending now gives <b>${gain}</b> more. Resets gas, auto-farters and upgrades; keeps pets, skins, achievements and crystals.`;
+    panel.querySelector('[data-act="ascend"]').disabled = gain < 1;
     for (const pt of D.pets) {
       const r = petRows[pt.id], has = !!S.pets[pt.id];
       r.cost.textContent = has ? "owned" : fmt(pt.cost);
@@ -117,6 +123,11 @@ GV.shop = (() => {
     else if (t.dataset.act === "import") {
       const code = prompt("Paste a save code:");
       if (code) GV.ui.toast(G.importCode(code) ? "Save loaded" : "Bad save code", 1500);
+    } else if (t.dataset.act === "ascend") {
+      const gain = G.crystalGain();
+      if (gain >= 1 && confirm("Ascend for " + gain + " crystal" + (gain > 1 ? "s" : "") + "? This resets your gas, auto-farters and upgrades.")) {
+        G.ascend(); GV.ui.toast("Ascended! +" + gain + " crystals", 2200);
+      }
     } else if (t.dataset.act === "reset") {
       if (confirm("Delete all progress and start over?")) G.reset();
     }

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#0b1230">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <title>Gassy Verity</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,14 +17,21 @@
     <div id="stars"></div>
     <div id="sun"></div>
     <div id="moon"><div id="moonShade"></div></div>
+    <div id="clouds"></div>
+    <div id="dim"></div>
   </div>
+  <div id="fog"></div>
+  <canvas id="weatherCanvas"></canvas>
 
   <h1>Gassy Verity</h1>
   <p class="sub">Hold Verity (or space) to inflate. Let go.</p>
 
   <div id="stage">
     <div id="body">
-      <svg id="verity" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="verity">
+        <img id="skinImg" alt="" draggable="false">
+        <svg id="face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
     </div>
   </div>
 
@@ -39,7 +47,7 @@
 <div id="meter"><div id="fill"></div></div>
 <div id="count">Toots: 0</div>
 <div id="hint"></div>
-<div id="topBtns"><button id="shopBtn" type="button">shop</button><button id="clipsBtn" type="button">clips</button><button id="statsBtn" type="button">stats</button><button id="aboutBtn" type="button">about</button></div>
+<div id="topBtns"><button id="shopBtn" type="button">shop</button><button id="clipsBtn" type="button">clips</button><button id="statsBtn" type="button">stats</button><button id="aboutBtn" type="button">about</button><button id="snapBtn" type="button">snap</button><button id="muteBtn" type="button">sound</button></div>
 <div id="statsPanel" hidden></div>
 <div id="clipsPanel" class="leftPanel" hidden></div>
 <div id="aboutPanel" class="leftPanel" hidden></div>
@@ -49,6 +57,7 @@
 
 <!-- Classic scripts (no build step, works from file://). Order matters. -->
 <script src="js/config.js"></script>
+<script src="assets/manifest.js"></script>
 <script src="js/format.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/stats.js"></script>
@@ -69,6 +78,9 @@
 <script src="js/verity.js"></script>
 <script src="js/shop.js"></script>
 <script src="js/golden.js"></script>
+<script src="js/achievements.js"></script>
+<script src="js/weather.js"></script>
+<script src="js/screenshot.js"></script>
 <script src="js/about.js"></script>
 <script src="js/main.js"></script>
 </body>

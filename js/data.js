@@ -47,22 +47,41 @@ GV.data = (() => {
   }
   upgrades.sort((a, b) => a.cost - b.cost);
 
-  // Pets: one each, permanent bonuses. fx values are fractions (0.1 = +10%), golden is a factor.
-  const pets = [
-    { id: "fly",    name: "Stink Fly",   cost: 1500,    desc: "Buzzes around Verity. +10% gas per second.",    fx: { gps: 0.1 } },
-    { id: "frog",   name: "Bog Frog",    cost: 2e4,     desc: "Hops through the gas. +15% gas per fart.",     fx: { tap: 0.15 } },
-    { id: "snail",  name: "Slow Snail",  cost: 2.5e5,   desc: "Takes its time. Gas blasts pay +50%.",         fx: { blast: 0.5 } },
-    { id: "beetle", name: "Dung Beetle", cost: 3e6,     desc: "Rolls a little ball. +20% gas per second.",    fx: { gps: 0.2 } },
-    { id: "pug",    name: "Gas Mask Pug", cost: 5e7,    desc: "Unbothered. Golden clouds show up 25% more often.", fx: { golden: 0.8 } }
-  ];
+  // Pets and skins are art, so they live in assets/manifest.js.
+  const { pets, skins } = GV.assets;
 
-  // Skins: art lives in skins.js. Owning one is permanent; you can switch any time.
-  const skins = [
-    { id: "verity",  name: "Verity",      cost: 0,      desc: "The original." },
-    { id: "mint",    name: "Mint Verity", cost: 3000,   desc: "A cool green coat." },
-    { id: "catboy",  name: "Cat Boy",     cost: 20000,  desc: "Ears, whiskers, and a weak stomach. Fart too much and he poops." },
-    { id: "robot",   name: "Robo Verity", cost: 300000, desc: "Beep. Boop. Pffft." }
-  ];
+  // Achievements: each unlocked one adds +1% to all gas. test(c) gets c.S (game state),
+  // c.st (lifetime stats), c.buildings (total owned) and c.types (kinds of building owned).
+  const achievements = [
+    ["first",    "First Toot",       "Let one out.",                   c => c.st.toots >= 1],
+    ["toots100", "Regular",          "100 toots.",                     c => c.st.toots >= 100],
+    ["toots1k",  "Gas Station",      "1,000 toots.",                   c => c.st.toots >= 1000],
+    ["toots10k", "Wind Tunnel",      "10,000 toots.",                  c => c.st.toots >= 10000],
+    ["combo10",  "On a Roll",        "A combo of 10.",                 c => c.st.bestCombo >= 10],
+    ["combo25",  "Chain Reaction",   "A combo of 25.",                 c => c.st.bestCombo >= 25],
+    ["combo50",  "Unstoppable",      "A combo of 50.",                 c => c.st.bestCombo >= 50],
+    ["hold3",    "Patient",          "Hold for a full charge.",        c => c.st.longestHold >= 3],
+    ["blast1",   "Kaboom",           "Set off a gas blast.",           c => c.st.blasts >= 1],
+    ["blast10",  "Demolition",       "10 gas blasts.",                 c => c.st.blasts >= 10],
+    ["blast50",  "Controlled Burn",  "50 gas blasts.",                 c => c.st.blasts >= 50],
+    ["gas1k",    "Pocket Change",    "Earn 1,000 gas.",                c => c.S.lifetime >= 1e3],
+    ["gas1m",    "Millionaire",      "Earn 1 million gas.",            c => c.S.lifetime >= 1e6],
+    ["gas1b",    "Billionaire",      "Earn 1 billion gas.",            c => c.S.lifetime >= 1e9],
+    ["gas1t",    "Atmospheric",      "Earn 1 trillion gas.",           c => c.S.lifetime >= 1e12],
+    ["build1",   "Hired Help",       "Buy your first auto-farter.",    c => c.buildings >= 1],
+    ["build50",  "Small Business",   "Own 50 auto-farters.",           c => c.buildings >= 50],
+    ["build200", "Industry",         "Own 200 auto-farters.",          c => c.buildings >= 200],
+    ["allTypes", "Full House",       "Own every kind of auto-farter.", c => c.types >= generators.length],
+    ["pet1",     "Best Friend",      "Get a pet.",                     c => Object.keys(c.S.pets).length >= 1],
+    ["petAll",   "Zoo Keeper",       "Get every pet.",                 c => Object.keys(c.S.pets).length >= pets.length],
+    ["skin1",    "New Look",         "Buy a skin.",                    c => Object.keys(c.S.skins).length >= 2],
+    ["skinAll",  "Wardrobe",         "Own every skin.",                c => Object.keys(c.S.skins).length >= skins.length],
+    ["poop1",    "Oops",             "Clean up your first poop.",      c => c.st.poops >= 1],
+    ["poop10",   "Janitor",          "Clean up 10 poops.",             c => c.st.poops >= 10],
+    ["gold1",    "Shiny",            "Click a golden cloud.",          c => c.st.goldens >= 1],
+    ["gold25",   "Prospector",       "Click 25 golden clouds.",        c => c.st.goldens >= 25],
+    ["ascend1",  "Rebirth",          "Ascend for the first time.",     c => (c.S.ascensions || 0) >= 1]
+  ].map(([id, name, desc, test]) => ({ id, name, desc, test }));
 
-  return { generators, upgrades, pets, skins };
+  return { generators, upgrades, pets, skins, achievements };
 })();

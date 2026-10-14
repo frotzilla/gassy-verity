@@ -5,12 +5,14 @@ No build step: open `index.html` in a browser.
 
 ## Layout
 
-- `index.html` - page markup and the Verity SVG
+- `index.html` - page markup
+- `assets/` - all the art (SVG/PNG), listed in `assets/manifest.js`; see `assets/README.md` to add your own
+- `clips/` - optional shipped voice clips (see `clips/README.txt`)
 - `css/style.css` - all styling
 - `js/config.js` - tweakable numbers (size, timings, sound, gas, blast, sky)
 - `js/format.js` - number formatting (1.23K, 5.10B)
 - `js/ui.js` - toast, screen flash, floating gain text
-- `js/data.js` - the content: auto-farters and upgrades (add new ones here)
+- `js/data.js` - the content: auto-farters, upgrades and achievements (add new ones here)
 - `js/game.js` - economy: gas, buying, frenzy, offline earnings, save/load
 - `js/shop.js` - bank readout and the shop panel
 - `js/golden.js` - golden clouds
@@ -19,10 +21,13 @@ No build step: open `index.html` in a browser.
 - `js/audio.js` - squeak, fart variants (squeak, classic, rumble, finale) and the blast boom
 - `js/puffs.js` - canvas gas particles (fixed pool, capped, lingers to fill the screen, blast shockwave)
 - `js/face.js` - expressions: blush, bulging eyes, watering eyes, relief
-- `js/skins.js` - skins (SVG art per skin; prices and text are in data.js)
+- `js/skins.js` - skins: the body is an image from assets/, the animated face is drawn over it
 - `js/poop.js` - Cat Boy's weak stomach
 - `js/pets.js` - pets that wander the ground or hover near Verity
 - `js/clips.js` - random voice clips (drag and drop, stored in IndexedDB)
+- `js/achievements.js` - achievements (+1% gas each) and their list in the stats panel
+- `js/weather.js` - optional real weather: clouds, fog, rain, snow, storms
+- `js/screenshot.js` - the snap button (saves a PNG of the scene)
 - `js/about.js` - credits, privacy blurb, and the first-visit location notice
 - `js/combo.js` - combo counter
 - `js/sky.js` - day/night cycle from the real time and IP location
@@ -44,10 +49,25 @@ seconds of production. Golden clouds show up now and then: click one for a lump 
 7x frenzy for 30 seconds. Progress saves to localStorage every 15 s, and while you are away it
 earns half production for up to 8 hours. The shop has save export and import, and reset.
 
+## Ascension, achievements, weather, screenshots
+
+Once you have earned about 100 million gas, Ascend (in the shop) to trade your run for methane
+crystals: each is a permanent +1% gas. It resets gas, auto-farters and upgrades, and keeps pets,
+skins, achievements and crystals. Each of the 28 achievements is also +1% gas. Buying, achievements
+and ascending have little sounds, and the sound button mutes everything.
+
+Weather is opt-in (About panel): it asks open-meteo.com for the current conditions at your
+approximate location, with the coordinates rounded to about 10 km, and shows clouds, fog, rain,
+snow or storms. For testing use `?weather=rain` (also `storm`, `snow`, `fog`, `cloudy`, `overcast`).
+
+The snap button saves a PNG of the scene (or opens the share sheet on a phone). It reads the
+page's own images back, so it needs the page served over http(s); opened from a file:// URL the
+browser blocks it and the button says so.
+
 ## Pets, skins and clips
 
 Pets (Stink Fly, Bog Frog, Slow Snail, Dung Beetle, Gas Mask Pug) each give a permanent bonus.
-Skins are bought once and switched any time. Cat Boy has a weak stomach: fart about 14 times in
+Skins (Verity, Mint, Cat Boy, Pumpkin, Robo, Ghost) are bought once and switched any time. Cat Boy has a weak stomach: fart about 14 times in
 6 seconds and he poops. Click the poop to clean it up for a little gas.
 
 Voice clips: drag audio files onto the page (or use the clips button). They are stored in your

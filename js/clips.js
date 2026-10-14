@@ -70,6 +70,7 @@ GV.clips = (() => {
 
   // ---- playback ----
   function play(c) {
+    if (GV.audio.muted) return;
     const a = new Audio(c.url); a.volume = prefs.volume;
     a.play().catch(() => {});
   }

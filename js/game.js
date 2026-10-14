@@ -8,11 +8,12 @@ GV.game = (() => {
   const upById = Object.fromEntries(D.upgrades.map(u => [u.id, u]));
   const listeners = [];
 
-  const blank = () => ({ gas: 0, total: 0, gens: {}, ups: {}, pets: {}, skins: { verity: 1 }, skin: "verity", frenzyUntil: 0, saved: Date.now() });
+  const blank = () => ({ gas: 0, total: 0, gens: {}, ups: {}, pets: {}, skins: { verity: 1 }, skin: "verity", ach: {}, lifetime: 0, crystals: 0, ascensions: 0, frenzyUntil: 0, saved: Date.now() });
   let S = blank();
   let d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, golden: 1, gps: 1 };  // derived from upgrades and pets
 
   const onChange = fn => listeners.push(fn);
+  const sfx = name => { if (GV.audio && GV.audio[name]) GV.audio[name](); };
   let queued = false;
   function changed() {                  // coalesce bursts into one notification per frame-ish
     if (queued) return;
@@ -50,15 +51,17 @@ GV.game = (() => {
 
   function gpsOf(id) { return (S.gens[id] || 0) * genById[id].gps * (d.gen[id] || 1); }
   function baseGps() { let t = 0; for (const g of D.generators) t += gpsOf(g.id); return t * d.gps; }
-  const gps = () => baseGps() * frenzyMult();
+  // Permanent bonuses: +1% per ascension crystal, +1% per achievement.
+  const mult = () => (1 + 0.01 * S.crystals) * (1 + 0.01 * Object.keys(S.ach).length);
+  const gps = () => baseGps() * mult() * frenzyMult();
 
   // Gas for one fart. p = how long it was held (0..1). A tap is ~1, a full hold is ~12.
   function tapValue(p, combo) {
-    return d.tap * (1 + 11 * Math.pow(p, 1.5)) * (1 + 0.05 * Math.min(combo - 1, 20)) * frenzyMult();
+    return d.tap * mult() * (1 + 11 * Math.pow(p, 1.5)) * (1 + 0.05 * Math.min(combo - 1, 20)) * frenzyMult();
   }
 
   // ---- earning ----
-  function earn(x) { S.gas += x; S.total += x; changed(); }
+  function earn(x) { S.gas += x; S.total += x; S.lifetime += x; changed(); }
 
   // Called on every release. Returns { gain, bonus }; bonus is the gas blast payout.
   function fart({ power, combo, blast }) {
@@ -89,7 +92,7 @@ GV.game = (() => {
     const cost = genCost(id, n);
     if (cost > S.gas) return false;
     S.gas -= cost; S.gens[id] = owned(id) + n;
-    recalc(); changed(); save();
+    recalc(); changed(); save(); sfx("buy");
     return true;
   }
 
@@ -97,7 +100,7 @@ GV.game = (() => {
     const u = upById[id];
     if (!u || S.ups[id] || u.cost > S.gas) return false;
     S.gas -= u.cost; S.ups[id] = 1;
-    recalc(); changed(); save();
+    recalc(); changed(); save(); sfx("buy");
     return true;
   }
 
@@ -105,7 +108,7 @@ GV.game = (() => {
     const pt = D.pets.find(x => x.id === id);
     if (!pt || S.pets[id] || pt.cost > S.gas) return false;
     S.gas -= pt.cost; S.pets[id] = 1;
-    recalc(); changed(); save();
+    recalc(); changed(); save(); sfx("buy");
     return true;
   }
 
@@ -113,7 +116,7 @@ GV.game = (() => {
     const sk = D.skins.find(x => x.id === id);
     if (!sk || S.skins[id] || sk.cost > S.gas) return false;
     S.gas -= sk.cost; S.skins[id] = 1; S.skin = id;
-    changed(); save();
+    changed(); save(); sfx("buy");
     return true;
   }
 
@@ -121,6 +124,27 @@ GV.game = (() => {
     if (!S.skins[id]) return false;
     S.skin = id; changed(); save();
     return true;
+  }
+
+  // ---- achievements and prestige ----
+  function unlock(id) {
+    if (S.ach[id]) return false;
+    S.ach[id] = 1; changed(); save();
+    return true;
+  }
+
+  // Ascension crystals come from all gas ever earned: sqrt(lifetime / 1e8) in total.
+  const crystalsEverEarned = () => Math.floor(Math.sqrt(S.lifetime / 1e8));
+  const crystalGain = () => Math.max(0, crystalsEverEarned() - S.crystals);
+
+  // Resets the run (gas, auto-farters, upgrades). Keeps pets, skins, achievements, crystals.
+  function ascend() {
+    const gain = crystalGain();
+    if (gain < 1) return 0;
+    S.crystals += gain; S.ascensions = (S.ascensions || 0) + 1;
+    S.gas = 0; S.total = 0; S.gens = {}; S.ups = {}; S.frenzyUntil = 0;
+    recalc(); changed(); save(); sfx("whoosh");
+    return gain;
   }
 
   function startFrenzy() { S.frenzyUntil = Date.now() + gc.frenzySec * 1000; changed(); }
@@ -138,6 +162,8 @@ GV.game = (() => {
     n.gas = num(raw.gas); n.total = Math.max(num(raw.total), n.gas);
     n.frenzyUntil = num(raw.frenzyUntil); n.saved = num(raw.saved) || Date.now();
     for (const g of D.generators) if (raw.gens) n.gens[g.id] = Math.floor(num(raw.gens[g.id]));
+    n.lifetime = Math.max(num(raw.lifetime), n.total); n.crystals = Math.floor(num(raw.crystals)); n.ascensions = Math.floor(num(raw.ascensions));
+    for (const a of D.achievements) if (raw.ach && raw.ach[a.id]) n.ach[a.id] = 1;
     for (const u of D.upgrades) if (raw.ups && raw.ups[u.id]) n.ups[u.id] = 1;
     for (const pt of D.pets) if (raw.pets && raw.pets[pt.id]) n.pets[pt.id] = 1;
     for (const sk of D.skins) if (raw.skins && raw.skins[sk.id]) n.skins[sk.id] = 1;
@@ -165,7 +191,7 @@ GV.game = (() => {
   // Gaps longer than 10s (closed tab, sleeping laptop) count as away time at reduced rate.
   let last = Date.now(), puffTimer = 0;
   function away(sec) {
-    const eff = Math.min(sec, gc.offlineCapHours * 3600) * baseGps() * gc.offlineEff;
+    const eff = Math.min(sec, gc.offlineCapHours * 3600) * baseGps() * mult() * gc.offlineEff;
     if (eff > 0) { earn(eff); GV.ui.toast("Away " + GV.fmt.time(sec) + ": +" + GV.fmt(eff) + " gas", 3200); }
   }
 
@@ -195,7 +221,7 @@ GV.game = (() => {
     get state() { return S; },
     get goldenFactor() { return d.golden; },
     onChange, fart, gps, baseGps, gpsOf, tapValue, owned, genCost, maxAffordable,
-    buyGen, buyUpgrade, buyPet, buySkin, setSkin, startFrenzy, frenzyOn, earn,
+    buyGen, buyUpgrade, buyPet, buySkin, setSkin, startFrenzy, mult, unlock, crystalGain, ascend, frenzyOn, earn,
     save, exportCode, importCode, reset
   };
 })();

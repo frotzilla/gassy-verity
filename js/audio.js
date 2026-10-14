@@ -176,5 +176,41 @@ GV.audio = (() => {
     } catch (e) {}
   }
 
-  return { startSqueak, setSqueak, stopSqueak, fart, boom, plop };
+  // Small UI sounds: a rising blip for buying, a two-note chime for achievements, a whoosh for ascending.
+  function tone(freqs, step, dur, gain, type = "triangle") {
+    try {
+      const c = context(), t = c.currentTime;
+      freqs.forEach((f, i) => {
+        const o = c.createOscillator(), g = c.createGain(), t0 = t + i * step;
+        o.type = type; o.frequency.setValueAtTime(f, t0);
+        g.gain.setValueAtTime(0.0001, t0); g.gain.linearRampToValueAtTime(gain, t0 + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        o.connect(g); g.connect(c.destination);
+        o.start(t0); o.stop(t0 + dur + 0.02);
+      });
+    } catch (e) {}
+  }
+  const buy = () => tone([440, 660], 0.06, 0.12, 0.12);
+  const chime = () => tone([784, 1047, 1319], 0.09, 0.28, 0.1, "sine");
+  function whoosh() {
+    try { const c = context(); noiseLayer(c, c.currentTime, 1.2, 0.35, 200, 4000, 1); } catch (e) {}
+  }
+
+  // Mute: everything audible goes through gate(), and the choice is remembered.
+  const MUTE_KEY = "gassyVerity.muted";
+  let muted = false;
+  try { muted = localStorage.getItem(MUTE_KEY) === "1"; } catch (e) {}
+  const gate = fn => (...a) => (muted ? undefined : fn(...a));
+  function setMuted(m) {
+    muted = !!m;
+    try { localStorage.setItem(MUTE_KEY, muted ? "1" : "0"); } catch (e) {}
+    if (muted) stopSqueak();
+  }
+
+  return {
+    startSqueak: gate(startSqueak), setSqueak, stopSqueak,
+    fart: gate(fart), boom: gate(boom), plop: gate(plop),
+    buy: gate(buy), chime: gate(chime), whoosh: gate(whoosh),
+    setMuted, get muted() { return muted; }
+  };
 })();

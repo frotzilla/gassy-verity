@@ -4,8 +4,6 @@ GV.poop = (() => {
   const G = GV.game;
   let times = [], cooldownUntil = 0, count = 0;
 
-  const SWIRL = `<svg viewBox="0 0 40 36" width="100%" height="100%"><path d="M20 3 q5 0 5 5 q8 1 8 8 q6 2 6 8 q0 8 -9 8 h-20 q-9 0 -9 -8 q0 -6 6 -8 q0 -7 8 -8 q0 -5 5 -5z" fill="#7a4a24"/><path d="M12 22 q8 4 16 0" stroke="#9c6a3a" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
-
   // Call once per fart.
   function note() {
     const rule = GV.skins.rule();
@@ -22,12 +20,15 @@ GV.poop = (() => {
   function drop() {
     const el = document.createElement("button");
     el.type = "button"; el.className = "poop"; el.setAttribute("aria-label", "clean up");
-    el.innerHTML = SWIRL;
+    const im = document.createElement("img");
+    im.src = GV.assets.poop; im.alt = ""; im.draggable = false;
+    el.appendChild(im);
     el.style.left = (30 + Math.random() * 40) + "%";
     el.style.top = (64 + Math.random() * 2.5) + "%";
     el.addEventListener("pointerdown", e => e.stopPropagation());
     el.addEventListener("click", () => {
       el.remove(); count--;
+      GV.stats.bump("poops");
       const reward = G.baseGps() * 20 + 25;
       G.earn(reward);
       GV.ui.floatText("+" + GV.fmt(reward), el.getBoundingClientRect());
