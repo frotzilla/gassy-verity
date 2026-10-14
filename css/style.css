@@ -14,22 +14,16 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 #stage { position:absolute; left:50%; top:62%; transform:translate(-50%,-100%); cursor:pointer; }
 #body { transform-origin:50% 100%; will-change:transform; }
 #verity { width:min(40vw,200px); display:block; }
-#verity.strain { animation:strain .08s linear infinite; }
-@keyframes strain { 0%{transform:translate(-2px,1px)} 50%{transform:translate(2px,-1px)} 100%{transform:translate(-2px,1px)} }
 
 
 /* HUD */
 #meter { position:fixed; left:50%; bottom:56px; transform:translateX(-50%); width:min(70vw,320px); height:16px;
          background:#0008; border:2px solid #fff; }
-#fill { height:100%; width:0; background:#9acd32; }
+#fill { height:100%; width:0; background:#9acd32; transition:width .15s linear; }
 #count, #hint { position:fixed; bottom:12px; color:#fff; background:#0008; padding:6px 12px; font-size:.85rem; }
 #count { left:12px; }
 #hint { right:12px; }
 
-/* Screen shake on big releases */
-body.shake { animation:quake .6s; }
-@keyframes quake { 10%{transform:translate(-14px,6px)} 30%{transform:translate(12px,-6px)} 50%{transform:translate(-9px,4px)}
-  70%{transform:translate(6px,-2px)} 90%{transform:translate(-3px,1px)} }
 
 /* Gas particles are drawn on one canvas (js/puffs.js), above Verity, below the HUD */
 #gasCanvas { position:fixed; inset:0; z-index:3; pointer-events:none; }

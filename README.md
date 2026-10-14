@@ -11,11 +11,12 @@ No build step: open `index.html` in a browser.
 - `js/audio.js` - squeak and fart sounds
 - `js/puffs.js` - canvas gas particles (fixed pool, capped, lingers to fill the screen)
 - `js/combo.js` - combo counter
+- `js/motion.js` - squash spring and screen shake (one loop, continuous state)
 - `js/verity.js` - charge and release behavior
 - `js/main.js` - input wiring
 
 Scripts are plain (non-module) files sharing a `GV` namespace, so the page works from
-`file://`. Load order in `index.html` matters: config, audio, puffs, combo, verity, main.
+`file://`. Load order in `index.html` matters: config, audio, puffs, combo, motion, verity, main.
 
 Verity is the round yellow companion from ThatMob's videos.
 
