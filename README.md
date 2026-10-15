@@ -72,7 +72,7 @@ Skins live in their own tab (the "skins" button): a grid of every skin with its 
 Skins are bought once and switched any time. They are the Verity variants from the
 [Veritypedia](https://verityminecraft.fandom.com/) (Falsity, Lovity, Curiosity, Larpity, Mandity, Cruelty,
 Manipulity, Narity, Moggity, Freakity, Obesity, Eclipsity, Monster Verity and Lord Verity, plus fan-blog variants:
-Timeity, Gypsy Verity, Acclivity, Vapority, Smallity, Calamity, Powerity, Upside-down Verity, Variety, Blarity,
+Timeity, Acclivity, Vapority, Smallity, Calamity, Powerity, Upside-down Verity, Variety, Blarity,
 Chillity, Nothinity, Stupidity, Purity, Homosexuality, and two I drew from the name alone, Angelity and Auraity), Chellsity (hot pink
 `>_<`, from the author's GitHub avatar) and Clawd, a little
 orange guy with claws (an unofficial fan tribute to Anthropic's Claude Code mascot; see `NOTICE.md`). Fart about 14 times in 6 seconds, on any skin, and Verity poops; click the poop
