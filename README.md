@@ -8,6 +8,7 @@ No build step: open `index.html` in a browser.
 - `index.html` - page markup
 - `assets/` - all the art (SVG/PNG), listed in `assets/manifest.js`; see `assets/README.md` to add your own
 - `clips/` - voice clips: drop audio files here (see `clips/README.txt`)
+- `tools/check-assets.js` - checks `assets/manifest.js` after you add or edit a skin
 - `tools/clips-manifest.js` - regenerates `clips/manifest.js` (a GitHub Action also does it on push)
 - `css/style.css` - all styling
 - `js/config.js` - tweakable numbers (size, timings, sound, gas, blast, sky)
@@ -64,6 +65,9 @@ page's own images back, so it needs the page served over http(s); opened from a 
 browser blocks it and the button says so.
 
 ## Skins and clips
+
+To add your own skin: drop an image in `assets/skins/`, add one line to `assets/manifest.js` (id, name, cost,
+file, pronoun, face), and run `node tools/check-assets.js`. Full steps are in `assets/README.md`.
 
 Chellsity's face is a text emoticon in JetBrains Mono (the other skins keep dot eyes). It changes with mood: a random idle face
 every few seconds (mostly `>_<`, with `:3`, `UwU` and `^w^`), `:o`, `O_O`, `@_@` as it swells, and `^_^` after a fart.

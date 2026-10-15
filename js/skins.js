@@ -84,5 +84,11 @@ GV.skins = (() => {
   set(GV.game.state.skin);
   GV.game.onChange(() => { if (GV.game.state.skin !== current) set(GV.game.state.skin); });
 
-  return { set, get current() { return current; } };
+  // he / she / it / they, from the skin's manifest entry (or the configured default).
+  const pronoun = () => {
+    const p = ((list.find(s => s.id === current) || {}).pronoun || GV.config.defaultPronoun || "they").toLowerCase();
+    return ["he", "she", "it", "they"].includes(p) ? p : "they";
+  };
+
+  return { set, pronoun, get current() { return current; } };
 })();

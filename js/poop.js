@@ -34,7 +34,7 @@ GV.poop = (() => {
     });
     layer.appendChild(el); count++;
     GV.audio.plop();
-    GV.ui.toast("...he pooped.", 1800);
+    GV.ui.toast("..." + GV.skins.pronoun() + " pooped.", 1800);
     if (GV.clips) GV.clips.maybe("big");
   }
 
