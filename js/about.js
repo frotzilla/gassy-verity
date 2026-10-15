@@ -5,6 +5,10 @@ GV.about = (() => {
 
   panel.innerHTML =
     `<div class="shopHead"><b>About</b><button type="button" class="close">close</button></div>` +
+    `<div class="shopSec">Work in progress</div>` +
+    `<p>This game is unfinished. Balance, art and features change often, and bugs happen. Saves can break or reset between updates, ` +
+    `so use <b>export</b> in the shop now and then to keep a backup. Found something wrong? ` +
+    `<a href="https://github.com/frotzilla/gassy-verity/issues" target="_blank" rel="noopener">Open an issue</a>.</p>` +
     `<div class="shopSec">Privacy</div>` +
     `<p>To match the sky to your real sunrise and sunset, this page looks up your approximate location from your IP address ` +
     `using <b>ipwho.is</b> (or <b>ipapi.co</b> if that fails). Those services see your IP, which is shared with every site you visit anyway, ` +

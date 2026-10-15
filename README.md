@@ -1,5 +1,8 @@
 # Gassy Verity
 
+> **Work in progress.** This is an unfinished fan game. Balance, art and features change often, bugs happen, and saves can break
+> or reset between updates (use the shop's export to back up). Issues and feedback are welcome.
+
 Hold the round yellow Verity (or press space) to inflate it, let go for a big fart.
 No build step: open `index.html` in a browser.
 
