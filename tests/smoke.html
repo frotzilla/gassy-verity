@@ -30,7 +30,7 @@
   await check("page loads without script errors", () => W.__errs.length === 0 || (() => { throw new Error(W.__errs.join(" | ")); })());
 
   await check("every module is present", () => {
-    const need = ["config","assets","fmt","ui","stats","haptics","data","game","audio","puffs","face","skins","combo","sky","motion","blast","poop","clips","verity","weather","shot","about","admin","ach","shop","skinsPanel"];
+    const need = ["config","assets","fmt","ui","stats","haptics","data","game","audio","puffs","face","skins","combo","sky","motion","blast","poop","verity","weather","shot","about","admin","ach","shop","skinsPanel"];
     const missing = need.filter(k => !GV[k]); if (missing.length) throw new Error("missing: " + missing.join(", "));
   });
 
@@ -140,10 +140,6 @@
   await check("shop and skins tab render", () => {
     if (D.querySelectorAll(".skinCard").length !== GV.data.skins.length) throw new Error("skin cards");
     if (!D.querySelector("#shopGens .gen")) throw new Error("shop rows");
-  });
-
-  await check("voice clip list is readable and playing never throws", () => {
-    if (!Array.isArray(GV.clipFiles)) throw new Error("no clip list"); GV.clips.maybe("big");
   });
 
   await check("no errors were thrown during the whole run", () => {

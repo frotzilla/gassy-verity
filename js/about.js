@@ -6,8 +6,9 @@ GV.about = (() => {
   panel.innerHTML =
     `<div class="shopHead"><b>About</b><button type="button" class="close">close</button></div>` +
     `<div class="shopSec">Work in progress</div>` +
-    `<p>This game is unfinished. Balance, art and features change often, and bugs happen. Saves can break or reset between updates, ` +
-    `so use <b>export</b> in the shop now and then to keep a backup. Found something wrong? ` +
+    `<p>The game is playable, but small screens (phones, and foldables when folded) are still a work in progress: the layout can be cramped. ` +
+    `Desktop and wide or unfolded screens have had the most testing. Your save is versioned and backed up, but it is only in this browser, ` +
+    `so use <b>export</b> in the shop now and then. Found something wrong? ` +
     `<a href="https://github.com/frotzilla/gassy-verity/issues" target="_blank" rel="noopener">Open an issue</a>.</p>` +
     `<div class="shopSec">Privacy</div>` +
     `<p>To match the sky to your real sunrise and sunset, this page looks up your approximate location from your IP address ` +

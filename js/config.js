@@ -21,10 +21,6 @@ window.GV = { config: {
             offlineCapHours: 8,  // away time that still earns gas
             offlineEff: 0.5,     // fraction of normal production earned while away
             saveSec: 15 },
-  clips:  { chance: 0.15,        // chance a normal fart plays a random clip
-            bigChance: 0.8,      // chance for blasts, big combos and poops
-            volume: 0.8, minGapMs: 2500 },
-  audioFinaleCombo: 12,          // combo at which clips use the "big" chance
   defaultPronoun: "they",         // for skins that do not set a pronoun in the manifest
   poop:   { count: 14, windowSec: 6, limit: 6 },   // this many farts in this many seconds makes a poop; most on screen
   haptics: true,                 // phone vibration (Android browsers; iOS ignores it)

@@ -1,7 +1,7 @@
 # Gassy Verity
 
-> **Work in progress.** This is an unfinished fan game. Balance, art and features change often, bugs happen, and saves can break
-> or reset between updates (use the shop's export to back up). Issues and feedback are welcome.
+> **Work in progress on mobile.** The game is playable, but small screens (phones, and foldables when folded) are still rough:
+> the layout can be cramped. Desktop and wide or unfolded screens have had the most testing. Issues and feedback are welcome.
 
 Hold the round yellow Verity (or press space) to inflate it, let go for a big fart.
 No build step: open `index.html` in a browser.
@@ -10,10 +10,8 @@ No build step: open `index.html` in a browser.
 
 - `index.html` - page markup
 - `assets/` - all the art (SVG/PNG), listed in `assets/manifest.js`; see `assets/README.md` to add your own
-- `clips/` - voice clips: drop audio files here (see `clips/README.txt`)
 - `tools/check-assets.js` - checks `assets/manifest.js` after you add or edit a skin
 - `tools/smoke.sh` and `tests/smoke.html` - the smoke test (loads the page in headless Chrome and pokes at it)
-- `tools/clips-manifest.js` - regenerates `clips/manifest.js` (a GitHub Action also does it on push)
 - `css/style.css` - all styling
 - `js/config.js` - tweakable numbers (size, timings, sound, gas, blast, sky)
 - `js/format.js` - number formatting (1.23K, 5.10B)
@@ -28,7 +26,6 @@ No build step: open `index.html` in a browser.
 - `js/puffs.js` - canvas gas particles (fixed pool, capped, lingers to fill the screen, blast shockwave)
 - `js/face.js` - expressions: blush, bulging eyes, relief after a fart, and Chellsity's text faces
 - `js/skins.js` - skins: the body is an image from assets/, the animated face is drawn over it
-- `js/clips.js` - plays random clips from `clips/`
 - `js/achievements.js` - achievements (+1% gas each) and their list in the stats panel
 - `js/weather.js` - optional real weather: clouds, fog, rain, snow, storms
 - `js/screenshot.js` - the snap button (saves a PNG of the scene)
@@ -73,7 +70,7 @@ The snap button saves a PNG of the scene (or opens the share sheet on a phone). 
 page's own images back, so it needs the page served over http(s); opened from a file:// URL the
 browser blocks it and the button says so.
 
-## Skins and clips
+## Skins
 
 To add your own skin: drop an image in `assets/skins/`, add one line to `assets/manifest.js` (id, name, cost,
 file, pronoun, face), and run `node tools/check-assets.js`. Full steps are in `assets/README.md`.
@@ -91,12 +88,6 @@ Chillity, Nothinity, Stupidity, Purity, Homosexuality, and two I drew from the n
 orange guy with claws (an unofficial fan tribute to Anthropic's Claude Code mascot; see `NOTICE.md`). Fart about 14 times in 6 seconds, on any skin, and Verity poops; click the poop
 to clean it up for a little gas. The art is my own drawings based on the wiki's descriptions; the wiki's text is
 CC-BY-SA. This is an unofficial fan project.
-
-Voice clips: put audio files in the `clips/` folder and push. They play at random on some farts,
-more often on blasts and big combos. The page reads `clips/manifest.js`, which is generated:
-a GitHub Action rebuilds it whenever you push files to `clips/`, or run
-`node tools/clips-manifest.js` locally. Chance and volume are in `js/config.js`. Only add clips you
-have the right to use, since the repo is public.
 
 ## Sky
 
