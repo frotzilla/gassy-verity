@@ -12,11 +12,12 @@ No build step: open `index.html` in a browser.
 - `assets/` - all the art (SVG/PNG), listed in `assets/manifest.js`; see `assets/README.md` to add your own
 - `clips/` - voice clips: drop audio files here (see `clips/README.txt`)
 - `tools/check-assets.js` - checks `assets/manifest.js` after you add or edit a skin
+- `tools/smoke.sh` and `tests/smoke.html` - the smoke test (loads the page in headless Chrome and pokes at it)
 - `tools/clips-manifest.js` - regenerates `clips/manifest.js` (a GitHub Action also does it on push)
 - `css/style.css` - all styling
 - `js/config.js` - tweakable numbers (size, timings, sound, gas, blast, sky)
 - `js/format.js` - number formatting (1.23K, 5.10B)
-- `js/ui.js` - toast, screen flash, floating gain text
+- `js/ui.js` - toast, screen flash, floating gain text, dialogs, and the reduce-motion setting
 - `js/data.js` - the content: auto-farters, upgrades and achievements (add new ones here)
 - `js/game.js` - economy: gas, buying, offline earnings, save/load
 - `js/shop.js` - bank readout and the shop panel
@@ -25,7 +26,7 @@ No build step: open `index.html` in a browser.
 - `js/haptics.js` - phone vibration
 - `js/audio.js` - squeak, fart variants (squeak, classic, rumble, finale) and the blast boom
 - `js/puffs.js` - canvas gas particles (fixed pool, capped, lingers to fill the screen, blast shockwave)
-- `js/face.js` - expressions: blush, bulging eyes, watering eyes, relief
+- `js/face.js` - expressions: blush, bulging eyes, relief after a fart, and Chellsity's text faces
 - `js/skins.js` - skins: the body is an image from assets/, the animated face is drawn over it
 - `js/clips.js` - plays random clips from `clips/`
 - `js/achievements.js` - achievements (+1% gas each) and their list in the stats panel
@@ -52,11 +53,16 @@ the screen) and on upgrades (2x farts, faster charge, longer combo window, bigge
 seconds of production. Progress saves to localStorage every 15 s, and while you are away it
 earns half production for up to 8 hours. The shop has save export and import, and reset.
 
+Saves are versioned. Every save records which version of the game wrote it, and older saves are upgraded
+automatically when the page loads (the migration steps are in `js/game.js`). Before a save is changed, its
+original text is kept in your browser under `gassyVerity.game.backup.<version>`, and a save from a newer version of
+the game still loads, with a notice. Export from the shop now and then anyway; it is your only copy.
+
 ## Ascension, achievements, weather, screenshots
 
 Once you have earned about 100 million gas, Ascend (in the shop) to trade your run for methane
 crystals: each is a permanent +1% gas. It resets gas, auto-farters and upgrades, and keeps
-skins, achievements and crystals. Each of the 22 achievements is also +1% gas. Buying, achievements
+skins, achievements and crystals. Each of the 24 achievements is also +1% gas. Buying, achievements
 and ascending have little sounds, and the sound button mutes everything.
 
 Weather is opt-in (About panel): it asks open-meteo.com for the current conditions at your
@@ -96,8 +102,7 @@ have the right to use, since the repo is public.
 
 The sky follows the sun at your location. Location comes from an IP lookup (ipwho.is, then
 ipapi.co as a fallback), cached in localStorage for 24 hours. **That request shows your IP to
-those services.** You can turn the lookup off from the About panel, and there is a notice the
-first time you visit. If it fails the sky uses the device clock and a longitude guessed from the
+those services.** You can turn the lookup off from the About panel. If it fails the sky uses the device clock and a longitude guessed from the
 time zone, and the label says "(approx)". The sun and moon positions are computed locally.
 
 To test other times, places or weather, use the admin panel.
@@ -116,6 +121,16 @@ open can edit their own game state anyway. There is nothing server-side to prote
 Hold Verity (or space) to inflate, release for a fart. On a phone, touch anywhere in the
 scene. Chain farts for a combo. Pack the screen with gas, then release a real hold (about
 2.3 s or more) for a gas blast.
+
+Reduce motion: if your device asks for reduced motion, or you tick it in the About dialog, there is no screen
+shake, no flashes or lightning, the clouds hold still and gain numbers just fade.
+
+## Testing
+
+    node tools/check-assets.js   # checks assets/manifest.js (run after adding a skin)
+    bash tools/smoke.sh          # headless Chrome: loads the page and exercises skins, economy, saves, admin, weather
+
+The smoke test also runs on every push (`.github/workflows/smoke.yml`).
 
 Verity is the round yellow companion from ThatMob's videos.
 

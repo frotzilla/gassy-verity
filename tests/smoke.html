@@ -1,0 +1,159 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>smoke: running</title>
+<body style="font:14px monospace;white-space:pre-wrap"><pre id="out">running...</pre>
+<script>
+// Smoke test: loads the real page in an iframe (with an error catcher injected), pokes at it, and
+// writes "SMOKE: PASS n/n" or "SMOKE: FAIL ..." into the page title. Run it with tools/smoke.sh,
+// or open this file over http (not file://) and read the result on screen.
+(async () => {
+  const results = [], wait = ms => new Promise(r => setTimeout(r, ms));
+  const check = async (name, fn) => {
+    try { const r = await fn(); results.push({ name, ok: r !== false, note: r === false ? "returned false" : "" }); }
+    catch (e) { results.push({ name, ok: false, note: String((e && e.message) || e) }); }
+  };
+
+  try { localStorage.clear(); } catch (e) {}
+  const html = await (await fetch("../index.html")).text();
+  const inject = `<base href="${location.origin}/"><script>window.__errs=[];addEventListener("error",e=>__errs.push(e.message));addEventListener("unhandledrejection",e=>__errs.push(String(e.reason)));<\/script>`;
+  const frame = document.createElement("iframe");
+  frame.style.cssText = "position:fixed;right:0;top:0;width:480px;height:720px;border:0;opacity:.01";
+  document.body.appendChild(frame);
+  frame.srcdoc = html.replace("<head>", "<head>" + inject);
+  await new Promise(r => frame.onload = r);
+  await wait(1500);
+  const W = frame.contentWindow, D = W.document, GV = W.GV, $ = id => D.getElementById(id);
+  const G = GV && GV.game;
+  const down = () => $("stage").dispatchEvent(new W.PointerEvent("pointerdown", { bubbles: true }));
+  const up = () => W.dispatchEvent(new W.PointerEvent("pointerup"));
+
+  await check("page loads without script errors", () => W.__errs.length === 0 || (() => { throw new Error(W.__errs.join(" | ")); })());
+
+  await check("every module is present", () => {
+    const need = ["config","assets","fmt","ui","stats","haptics","data","game","audio","puffs","face","skins","combo","sky","motion","blast","poop","clips","verity","weather","shot","about","admin","ach","shop","skinsPanel"];
+    const missing = need.filter(k => !GV[k]); if (missing.length) throw new Error("missing: " + missing.join(", "));
+  });
+
+  await check("every skin has a unique id, a price and a loadable image", async () => {
+    const skins = GV.data.skins, ids = new Set();
+    for (const s of skins) {
+      if (!s.id || ids.has(s.id)) throw new Error("bad or duplicate id " + s.id); ids.add(s.id);
+      if (!s.name || typeof s.cost !== "number") throw new Error(s.id + ": name or cost");
+      const ok = await new Promise(r => { const i = new W.Image(); i.onload = () => r(true); i.onerror = () => r(false); i.src = s.file; });
+      if (!ok) throw new Error(s.id + ": image failed to load: " + s.file);
+    }
+  });
+
+  await check("every skin equips, draws a face, and has a valid pronoun", async () => {
+    G.reset(); G.admin.unlockAll(); await wait(100);
+    for (const s of GV.data.skins) {
+      G.setSkin(s.id); await wait(120);   // the game batches change notices (~50 ms)
+      if (GV.skins.current !== s.id) throw new Error("did not equip " + s.id);
+      if (s.face !== false && !$("eyes")) throw new Error(s.id + ": no eyes drawn");
+      if (!["he","she","it","they"].includes(GV.skins.pronoun())) throw new Error(s.id + ": bad pronoun");
+    }
+    G.setSkin("verity");
+  });
+
+  await check("economy: earning, buying and prices", () => {
+    G.reset(); G.earn(1000);
+    if (!G.buyGen("bean", 2)) throw new Error("could not buy");
+    if (Math.abs(G.gps() - 0.2) > 1e-9) throw new Error("gps " + G.gps());
+    const expect = 15 * Math.pow(1.15, 2); if (Math.abs(G.genCost("bean", 1) - expect) > 1e-6) throw new Error("price growth");
+    if (G.buyGen("cosmic", 1)) throw new Error("bought something unaffordable");
+  });
+
+  await check("a fart earns gas and unlocks the first achievement", async () => {
+    G.reset(); const before = G.state.gas; down(); await wait(150); up(); await wait(1200);
+    if (!(G.state.gas > before)) throw new Error("no gas earned");
+    if (!G.state.ach.first) throw new Error("achievement did not unlock");
+  });
+
+  await check("ascension resets the run and keeps skins and crystals", () => {
+    G.reset(); G.earn(4e10); G.buyGen("bean", 3);
+    if (G.crystalGain() !== 20) throw new Error("expected 20 crystals, got " + G.crystalGain());
+    G.ascend();
+    if (G.state.crystals !== 20 || G.state.gas !== 0 || (G.state.gens.bean || 0) !== 0 || !G.state.skins.verity) throw new Error("wrong state after ascending");
+    if (G.crystalGain() !== 0) throw new Error("could ascend twice");
+  });
+
+  await check("save round trip keeps data and stamps the save version", () => {
+    G.reset(); G.earn(5e9); G.ascend(); const c = G.state.crystals;
+    const saved = JSON.parse(W.localStorage.getItem("gassyVerity.game.v1"));
+    if (saved.v !== G.SAVE_VERSION) throw new Error("save has no version");
+    const code = G.exportCode(); G.reset(); if (!G.importCode(code) || G.state.crystals !== c) throw new Error("import lost data");
+    if (G.importCode("not a save")) throw new Error("accepted garbage");
+  });
+
+  await check("old saves migrate (no version, robot skin, pets) and newer saves still load", () => {
+    const legacy = { gas: 77, total: 77, lifetime: 77, pets: { fly: 1 }, frenzyUntil: 1, skins: { verity: 1, robot: 1 }, skin: "robot", ups: { tap0: 1 } };
+    if (!G.importCode(btoa(JSON.stringify(legacy)))) throw new Error("legacy import failed");
+    if (!G.state.skins.clawd || G.state.skin !== "clawd" || "pets" in G.state || !G.state.ups.tap0) throw new Error("legacy not migrated");
+    if (!G.importCode(btoa(JSON.stringify({ v: 99, gas: 5, mystery: true })))) throw new Error("newer save rejected");
+    if (G.state.gas !== 5) throw new Error("newer save lost data");
+  });
+
+  await check("poop appears, uses the skin's pronoun, and cleans up for gas", async () => {
+    G.reset(); G.admin.unlockAll(); G.setSkin("lovity"); await wait(60);
+    GV.poop.drop();
+    if (!/she pooped/.test($("toast").textContent)) throw new Error("toast: " + $("toast").textContent);
+    const p = D.querySelector(".poop"); if (!p) throw new Error("no poop"); const g0 = G.state.gas; p.click();
+    if (D.querySelector(".poop") || !(G.state.gas > g0)) throw new Error("did not clean up");
+  });
+
+  await check("admin panel rejects a wrong password and accepts the right one", async () => {
+    GV.admin.open(); await wait(200);
+    const panel = $("adminPanel"), form = panel.querySelector("#adForm");
+    const submit = async pw => { panel.querySelector("#adPw").value = pw; form.dispatchEvent(new W.Event("submit", { cancelable: true, bubbles: true })); await wait(400); };
+    await submit("definitely-wrong");
+    if (!panel.querySelector("#adPw")) throw new Error("wrong password unlocked it");
+    await wait(1500); await submit("ughImSoBigAndFatAndGassyAndGay");
+    if (!panel.querySelector("#adTime")) throw new Error("right password did not unlock");
+    panel.querySelector(".close").click();
+  });
+
+  await check("reduce motion switches on and off", () => {
+    GV.ui.setReduced(true); if (!D.documentElement.classList.contains("reduce-motion") || !GV.ui.reduced()) throw new Error("not on");
+    GV.ui.setReduced(false); if (D.documentElement.classList.contains("reduce-motion")) throw new Error("not off");
+    GV.ui.setReduced(null);
+  });
+
+  await check("sky follows the time and location", async () => {
+    GV.sky.setLocation({ lat: 40, lon: -100, city: "Test" });
+    GV.sky.setTime(new Date(new Date().setHours(12, 0, 0, 0)), 0); await wait(100);
+    const day = $("world").style.getPropertyValue("--sky-top");
+    GV.sky.setTime(new Date(new Date().setHours(0, 30, 0, 0)), 0); await wait(100);
+    const night = $("world").style.getPropertyValue("--sky-top");
+    GV.sky.setTime(null, 0); GV.sky.setLocation(null);
+    if (!day || !night || day === night) throw new Error("sky did not change: " + day + " vs " + night);
+  });
+
+  await check("every kind of weather applies", async () => {
+    for (const k of GV.weather.kinds) { GV.weather.force(k); await wait(30); if (GV.weather.kind !== k) throw new Error("did not apply " + k); }
+    GV.weather.force(null);
+  });
+
+  await check("screenshot composes a canvas", async () => {
+    const c = await GV.shot.draw(); if (!c || c.width < 100 || c.height < 100) throw new Error("bad canvas");
+  });
+
+  await check("shop and skins tab render", () => {
+    if (D.querySelectorAll(".skinCard").length !== GV.data.skins.length) throw new Error("skin cards");
+    if (!D.querySelector("#shopGens .gen")) throw new Error("shop rows");
+  });
+
+  await check("voice clip list is readable and playing never throws", () => {
+    if (!Array.isArray(GV.clipFiles)) throw new Error("no clip list"); GV.clips.maybe("big");
+  });
+
+  await check("no errors were thrown during the whole run", () => {
+    if (W.__errs.length) throw new Error(W.__errs.slice(0, 3).join(" | "));
+  });
+
+  const bad = results.filter(r => !r.ok);
+  const lines = results.map(r => (r.ok ? "ok    " : "FAIL  ") + r.name + (r.note ? "  <- " + r.note : ""));
+  const head = bad.length ? `SMOKE: FAIL ${bad.length}/${results.length}` : `SMOKE: PASS ${results.length}/${results.length}`;
+  document.getElementById("out").textContent = head + "\n\n" + lines.join("\n");
+  document.title = head;
+})();
+</script>

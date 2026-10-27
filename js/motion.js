@@ -18,7 +18,7 @@ GV.motion = (() => {
   // Release: knock the spring (squash) and add screen-shake trauma. Both stack smoothly.
   function pop(power) {
     v -= power * cfg.popKick;
-    trauma = Math.min(1, trauma + power * cfg.traumaPerPower);
+    if (!GV.ui.reduced()) trauma = Math.min(1, trauma + power * cfg.traumaPerPower);
     wake();
   }
 

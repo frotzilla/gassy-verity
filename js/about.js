@@ -14,6 +14,7 @@ GV.about = (() => {
     `using <b>ipwho.is</b> (or <b>ipapi.co</b> if that fails). Those services see your IP, which is shared with every site you visit anyway, ` +
     `but they are a third party. The result is cached in your browser for a day. Nothing else leaves your device: ` +
     `your game save and stats stay in this browser and are never uploaded.</p>` +
+    `<label class="check"><input type="checkbox" id="rmToggle"> Reduce motion (no screen shake, flashes or drifting clouds; follows your device setting by default)</label>` +
     `<label class="check"><input type="checkbox" id="geoToggle"> Use my IP location for the sky</label>` +
     `<label class="check"><input type="checkbox" id="wxToggle"> Show my real weather (sends your location, rounded to about 10 km, to open-meteo.com; off by default)</label>` +
     `<div class="shopSec">Credits</div>` +
@@ -31,11 +32,12 @@ GV.about = (() => {
     `<p>There is an admin panel for setting the time, weather and location, giving gas, and spawning things. It needs a password. ` +
     `<button type="button" id="openAdmin" class="linkBtn">Open admin</button></p>`;
 
-  const geo = panel.querySelector("#geoToggle"), wx = panel.querySelector("#wxToggle");
+  const geo = panel.querySelector("#geoToggle"), wx = panel.querySelector("#wxToggle"), rm = panel.querySelector("#rmToggle");
+  rm.addEventListener("change", () => GV.ui.setReduced(rm.checked));
   geo.addEventListener("change", () => GV.sky.setGeo(geo.checked));
   wx.addEventListener("change", () => GV.weather.setEnabled(wx.checked));
 
   panel.querySelector("#openAdmin").addEventListener("click", () => GV.admin.open());
-  GV.ui.modal(btn, panel, () => { geo.checked = GV.sky.geoOn(); wx.checked = GV.weather.enabled(); });
+  GV.ui.modal(btn, panel, () => { rm.checked = GV.ui.reduced(); geo.checked = GV.sky.geoOn(); wx.checked = GV.weather.enabled(); });
   return {};
 })();

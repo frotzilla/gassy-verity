@@ -221,3 +221,10 @@ h1 { text-align:center; margin:18px 0 0; color:#fff; text-shadow:3px 3px 0 #0006
 #wip { position:fixed; top:calc(max(12px, env(safe-area-inset-top)) + 34px); left:12px; z-index:4; pointer-events:none;
        font-size:.65rem; letter-spacing:.06em; text-transform:uppercase; color:#fff; background:#0006; padding:2px 8px;
        border:1px solid var(--pink); }
+
+/* Reduce motion (OS setting or the About toggle): no bouncing, drifting or flashing */
+.reduce-motion .cloud { animation-play-state:paused; }
+.reduce-motion #comboText.pop { animation:none; }
+.reduce-motion #toast.show { animation:none; opacity:1; }  /* shown plainly for as long as it lasts */
+.reduce-motion #fill, .reduce-motion #dim, .reduce-motion #fog, .reduce-motion #stars { transition:none; }
+.reduce-motion #flash { display:none; }

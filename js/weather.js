@@ -81,7 +81,7 @@ GV.weather = (() => {
     g.clearRect(0, 0, W, H);
     const dt = 1 / 60;
     if (kind === "storm") {                          // an occasional flash
-      if (now > nextBolt) { lightning = 1; nextBolt = now + 4000 + Math.random() * 7000; }
+      if (now > nextBolt && !GV.ui.reduced()) { lightning = 1; nextBolt = now + 4000 + Math.random() * 7000; }
       if (lightning > 0) { g.fillStyle = `rgba(255,255,255,${lightning * 0.5})`; g.fillRect(0, 0, W, H); lightning = Math.max(0, lightning - dt * 7); }
     }
     g.strokeStyle = "rgba(190,215,255,.55)"; g.lineWidth = 1.4; g.beginPath();

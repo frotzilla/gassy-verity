@@ -1,8 +1,23 @@
-// Tiny shared UI helpers: the centered toast and the full-screen flash.
+// Tiny shared UI helpers: the centered toast, the full-screen flash, panels, dialogs, and the
+// reduce-motion preference.
 GV.ui = (() => {
   const toastEl = document.getElementById("toast");
   const flashEl = document.getElementById("flash");
   let timer = 0;
+
+  // Reduce motion: follows the operating system setting unless the About dialog overrides it.
+  // When on: no screen shake, no flashes or lightning, clouds hold still, gain text just fades.
+  const RM_KEY = "gassyVerity.reduceMotion";
+  const mq = window.matchMedia ? matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+  const pref = () => { try { return localStorage.getItem(RM_KEY); } catch (e) { return null; } };   // "1", "0" or null (follow the OS)
+  const reduced = () => (pref() === "1" ? true : pref() === "0" ? false : mq.matches);
+  const applyRM = () => document.documentElement.classList.toggle("reduce-motion", reduced());
+  function setReduced(v) {          // true, false, or null to go back to following the OS
+    try { v === null ? localStorage.removeItem(RM_KEY) : localStorage.setItem(RM_KEY, v ? "1" : "0"); } catch (e) {}
+    applyRM();
+  }
+  if (mq.addEventListener) mq.addEventListener("change", applyRM);
+  applyRM();
 
   function toast(text, ms = 1600) {
     toastEl.textContent = text;
@@ -12,6 +27,7 @@ GV.ui = (() => {
   }
 
   function flash(ms = 700) {
+    if (reduced()) return;
     flashEl.animate([{ opacity: 0.95 }, { opacity: 0 }], { duration: ms, easing: "ease-out" });
   }
 
@@ -26,7 +42,8 @@ GV.ui = (() => {
     el.style.left = rect.left + rect.width * (0.3 + Math.random() * 0.4) + "px";
     el.style.top = rect.top + "px";
     document.body.appendChild(el);
-    el.animate([{ transform: "translate(-50%,0)", opacity: 1 }, { transform: "translate(-50%,-70px)", opacity: 0 }],
+    const rise = reduced() ? "translate(-50%,0)" : "translate(-50%,-70px)";       // reduced: fade in place
+    el.animate([{ transform: "translate(-50%,0)", opacity: 1 }, { transform: rise, opacity: 0 }],
                { duration: 900, easing: "ease-out" }).onfinish = () => el.remove();
   }
 
@@ -76,5 +93,5 @@ GV.ui = (() => {
     return { open, close: closeModals };
   }
 
-  return { toast, flash, floatText, bindPanel, modal };
+  return { toast, flash, floatText, bindPanel, modal, reduced, setReduced, reducedSetting: pref };
 })();

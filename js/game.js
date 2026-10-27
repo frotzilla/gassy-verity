@@ -2,13 +2,26 @@
 // UI lives in shop.js; content (prices, names) lives in data.js.
 GV.game = (() => {
   const cfg = GV.config, gc = cfg.game, D = GV.data;
-  const KEY = "gassyVerity.game.v1";
+  const KEY = "gassyVerity.game.v1";   // the storage key stays put; the version lives inside the save
+
+  // Save versions. Every save carries `v`. To change what a save contains: bump SAVE_VERSION and add
+  // MIGRATIONS[oldVersion] = raw => newRaw, which upgrades a save from oldVersion to the next one.
+  // Saves from before versions existed have no `v` and count as version 0.
+  const SAVE_VERSION = 1;
+  const MIGRATIONS = {
+    0: raw => {                                       // legacy saves: renamed and removed features
+      if (raw.skins && raw.skins.robot) { raw.skins.clawd = 1; delete raw.skins.robot; }   // Robo Verity became Clawd
+      if (raw.skin === "robot") raw.skin = "clawd";
+      delete raw.pets; delete raw.frenzyUntil;        // pets and golden-cloud frenzy were removed
+      return raw;
+    }
+  };
   const baseCharge = cfg.fullChargeMs, baseWindow = cfg.combo.windowMs;
   const genById = Object.fromEntries(D.generators.map(g => [g.id, g]));
   const upById = Object.fromEntries(D.upgrades.map(u => [u.id, u]));
   const listeners = [];
 
-  const blank = () => ({ gas: 0, total: 0, gens: {}, ups: {}, skins: { verity: 1 }, skin: "verity", ach: {}, lifetime: 0, crystals: 0, ascensions: 0, saved: Date.now() });
+  const blank = () => ({ v: SAVE_VERSION, gas: 0, total: 0, gens: {}, ups: {}, skins: { verity: 1 }, skin: "verity", ach: {}, lifetime: 0, crystals: 0, ascensions: 0, saved: Date.now() });
   let S = blank();
   let d = { tap: 1, gen: {}, charge: 1, window: 0, blast: 1, gps: 1 };  // derived from upgrades
 
@@ -144,20 +157,43 @@ GV.game = (() => {
     for (const a of D.achievements) if (raw.ach && raw.ach[a.id]) n.ach[a.id] = 1;
     for (const u of D.upgrades) if (raw.ups && raw.ups[u.id]) n.ups[u.id] = 1;
     for (const sk of D.skins) if (raw.skins && raw.skins[sk.id]) n.skins[sk.id] = 1;
-    if (raw.skins && raw.skins.robot) n.skins.clawd = 1;                 // Robo Verity became Clawd
-    if (typeof raw.skin === "string") { const id = raw.skin === "robot" ? "clawd" : raw.skin; if (n.skins[id]) n.skin = id; }
+    if (typeof raw.skin === "string" && n.skins[raw.skin]) n.skin = raw.skin;
     return n;
   }
 
+  // Upgrade a parsed save to the current version. Returns { raw, from, newer }.
+  function migrate(raw) {
+    if (!raw || typeof raw !== "object") return { raw, from: SAVE_VERSION, newer: false };
+    let v = Number.isInteger(raw.v) && raw.v >= 0 ? raw.v : 0;
+    const from = v;
+    if (v > SAVE_VERSION) return { raw, from, newer: true };   // from a newer build: keep what we understand
+    while (v < SAVE_VERSION) { raw = MIGRATIONS[v](raw); v++; }
+    raw.v = SAVE_VERSION;
+    return { raw, from, newer: false };
+  }
+
+  // Keep the original text of any save we are about to change, so nothing is lost for good.
+  function backup(text, tag) {
+    try { const k = "gassyVerity.game.backup." + tag; if (!localStorage.getItem(k)) localStorage.setItem(k, text); } catch (e) {}
+  }
+
   function load() {
-    try { S = adopt(JSON.parse(localStorage.getItem(KEY) || "null")); } catch (e) { S = blank(); }
+    let text = null;
+    try { text = localStorage.getItem(KEY); } catch (e) {}
+    try {
+      const m = migrate(JSON.parse(text || "null"));
+      if (text && (m.from < SAVE_VERSION)) backup(text, "v" + m.from);
+      if (text && m.newer) { backup(text, "newer"); setTimeout(() => GV.ui.toast("This save is from a newer version; some things may be missing", 3500), 800); }
+      S = adopt(m.raw);
+    } catch (e) { if (text) backup(text, "unreadable"); S = blank(); }
     recalc();
   }
 
   const exportCode = () => btoa(JSON.stringify(S));
   function importCode(code) {
     try {
-      S = adopt(JSON.parse(atob(code.trim())));
+      const text = atob(code.trim());
+      S = adopt(migrate(JSON.parse(text)).raw);
       recalc(); save(); changed();
       return true;
     } catch (e) { return false; }
@@ -211,6 +247,6 @@ GV.game = (() => {
     get state() { return S; },
     onChange, fart, gps, baseGps, gpsOf, tapValue, owned, genCost, maxAffordable,
     buyGen, buyUpgrade, buySkin, setSkin, mult, unlock, crystalGain, ascend, earn,
-    save, exportCode, importCode, reset
+    save, exportCode, importCode, reset, SAVE_VERSION
   };
 })();
